@@ -370,6 +370,53 @@ file that was distributed with this source code.
                                     </li>
                                 </ul>
                             </div>
+                            
+                            <!-- クレジットカード情報入力 -->
+                            <div class="p-orederform_sec h-adr customer_input wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                <input type='hidden' value='{{ token }}' name='token' id="token" />
+                                <div class="c-register_title">
+                                    <h2>クレジットカード情報入力</h2>
+                                </div>
+                                <ul>
+                                    <li class="form_item">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">カード番号</label>
+                                        </div>
+                                        <div class="content">
+                                            {{ form.credit.credit_card_number.vars.data }}
+                                            {{ form_widget(form.credit.credit_card_number, { type : 'hidden' }) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_item">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">有効期限</label>
+                                        </div>
+                                        <div class="content">
+                                            {{ form.credit.expiration_year.vars.data ~ form.credit.expiration_month.vars.data }}
+                                            {{ form_widget(form.credit.expiration_year, { type : 'hidden' }) }}
+                                            {{ form_widget(form.credit.expiration_month, { type : 'hidden' }) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_item">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">名義人</label>
+                                        </div>
+                                        <div class="content">
+                                            {{ form.credit.holder_name.vars.data }}
+                                            {{ form_widget(form.credit.holder_name, { type : 'hidden' }) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_item">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">セキュリティコード</label>
+                                        </div>
+                                        <div class="content">
+                                            {{ form.credit.security_code.vars.data }}
+                                            {{ form_widget(form.credit.security_code, { type : 'hidden' }) }}
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="c-btn_group wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">

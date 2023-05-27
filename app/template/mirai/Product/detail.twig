@@ -1,506 +1,531 @@
 {#
-This file is part of EC-CUBE
-
-Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
-
-http://www.ec-cube.co.jp/
-
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
-#}
-{% extends 'default_frame.twig' %}
-
-{% set body_class = 'product_page' %}
-
-{% block stylesheet %}
-    <link rel="stylesheet" href="{{ asset('assets/css/product.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('assets/css/product_sp.css') }}" type="text/css" />
+    This file is part of EC-CUBE
     
-    <style>
-        .slick-slider {
-            margin-bottom: 15px;
-        }
-
-        .slick-dots {
-            position: absolute;
-            bottom: -45px;
-            display: block;
-            width: 100%;
-            padding: 0;
-            list-style: none;
-            text-align: center;
-        }
-
-        .slick-dots li {
-            position: relative;
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin: 0 5px;
-            padding: 0;
-
-            cursor: pointer;
-        }
-
-        .slick-dots li button {
-            font-size: 0;
-            line-height: 0;
-            display: block;
-            width: 20px;
-            height: 20px;
-            padding: 5px;
-            cursor: pointer;
-            color: transparent;
-            border: 0;
-            outline: none;
-            background: transparent;
-        }
-
-        .slick-dots li button:hover,
-        .slick-dots li button:focus {
-            outline: none;
-        }
-
-        .slick-dots li button:hover:before,
-        .slick-dots li button:focus:before {
-            opacity: 1;
-        }
-
-        .slick-dots li button:before {
-            content: " ";
-            line-height: 20px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 12px;
-            height: 12px;
-            text-align: center;
-            opacity: .25;
-            background-color: black;
-            border-radius: 50%;
-
-        }
-
-        .slick-dots li.slick-active button:before {
-            opacity: .75;
-            background-color: black;
-        }
-
-        .slick-dots li button.thumbnail img {
-            width: 0;
-            height: 0;
-        }
-
-        .ec-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 99999;
-            width: 100%;
-            height: 100%;
-        }
-        .ec-modal.small {
-            width: 30%;
-        }
-        .ec-modal.full {
-            width: 100%;
-            height: 100%;
-        }
-        .ec-modal .ec-modal-overlay {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.3);
-            width: 100%;
-            height: 100%;
-        }
-        .ec-modal .ec-modal-wrap {
-            position: relative;
-            border-radius: 2px;
-            border: 1px solid #333;
-            background-color: #fff;
-            width: 90%;
-            margin: 20px;
-            padding: 40px 5px;
-        }
-        .ec-modal .ec-modal-close {
-            cursor: pointer;
-            position: absolute;
-            right: 20px;
-            top: 10px;
-            font-size: 20px;
-            height: 30px;
-            width: 20px;
-        }
-        .ec-modal .ec-modal-close:hover {
-            color: #4b5361;
-        }
-        .ec-modal .ec-modal-box {
-            text-align: center;
-        }
-        .ec-modal .ec-role {
-            margin-top: 20px;
-        }
-
-        .ec-modal .ec-btn_group {
-            margin: 20px 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-        }
-        #ec-modal-header {
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        @media only screen and (min-width: 768px) {
-            .ec-modal .ec-modal-wrap {
-                padding: 40px 10px;
-                width: 50%;
-                margin: 20px auto;
+    Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+    
+    http://www.ec-cube.co.jp/
+    
+    For the full copyright and license information, please view the LICENSE
+    file that was distributed with this source code.
+    #}
+    {% extends 'default_frame.twig' %}
+    
+    {% set body_class = 'product_page' %}
+    
+    {% block stylesheet %}
+        <link rel="stylesheet" href="{{ asset('assets/css/product.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('assets/css/product_sp.css') }}" type="text/css" />
+        
+        <style>
+            .slick-slider {
+                margin-bottom: 15px;
             }
-        }
-    </style>
-{% endblock %}
+    
+            .slick-dots {
+                position: absolute;
+                bottom: -45px;
+                display: block;
+                width: 100%;
+                padding: 0;
+                list-style: none;
+                text-align: center;
+            }
+    
+            .slick-dots li {
+                position: relative;
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                margin: 0 5px;
+                padding: 0;
+    
+                cursor: pointer;
+            }
+    
+            .slick-dots li button {
+                font-size: 0;
+                line-height: 0;
+                display: block;
+                width: 20px;
+                height: 20px;
+                padding: 5px;
+                cursor: pointer;
+                color: transparent;
+                border: 0;
+                outline: none;
+                background: transparent;
+            }
+    
+            .slick-dots li button:hover,
+            .slick-dots li button:focus {
+                outline: none;
+            }
+    
+            .slick-dots li button:hover:before,
+            .slick-dots li button:focus:before {
+                opacity: 1;
+            }
+    
+            .slick-dots li button:before {
+                content: " ";
+                line-height: 20px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 12px;
+                height: 12px;
+                text-align: center;
+                opacity: .25;
+                background-color: black;
+                border-radius: 50%;
+    
+            }
+    
+            .slick-dots li.slick-active button:before {
+                opacity: .75;
+                background-color: black;
+            }
+    
+            .slick-dots li button.thumbnail img {
+                width: 0;
+                height: 0;
+            }
+    
+            .ec-modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 99999;
+                width: 100%;
+                height: 100%;
+            }
+            .ec-modal.small {
+                width: 30%;
+            }
+            .ec-modal.full {
+                width: 100%;
+                height: 100%;
+            }
+            .ec-modal .ec-modal-overlay {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.3);
+                width: 100%;
+                height: 100%;
+            }
+            .ec-modal .ec-modal-wrap {
+                position: relative;
+                border-radius: 2px;
+                border: 1px solid #333;
+                background-color: #fff;
+                width: 90%;
+                margin: 20px;
+                padding: 40px 5px;
+            }
+            .ec-modal .ec-modal-close {
+                cursor: pointer;
+                position: absolute;
+                right: 20px;
+                top: 10px;
+                font-size: 20px;
+                height: 30px;
+                width: 20px;
+            }
+            .ec-modal .ec-modal-close:hover {
+                color: #4b5361;
+            }
+            .ec-modal .ec-modal-box {
+                text-align: center;
+            }
+            .ec-modal .ec-role {
+                margin-top: 20px;
+            }
+    
+            .ec-modal .ec-btn_group {
+                margin: 20px 0 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 40px;
+            }
+            #ec-modal-header {
+                font-size: 18px;
+                font-weight: 600;
+                text-align: center;
+            }
 
-{% block javascript %}
-    <script>
-        eccube.classCategories = {{ class_categories_as_json(Product)|raw }};
-
-        // 規格2に選択肢を割り当てる。
-        function fnSetClassCategories(form, classcat_id2_selected) {
-            var $form = $(form);
-            var product_id = $form.find('input[name=product_id]').val();
-            var $sele1 = $form.find('select[name=classcategory_id1]');
-            var $sele2 = $form.find('select[name=classcategory_id2]');
-            eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
-        }
-
-        {% if form.classcategory_id2 is defined %}
-        fnSetClassCategories(
-            $('#form1'), {{ form.classcategory_id2.vars.value|json_encode|raw }}
-        );
-        {% elseif form.classcategory_id1 is defined %}
-        eccube.checkStock($('#form1'), {{ Product.id }}, {{ form.classcategory_id1.vars.value|json_encode|raw }}, null);
-        {% endif %}
-    </script>
-    <script>
-        $(function() {
-            // bfcache無効化
-            $(window).bind('pageshow', function(event) {
-                if (event.originalEvent.persisted) {
-                    location.reload(true);
+            .special-note {
+                font-size: 20px;
+                font-weight: bold;
+                margin: 25px auto;
+                text-align: center;
+            }
+    
+            @media only screen and (min-width: 768px) {
+                .ec-modal .ec-modal-wrap {
+                    padding: 40px 10px;
+                    width: 50%;
+                    margin: 20px auto;
                 }
-            });
-
-            // Core Web Vital の Cumulative Layout Shift(CLS)対策のため
-            // img タグに width, height が付与されている.
-            // 630px 未満の画面サイズでは縦横比が壊れるための対策
-            // see https://github.com/EC-CUBE/ec-cube/pull/5023
-            $('.ec-grid2__cell').hide();
-            var removeSize = function () {
-                $('.slide-item').height('');
-                $('.slide-item img')
-                    .removeAttr('width')
-                    .removeAttr('height')
-                    .removeAttr('style');
-            };
-            var slickInitial = function(slick) {
-                $('.ec-grid2__cell').fadeIn(1500);
-                var baseHeight = $(slick.target).height();
-                var baseWidth = $(slick.target).width();
-                var rate = baseWidth / baseHeight;
-
-                $('.slide-item').height(baseHeight * rate); // 余白を削除する
-                // transform を使用することでCLSの影響を受けないようにする
-                $('.slide-item img')
-                    .css(
-                        {
-                            'transform-origin': 'top left',
-                            'transform': 'scaleY(' + rate + ')',
-                            'transition': 'transform .1s'
-                        }
-                    );
-                // 正しいサイズに近くなったら属性を解除する
-                setTimeout(removeSize, 500);
-            };
-            $('.item_visual').on('init', slickInitial);
-            // リサイズ時は CLS の影響を受けないため属性を解除する
-            $(window).resize(removeSize);
-            $('.item_visual').slick({
-                dots: false,
-                arrows: false,
-                responsive: [{
-                    breakpoint: 768,
-                    settings: {
-                        dots: true
+            }
+    
+            @media only screen and (max-width: 768px) {
+                .special-note {
+                    font-size: 15px;
+                }
+            }
+        </style>
+    {% endblock %}
+    
+    {% block javascript %}
+        <script>
+            eccube.classCategories = {{ class_categories_as_json(Product)|raw }};
+    
+            // 規格2に選択肢を割り当てる。
+            function fnSetClassCategories(form, classcat_id2_selected) {
+                var $form = $(form);
+                var product_id = $form.find('input[name=product_id]').val();
+                var $sele1 = $form.find('select[name=classcategory_id1]');
+                var $sele2 = $form.find('select[name=classcategory_id2]');
+                eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+            }
+    
+            {% if form.classcategory_id2 is defined %}
+            fnSetClassCategories(
+                $('#form1'), {{ form.classcategory_id2.vars.value|json_encode|raw }}
+            );
+            {% elseif form.classcategory_id1 is defined %}
+            eccube.checkStock($('#form1'), {{ Product.id }}, {{ form.classcategory_id1.vars.value|json_encode|raw }}, null);
+            {% endif %}
+        </script>
+        <script>
+            $(function() {
+                // bfcache無効化
+                $(window).bind('pageshow', function(event) {
+                    if (event.originalEvent.persisted) {
+                        location.reload(true);
                     }
-                }]
-            });
-
-            $('.slideThumb').on('click', function() {
-                var index = $(this).attr('data-index');
-                $('.item_visual').slick('slickGoTo', index, false);
-            })
-
-            $('.s-color_item input[name="color"]').on('change', function(e) {
-                if (e.target.checked) {
+                });
+    
+                // Core Web Vital の Cumulative Layout Shift(CLS)対策のため
+                // img タグに width, height が付与されている.
+                // 630px 未満の画面サイズでは縦横比が壊れるための対策
+                // see https://github.com/EC-CUBE/ec-cube/pull/5023
+                $('.ec-grid2__cell').hide();
+                var removeSize = function () {
+                    $('.slide-item').height('');
+                    $('.slide-item img')
+                        .removeAttr('width')
+                        .removeAttr('height')
+                        .removeAttr('style');
+                };
+                var slickInitial = function(slick) {
+                    $('.ec-grid2__cell').fadeIn(1500);
+                    var baseHeight = $(slick.target).height();
+                    var baseWidth = $(slick.target).width();
+                    var rate = baseWidth / baseHeight;
+    
+                    $('.slide-item').height(baseHeight * rate); // 余白を削除する
+                    // transform を使用することでCLSの影響を受けないようにする
+                    $('.slide-item img')
+                        .css(
+                            {
+                                'transform-origin': 'top left',
+                                'transform': 'scaleY(' + rate + ')',
+                                'transition': 'transform .1s'
+                            }
+                        );
+                    // 正しいサイズに近くなったら属性を解除する
+                    setTimeout(removeSize, 500);
+                };
+                $('.item_visual').on('init', slickInitial);
+                // リサイズ時は CLS の影響を受けないため属性を解除する
+                $(window).resize(removeSize);
+                $('.item_visual').slick({
+                    dots: false,
+                    arrows: false,
+                    responsive: [{
+                        breakpoint: 768,
+                        settings: {
+                            dots: true
+                        }
+                    }]
+                });
+    
+                $('.slideThumb').on('click', function() {
                     var index = $(this).attr('data-index');
                     $('.item_visual').slick('slickGoTo', index, false);
-                }
-            })
-        });
-    </script>
-    <script>
-        $(function() {
-            $('.add-cart').on('click', function(event) {
-                {% if form.classcategory_id1 is defined %}
-                // 規格1フォームの必須チェック
-                if ($('#classcategory_id1').val() == '__unselected' || $('#classcategory_id1').val() == '') {
-                    $('#classcategory_id1')[0].setCustomValidity('{{ '項目が選択されていません'|trans }}');
-                    return true;
-                } else {
-                    $('#classcategory_id1')[0].setCustomValidity('');
-                }
-                {% endif %}
-
-                {% if form.classcategory_id2 is defined %}
-                // 規格2フォームの必須チェック
-                if ($('#classcategory_id2').val() == '__unselected' || $('#classcategory_id2').val() == '') {
-                    $('#classcategory_id2')[0].setCustomValidity('{{ '項目が選択されていません'|trans }}');
-                    return true;
-                } else {
-                    $('#classcategory_id2')[0].setCustomValidity('');
-                }
-                {% endif %}
-
-                // 個数フォームのチェック
-                if ($('#quantity').val() < 1) {
-                    $('#quantity')[0].setCustomValidity('{{ '1以上で入力してください。'|trans }}');
-                    return true;
-                } else {
-                    $('#quantity')[0].setCustomValidity('');
-                }
-
-                event.preventDefault();
-                $('.s-color_item input[name="color"]').each(function() {
-                    if ($(this).is(':checked')) {
-                        $('#property').val($(this).attr('text'));
+                })
+    
+                $('.s-color_item input[name="color"]').on('change', function(e) {
+                    if (e.target.checked) {
+                        var index = $(this).attr('data-index');
+                        $('.item_visual').slick('slickGoTo', index, false);
                     }
-                });
-
-                $form = $('#form1');
-                $.ajax({
-                    url: $form.attr('action'),
-                    type: $form.attr('method'),
-                    data: $form.serialize(),
-                    dataType: 'json',
-                    beforeSend: function(xhr, settings) {
-                        // Buttonを無効にする
-                        $('.add-cart').prop('disabled', true);
+                })
+            });
+        </script>
+        <script>
+            $(function() {
+                $('.add-cart').on('click', function(event) {
+                    {% if form.classcategory_id1 is defined %}
+                    // 規格1フォームの必須チェック
+                    if ($('#classcategory_id1').val() == '__unselected' || $('#classcategory_id1').val() == '') {
+                        $('#classcategory_id1')[0].setCustomValidity('{{ '項目が選択されていません'|trans }}');
+                        return true;
+                    } else {
+                        $('#classcategory_id1')[0].setCustomValidity('');
                     }
-                }).done(function(data) {
-                    // レスポンス内のメッセージをalertで表示
-                    $.each(data.messages, function() {
-                        $('#ec-modal-header').text(this);
+                    {% endif %}
+    
+                    {% if form.classcategory_id2 is defined %}
+                    // 規格2フォームの必須チェック
+                    if ($('#classcategory_id2').val() == '__unselected' || $('#classcategory_id2').val() == '') {
+                        $('#classcategory_id2')[0].setCustomValidity('{{ '項目が選択されていません'|trans }}');
+                        return true;
+                    } else {
+                        $('#classcategory_id2')[0].setCustomValidity('');
+                    }
+                    {% endif %}
+    
+                    // 個数フォームのチェック
+                    if ($('#quantity').val() < 1) {
+                        $('#quantity')[0].setCustomValidity('{{ '1以上で入力してください。'|trans }}');
+                        return true;
+                    } else {
+                        $('#quantity')[0].setCustomValidity('');
+                    }
+    
+                    event.preventDefault();
+                    $('.s-color_item input[name="color"]').each(function() {
+                        if ($(this).is(':checked')) {
+                            $('#property').val($(this).attr('text'));
+                        }
                     });
-
-                    $('#cart-modal').show()
-
-                    // カートブロックを更新する
+    
+                    $form = $('#form1');
                     $.ajax({
-                        url: "{{ url('block_cart') }}",
-                        type: 'GET',
-                        dataType: 'html'
-                    }).done(function(html) {
-                        $('.ec-headerRole__cart').html(html);
+                        url: $form.attr('action'),
+                        type: $form.attr('method'),
+                        data: $form.serialize(),
+                        dataType: 'json',
+                        beforeSend: function(xhr, settings) {
+                            // Buttonを無効にする
+                            $('.add-cart').prop('disabled', true);
+                        }
+                    }).done(function(data) {
+                        // レスポンス内のメッセージをalertで表示
+                        $.each(data.messages, function() {
+                            $('#ec-modal-header').text(this);
+                        });
+    
+                        $('#cart-modal').show()
+    
+                        // カートブロックを更新する
+                        $.ajax({
+                            url: "{{ url('block_cart') }}",
+                            type: 'GET',
+                            dataType: 'html'
+                        }).done(function(html) {
+                            $('.ec-headerRole__cart').html(html);
+                        });
+                    }).fail(function(data) {
+                        alert('{{ 'カートへの追加に失敗しました。'|trans }}');
+                    }).always(function(data) {
+                        // Buttonを有効にする
+                        $('.add-cart').prop('disabled', false);
                     });
-                }).fail(function(data) {
-                    alert('{{ 'カートへの追加に失敗しました。'|trans }}');
-                }).always(function(data) {
-                    // Buttonを有効にする
-                    $('.add-cart').prop('disabled', false);
                 });
             });
-        });
-
-        $('.ec-modal-wrap').on('click', function(e) {
-            // モーダル内の処理は外側にバブリングさせない
-            e.stopPropagation();
-        });
-        $('.ec-modal-overlay, .ec-modal, .ec-modal-close, .ec-inlineBtn--cancel').on('click', function() {
-            $('#cart-modal').hide()
-        });
-    </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org/",
-        "@type": "Product",
-        "name": "{{ Product.name }}",
-        "image": [
-            {% for img in Product.ProductImage %}
-                "{{ app.request.schemeAndHttpHost }}{{ asset(img, 'save_image') }}"{% if not loop.last %},{% endif %}
-
-            {% else %}
-                "{{ app.request.schemeAndHttpHost }}{{ asset(''|no_image_product, 'save_image') }}"
-            {% endfor %}
-        ],
-        "description": "{{ Product.description_list | default(Product.description_detail) | replace({'\n': '', '\r': ''}) | slice(0,300) }}",
-        {% if Product.code_min %}
-        "sku": "{{ Product.code_min }}",
-        {% endif %}
-        "offers": {
-            "@type": "Offer",
-            "url": "{{ url('product_detail', {'id': Product.id}) }}",
-            "priceCurrency": "{{ eccube_config.currency }}",
-            "price": {{ Product.getPrice02IncTaxMin ? Product.getPrice02IncTaxMin : 0}},
-            "availability": "{{ Product.stock_find ? "InStock" : "OutOfStock" }}"
+    
+            $('.ec-modal-wrap').on('click', function(e) {
+                // モーダル内の処理は外側にバブリングさせない
+                e.stopPropagation();
+            });
+            $('.ec-modal-overlay, .ec-modal, .ec-modal-close, .ec-inlineBtn--cancel').on('click', function() {
+                $('#cart-modal').hide()
+            });
+        </script>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": "{{ Product.name }}",
+            "image": [
+                {% for img in Product.ProductImage %}
+                    "{{ app.request.schemeAndHttpHost }}{{ asset(img, 'save_image') }}"{% if not loop.last %},{% endif %}
+    
+                {% else %}
+                    "{{ app.request.schemeAndHttpHost }}{{ asset(''|no_image_product, 'save_image') }}"
+                {% endfor %}
+            ],
+            "description": "{{ Product.description_list | default(Product.description_detail) | replace({'\n': '', '\r': ''}) | slice(0,300) }}",
+            {% if Product.code_min %}
+            "sku": "{{ Product.code_min }}",
+            {% endif %}
+            "offers": {
+                "@type": "Offer",
+                "url": "{{ url('product_detail', {'id': Product.id}) }}",
+                "priceCurrency": "{{ eccube_config.currency }}",
+                "price": {{ Product.getPrice02IncTaxMin ? Product.getPrice02IncTaxMin : 0}},
+                "availability": "{{ Product.stock_find ? "InStock" : "OutOfStock" }}"
+            }
         }
-    }
-    </script>
-{% endblock %}
-
-{% block main %}
-<div class="c-page_head page_small_width">
-    <div class="c-page_title">
-        <h1 class="en"><span>ITEM</span></h1>
-        <p class="jp">商品</p>
+        </script>
+    {% endblock %}
+    
+    {% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>ITEM</span></h1>
+            <p class="jp">商品</p>
+        </div>
     </div>
-</div>
-<!--  -->
-<main class="main">
-    <div class="s-product_body page_small_width">
-        <section class="s-product_main">
-            <div class="s-product_img wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                <div class="s-product_main_img item_visual">
-                    {% for ProductImage in Product.ProductImage %}
-                        <div class="slide-item"><img src="{{ asset(ProductImage, 'save_image') }}" alt="{{ loop.first ? Product.name : '' }}" width="550" height="550"{% if loop.index > 1 %} loading="lazy"{% endif %}></div>
-                    {% else %}
-                        <div class="slide-item"><img src="{{ asset(''|no_image_product, 'save_image') }}" alt="{{ loop.first ? Product.name : '' }}" width="550" height="550"></div>
-                    {% endfor %}
-                </div>
-                <div class="s-product_img_box item_nav">
-                    {% for ProductImage in Product.ProductImage %}
-                        <div class="slideThumb" data-index="{{ loop.index0 }}"><img src="{{ asset(ProductImage, 'save_image') }}" alt="" width="133" height="133" loading="lazy"></div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="s-product_profile wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                <div class="s-product_infor">
-                    <div class="s-product_cate">
-                        <span>
-                            {% for index, ProductCategory in Product.ProductCategories if index != 0 %}
-                                <a href="{{ url('product_list', { 'category_id': ProductCategory.Category.id }) }}">{{ ProductCategory.Category.name }}</a>
-                            {% endfor %}
-                        </span>
+    <!--  -->
+    <main class="main">
+        <div class="s-product_body page_small_width">
+            <section class="s-product_main">
+                <div class="s-product_img wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="s-product_main_img item_visual">
+                        {% for ProductImage in Product.ProductImage %}
+                            <div class="slide-item"><img src="{{ asset(ProductImage, 'save_image') }}" alt="{{ loop.first ? Product.name : '' }}" width="550" height="550"{% if loop.index > 1 %} loading="lazy"{% endif %}></div>
+                        {% else %}
+                            <div class="slide-item"><img src="{{ asset(''|no_image_product, 'save_image') }}" alt="{{ loop.first ? Product.name : '' }}" width="550" height="550"></div>
+                        {% endfor %}
                     </div>
-                    <div class="s-product_word">
-                        <span> {{ Product.one_word }} </span>
-                    </div>
-                    <div class="s-product_title">
-                        <h2> {{ Product.name }} </h2>
-                    </div>
-                    <div class="s-product_price">
-                        <p><span class="price">{{ Product.price02_max|price }}</span><span class="tax"> (税込)</span></p>
+                    <div class="s-product_img_box item_nav">
+                        {% for ProductImage in Product.ProductImage %}
+                            <div class="slideThumb" data-index="{{ loop.index0 }}"><img src="{{ asset(ProductImage, 'save_image') }}" alt="" width="133" height="133" loading="lazy"></div>
+                        {% endfor %}
                     </div>
                 </div>
-                <div class="s-btn_box">
-                    <form action="{{ url('product_add_cart', {id:Product.id}) }}" method="post" id="form1" name="form1" style="width: 450px;">
-                        <div style="display: none;">
-                            {% if form.classcategory_id1 is defined %}
-                                <div class="ec-select">
-                                    {{ form_row(form.classcategory_id1) }}
-                                    {{ form_errors(form.classcategory_id1) }}
-                                </div>
-                                {% if form.classcategory_id2 is defined %}
+                <div class="s-product_profile wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="s-product_infor">
+                        <div class="s-product_cate">
+                            <span>
+                                {% for index, ProductCategory in Product.ProductCategories if index != 0 %}
+                                    <a href="{{ url('product_list', { 'category_id': ProductCategory.Category.id }) }}">{{ ProductCategory.Category.name }}</a>
+                                {% endfor %}
+                            </span>
+                        </div>
+                        <div class="s-product_word">
+                            <span> {{ Product.one_word }} </span>
+                        </div>
+                        <div class="s-product_title">
+                            <h2> {{ Product.name }} </h2>
+                        </div>
+                        <div class="s-product_price">
+                            <p><span class="price">{{ Product.price02_max|price }}</span><span class="tax"> (税込)</span></p>
+                        </div>
+                    </div>
+                    <div class="s-btn_box">
+                        <form action="{{ url('product_add_cart', {id:Product.id}) }}" method="post" id="form1" name="form1" style="width: 450px;">
+                            <div style="display: none;">
+                                {% if form.classcategory_id1 is defined %}
                                     <div class="ec-select">
-                                        {{ form_row(form.classcategory_id2) }}
-                                        {{ form_errors(form.classcategory_id2) }}
+                                        {{ form_row(form.classcategory_id1) }}
+                                        {{ form_errors(form.classcategory_id1) }}
                                     </div>
+                                    {% if form.classcategory_id2 is defined %}
+                                        <div class="ec-select">
+                                            {{ form_row(form.classcategory_id2) }}
+                                            {{ form_errors(form.classcategory_id2) }}
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            <div class="ec-numberInput"><span>{{ '数量'|trans }}</span>
-                                {{ form_widget(form.quantity, { 'attr': { 'type': 'hidden', 'value': '1' } }) }}
-                                {{ form_errors(form.quantity) }}
-                            </div>
-                            {{ form_rest(form) }}
-                        </div>
-                        <div class="s-addcart">
-                            {% if Product.stock_find %}
-                                <button type="submit" class="s-addcartbtn add-cart">
-                                    ADD TO CART
-                                    <span><i class="fas fa-caret-right"></i></span>
-                                </button>
-                            {% else %}
-                                <button type="submit" class="s-addcartbtn add-cart" disabled="disabled">{{ 'ただいま品切れ中です。'|trans }}</button>
-                            {% endif %}
-                        </div>
-                    </form>
-                    <div class="ec-modal" id="cart-modal">
-                        <div class="ec-modal-overlay">
-                            <div class="ec-modal-wrap">
-                                <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
-                                <div id="ec-modal-header">{{ 'カートに追加しました。'|trans }}</div>
-                                <div class="ec-modal-box">
-                                    <div class="ec-btn_group">
-                                        <div class="c-btn_left">
-                                            <button class="c-btn ec-inlineBtn--cancel">お買い物を続ける</button>
-                                        </div>
-                                        <div class="c-btn_rigth">
-                                            <a href="{{ url('cart') }}" class="c-btn" >この内容で進む</a>
-                                        </div>
-                                    </div>
+                                <div class="ec-numberInput"><span>{{ '数量'|trans }}</span>
+                                    {{ form_widget(form.quantity, { 'attr': { 'type': 'hidden', 'value': '1' } }) }}
+                                    {{ form_errors(form.quantity) }}
                                 </div>
+                                {{ form_rest(form) }}
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="s-favorite">
-                        {% if BaseInfo.option_favorite_product %}
-                            <form action="{{ url('product_add_favorite', {id:Product.id}) }}" method="post">
-                                {% if is_favorite == false %}
-                                    <button type="submit" id="favorite" class="s-favorite_btn"><i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i></button>
+                            <div class="s-addcart">
+                                {% if Product.stock_find %}
+                                    <button type="submit" class="s-addcartbtn add-cart">
+                                        ADD TO CART
+                                        <span><i class="fas fa-caret-right"></i></span>
+                                    </button>
                                 {% else %}
-                                    <button type="submit" id="favorite" class="s-favorite_btn" disabled="disabled"><i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i></button>
+                                    <button type="submit" class="s-addcartbtn add-cart" disabled="disabled">{{ 'ただいま品切れ中です。'|trans }}</button>
                                 {% endif %}
-                            </form>
-                        {% endif %}
-                    </div>
-                </div>
-                {% if Product.color is not empty %}
-                    <div class="s-product_colors">
-                        <div class="s-colors_head">
-                            <p>COLORS</p>
-                        </div>
-                        <div class="s-colors_box">
-                            {% for index, color in Product.color|split('/') %}
-                                <div class="s-color_item">
-                                    <input type="radio" id="color{{index}}" name="color" {% if loop.first %} checked {% endif %} text="{{ color }}" data-index="{{ index }}">
-                                    <label for="color{{index}}">{{ color }}</label>
+                            </div>
+                        </form>
+                        <div class="ec-modal" id="cart-modal">
+                            <div class="ec-modal-overlay">
+                                <div class="ec-modal-wrap">
+                                    <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
+                                    <div id="ec-modal-header">{{ 'カートに追加しました。'|trans }}</div>
+                                    <div class="ec-modal-box">
+                                        <div class="ec-btn_group">
+                                            <div class="c-btn_left">
+                                                <button class="c-btn ec-inlineBtn--cancel">お買い物を続ける</button>
+                                            </div>
+                                            <div class="c-btn_rigth">
+                                                <a href="{{ url('cart') }}" class="c-btn" >この内容で進む</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="s-favorite">
+                            {% if BaseInfo.option_favorite_product %}
+                                <form action="{{ url('product_add_favorite', {id:Product.id}) }}" method="post">
+                                    {% if is_favorite == false %}
+                                        <button type="submit" id="favorite" class="s-favorite_btn"><i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i></button>
+                                    {% else %}
+                                        <button type="submit" id="favorite" class="s-favorite_btn" disabled="disabled"><i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i></button>
+                                    {% endif %}
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
-                {% endif %}
-                {# {% if Product.description_detail is not empty %}
-                    {% if '/' in Product.description_detail %}
+                    {% if Product.color is not empty %}
                         <div class="s-product_colors">
                             <div class="s-colors_head">
-                                <p>内容</p>
+                                <p>COLORS</p>
                             </div>
                             <div class="s-colors_box">
-                                {% for index, description in Product.description_detail|split('/') %}
+                                {% for index, color in Product.color|split('/') %}
                                     <div class="s-color_item">
-                                        <input type="radio" id="description{{index}}" name="description" {% if loop.first %} checked {% endif %} text="{{ description }}">
-                                        <label for="color{{index}}">{{ description }}</label>
+                                        <input type="radio" id="color{{index}}" name="color" {% if loop.first %} checked {% endif %} text="{{ color }}" data-index="{{ index }}">
+                                        <label for="color{{index}}">{{ color }}</label>
                                     </div>
                                 {% endfor %}
                             </div>
                         </div>
-                    {% else %}
+                    {% endif %}
+                    {# {% if Product.description_detail is not empty %}
+                        {% if '/' in Product.description_detail %}
+                            <div class="s-product_colors">
+                                <div class="s-colors_head">
+                                    <p>内容</p>
+                                </div>
+                                <div class="s-colors_box">
+                                    {% for index, description in Product.description_detail|split('/') %}
+                                        <div class="s-color_item">
+                                            <input type="radio" id="description{{index}}" name="description" {% if loop.first %} checked {% endif %} text="{{ description }}">
+                                            <label for="color{{index}}">{{ description }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="s-product_infor_additem">
+                                <div class="head">
+                                    <span>内容</span>
+                                </div>
+                                <div class="txt">
+                                    <span>{{ Product.description_detail }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %} #}
+                    <div class="s-product_infor_add">
+                        {% if Product.description_detail is not empty %}
                         <div class="s-product_infor_additem">
                             <div class="head">
                                 <span>内容</span>
@@ -509,316 +534,307 @@ file that was distributed with this source code.
                                 <span>{{ Product.description_detail }}</span>
                             </div>
                         </div>
-                    {% endif %}
-                {% endif %} #}
-                <div class="s-product_infor_add">
-                    {% if Product.description_detail is not empty %}
-                    <div class="s-product_infor_additem">
-                        <div class="head">
-                            <span>内容</span>
-                        </div>
-                        <div class="txt">
-                            <span>{{ Product.description_detail }}</span>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% if Product.usage0 is not empty %}
-                    <div class="s-product_infor_additem">
-                        <div class="head">
-                            <span>USAGE</span>
-                        </div>
-                        <div class="txt">
-                            <span>{{ Product.usage0 }}</span>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% if Product.manual is not empty %}
+                        {% endif %}
+                        {% if Product.usage0 is not empty %}
                         <div class="s-product_infor_additem">
-                            <div class="s-product_manuallink">
-                                <a href="{{ Product.manual }}">取り扱い説明書はこちら</a>
+                            <div class="head">
+                                <span>USAGE</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Product.usage0 }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if Product.manual is not empty %}
+                            <div class="s-product_infor_additem">
+                                <div class="s-product_manuallink">
+                                    <a href="{{ Product.manual }}">取り扱い説明書はこちら</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+    
+            <!--  -->
+            {% if Product.reference_video is not empty %}
+                {# {{ dump(youtube_embed_link(Product.reference_video)) }} #}
+                <div class="s-moviebox wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <a href="{{ Product.reference_video }}">
+                        <iframe src="{{ youtube_embed_link(Product.reference_video) }}" frameborder="0"></iframe>
+                    </a>
+                </div>
+            {% endif %}
+    
+            <!--  -->
+            <section class="s-product_introduce">
+                <div class="s-introduce_top wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="top_txt">
+                        {{ Product.catch_copy }}
+                    </div>
+                    {% if Product.title0 is not empty %}
+                    <div class="top_head">
+                        <h3>{{ Product.title0 }}</h3>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="s-introduce_main">
+                    {% if Product.title1 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title1 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail1|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title2 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title2 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail2|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title3 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title3 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail3|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title4 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title4 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail4|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title5 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title5 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail5|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title6 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title6 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail6|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title7 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title7 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail7|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title8 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title8 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail8|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title9 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title9 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail9|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+    
+                    {% if Product.title10 is not empty %}
+                    <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="s-introduce_title">
+                            <h4>{{ Product.title10 }}</h4>
+                        </div>
+                        <div class="s-introduce_txt">
+                            <p>{{ Product.detail10|raw|nl2br }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+    
+            <!-- 商品情報 -->
+            <section class="s-add_detail">
+                <div class="s-product_sec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h4>商品情報</h4>
+                </div>
+                <div class="s-add_detail_body wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="s-add_detail_item">
+                        <div class="s-add_detail_head">
+                            <span>商品名</span>
+                        </div>
+                        <div class="s-add_detail_txt">
+                            <p>{{ Product.property_name }}</p>
+                        </div>
+                    </div>
+                    {% if Product.property_color is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>カラー</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                <p>{{ Product.property_color|raw|nl2br }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if Product.code_min is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>品番（商品コード）</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                <p>{{ Product.code_min }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if Product.property_size is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>サイズ</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                <p>{{ Product.property_size|raw|nl2br }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if Product.property_heatproof is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>耐熱温度</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                <p>{{ Product.property_heatproof|raw|nl2br }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if Product.property_material is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>材質</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                <p>{{ Product.property_material|raw|nl2br }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if Product.property_country is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>生産国</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                <p>{{ Product.property_country }}製</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if Product.property_usage is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>用途</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                <p>{{ Product.property_usage|raw|nl2br }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if Product.property_jan is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>知的財産権</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                <p>{{ Product.property_jan|raw|nl2br }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if Product.property_note is not empty %}
+                        <div class="s-add_detail_item">
+                            <div class="s-add_detail_head">
+                                <span>ご注意</span>
+                            </div>
+                            <div class="s-add_detail_txt">
+                                {% if '画面上の色はブラウザやご使用のパソコンの設定により実物と異なる場合があります。' not in Product.property_note %}
+                                <p>{{ Product.property_note|raw|nl2br }}</p>
+                                {% endif %}
                             </div>
                         </div>
                     {% endif %}
                 </div>
-            </div>
-        </section>
-
-        <!--  -->
-        {% if Product.reference_video is not empty %}
-            {# {{ dump(youtube_embed_link(Product.reference_video)) }} #}
-            <div class="s-moviebox wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                <a href="{{ Product.reference_video }}">
-                    <iframe src="{{ youtube_embed_link(Product.reference_video) }}" frameborder="0"></iframe>
-                </a>
-            </div>
-        {% endif %}
-
-        <!--  -->
-        <section class="s-product_introduce">
-            <div class="s-introduce_top wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                <div class="top_txt">
-                    {{ Product.catch_copy }}
+            </section>
+                
+            {% if '画面上の色はブラウザやご使用のパソコンの設定により実物と異なる場合があります。' in Product.property_note %}
+            <p class="wow fadeInUp special-note" data-wow-duration="1s" data-wow-delay="0.3s">
+                画面上の色はブラウザやご使用のパソコンの設定により実物と異なる場合があります。
+            </p>
+            {% endif %}
+    
+            <!-- こんな商品もおすすめ -->
+            <section class="s-recommend">
+                <div class="s-product_sec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h4>こんな商品もおすすめ</h4>
                 </div>
-                {% if Product.title0 is not empty %}
-                <div class="top_head">
-                    <h3>{{ Product.title0 }}</h3>
-                </div>
-                {% endif %}
-            </div>
-            <div class="s-introduce_main">
-                {% if Product.title1 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title1 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail1|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title2 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title2 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail2|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title3 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title3 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail3|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title4 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title4 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail4|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title5 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title5 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail5|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title6 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title6 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail6|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title7 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title7 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail7|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title8 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title8 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail8|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title9 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title9 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail9|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if Product.title10 is not empty %}
-                <div class="s-introduce_single wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                    <div class="s-introduce_title">
-                        <h4>{{ Product.title10 }}</h4>
-                    </div>
-                    <div class="s-introduce_txt">
-                        <p>{{ Product.detail10|raw|nl2br }}</p>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-        </section>
-
-        <!-- 商品情報 -->
-        <section class="s-add_detail">
-            <div class="s-product_sec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                <h4>商品情報</h4>
-            </div>
-            <div class="s-add_detail_body wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                <div class="s-add_detail_item">
-                    <div class="s-add_detail_head">
-                        <span>商品名</span>
-                    </div>
-                    <div class="s-add_detail_txt">
-                        <p>{{ Product.property_name }}</p>
-                    </div>
-                </div>
-                {% if Product.property_color is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>カラー</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            <p>{{ Product.property_color|raw|nl2br }}</p>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if Product.code_min is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>品番（商品コード）</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            <p>{{ Product.code_min }}</p>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if Product.property_size is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>サイズ</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            <p>{{ Product.property_size|raw|nl2br }}</p>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if Product.property_heatproof is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>耐熱温度</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            <p>{{ Product.property_heatproof|raw|nl2br }}</p>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if Product.property_material is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>材質</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            <p>{{ Product.property_material|raw|nl2br }}</p>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if Product.property_country is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>生産国</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            <p>{{ Product.property_country }}製</p>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if Product.property_usage is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>用途</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            <p>{{ Product.property_usage|raw|nl2br }}</p>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if Product.property_jan is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>知的財産権</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            <p>{{ Product.property_jan|raw|nl2br }}</p>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if Product.property_note is not empty %}
-                    <div class="s-add_detail_item">
-                        <div class="s-add_detail_head">
-                            <span>ご注意</span>
-                        </div>
-                        <div class="s-add_detail_txt">
-                            {% if '画面上の色はブラウザやご使用のパソコンの設定により実物と異なる場合があります。' not in Product.property_note %}
-                            <p>{{ Product.property_note|raw|nl2br }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </section>
-            
-        {% if '画面上の色はブラウザやご使用のパソコンの設定により実物と異なる場合があります。' in Product.property_note %}
-        <h3 style="margin: 25px auto; text-align: center;" class="wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">{{ Product.property_note }}</h3>
-        {% endif %}
-
-        <!-- こんな商品もおすすめ -->
-        <section class="s-recommend">
-            <div class="s-product_sec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                <h4>こんな商品もおすすめ</h4>
-            </div>
-            <div class="s-recommend_body wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                <div class="p-products_grid">
-                    {% for scProduct in same_category_products %}
-                        <div class="p-product_item">
-                            <a href="{{ url('product_detail', {'id': scProduct.id}) }}" class="p-product_img">
-                                <img src="{{ asset(scProduct.main_list_image|no_image_product, 'save_image') }}" alt="{{ scProduct.name }}" loading="lazy">
-                            </a>
-                            <div class="p-product_infor">
+                <div class="s-recommend_body wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="p-products_grid">
+                        {% for scProduct in same_category_products %}
+                            <div class="p-product_item">
                                 <a href="{{ url('product_detail', {'id': scProduct.id}) }}" class="p-product_img">
-                                    <h3>{{ scProduct.name }}</h3>
+                                    <img src="{{ asset(scProduct.main_list_image|no_image_product, 'save_image') }}" alt="{{ scProduct.name }}" loading="lazy">
                                 </a>
-                                <div class="p-product_detail">
-                                    <p>{{ scProduct.description_detail }}</p>
-                                </div>
-                                <div class="p-product_price">
-                                    <span>{{ Product.getPrice02Max|price }}</span>
+                                <div class="p-product_infor">
+                                    <a href="{{ url('product_detail', {'id': scProduct.id}) }}" class="p-product_img">
+                                        <h3>{{ scProduct.name }}</h3>
+                                    </a>
+                                    <div class="p-product_detail">
+                                        <p>{{ scProduct.description_detail }}</p>
+                                    </div>
+                                    <div class="p-product_price">
+                                        <span>{{ Product.getPrice02Max|price }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-        </section>
-    </div>
-</main>
-{% endblock %}
+            </section>
+        </div>
+    </main>
+    {% endblock %}
+    

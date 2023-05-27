@@ -225,9 +225,6 @@ services:
 
     Customize\Form\Type\Front\EntryType:
         decorates: Eccube\Form\Type\Front\EntryType
-        
-    Customize\Form\Type\Shopping\OrderType:
-        decorates: Eccube\Form\Type\Shopping\OrderType
 
     Customize\Form\Type\AddCartType:
         decorates: Eccube\Form\Type\AddCartType

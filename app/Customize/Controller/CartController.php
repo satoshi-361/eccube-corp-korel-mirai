@@ -69,6 +69,10 @@ use Eccube\Repository\CustomerRepository;
 use Eccube\Entity\Master\CustomerStatus;
 use Eccube\Repository\Master\CustomerStatusRepository;
 
+use Plugin\EccubePaymentLite42\Form\Type\Front\CreditCardForTokenPaymentType;
+use Plugin\EccubePaymentLite42\Service\GmoEpsilonRequestService;
+use Plugin\EccubePaymentLite42\Service\GmoEpsilonUrlService;
+
 class CartController extends AbstractController
 {
     /**
@@ -190,6 +194,16 @@ class CartController extends AbstractController
      * @var CustomerStatusRepository
      */
     protected $customerStatusRepository;
+    
+    /**
+     * @var GmoEpsilonUrlService
+     */
+    private $gmoEpsilonUrlService;
+    
+    /**
+     * @var GmoEpsilonRequestService
+     */
+    private $gmoEpsilonRequestService;
 
     /**
      * CartController constructor.
@@ -227,6 +241,8 @@ class CartController extends AbstractController
         CustomerRepository $customerRepository,
         CustomerStatusRepository $customerStatusRepository,
         TokenStorageInterface $tokenStorage,
+        GmoEpsilonUrlService $gmoEpsilonUrlService,
+        GmoEpsilonRequestService $gmoEpsilonRequestService,
         SessionInterface $session
     ) {
         $this->productClassRepository = $productClassRepository;
@@ -251,6 +267,8 @@ class CartController extends AbstractController
         $this->customerRepository = $customerRepository;
         $this->customerStatusRepository = $customerStatusRepository;
         $this->session = $session;
+        $this->gmoEpsilonUrlService = $gmoEpsilonUrlService;
+        $this->gmoEpsilonRequestService = $gmoEpsilonRequestService;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -331,6 +349,8 @@ class CartController extends AbstractController
                         'least' => $least,
                         'quantity' => $quantity,
                         'is_delivery_free' => $isDeliveryFree,
+                        'url_token_js' => $this->gmoEpsilonUrlService->getUrl('token'),
+                        'token' => $form->getData()['token'],
                     ]);
 
                 case 'complete':
@@ -380,6 +400,7 @@ class CartController extends AbstractController
             'quantity' => $quantity,
             'is_delivery_free' => $isDeliveryFree,
             'form' => $form->createView(),
+            'url_token_js' => $this->gmoEpsilonUrlService->getUrl('token'),
         ];
     }
 

@@ -121,6 +121,32 @@ file that was distributed with this source code.
             })
         });
     </script>
+
+    <script src='{{ url_token_js }}'></script>
+    <script>
+        function execTrade(response) {
+            if (response.resultCode != 000) {
+                $('#cart_credit_token').value = '';
+            } else {
+                $('#cart_credit_token').value = response.tokenObject.token;
+            }
+            $('#form_cart').submit()
+        }
+        $(function() {
+            $('.c-btn_rigth button[type="submit"]').on('click', function(e) {
+                e.preventDefault();
+                var cardObj = {};
+                var year = $('#cart_credit_expiration_year').value;
+                var month = ('00' + $('#cart_credit_expiration_month').value).slice(-2)
+                cardObj.cardno = $('#cart_credit_credit_card_number').value;
+                cardObj.expire = year + month;
+                cardObj.securitycode = $('#cart_credit_security_code').value;
+                cardObj.holdername = $('#cart_credit_holder_name').value;
+                EpsilonToken.init($("#cart_credit_contract_code").value);
+                EpsilonToken.getToken(cardObj, execTrade);
+            });
+        });
+    </script>
 {% endblock javascript %}
 
 {% block main %}
@@ -487,6 +513,57 @@ file that was distributed with this source code.
                                             <div class="content ec-input{{ has_errors(form.shipping.phone_number) ? ' error' }}">
                                                 {{ form_widget(form.shipping.phone_number) }}
                                                 {{ form_errors(form.shipping.phone_number) }}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- クレジットカード情報入力 -->
+                                <div class="p-orederform_sec h-adr customer_input wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                    {{ form_widget(form.credit.token) }}
+                                    {{ form_widget(form.credit.contract_code) }}
+                                    {{ form_errors(form.credit.contract_code) }}
+                                    {{ form_errors(form.credit.token) }}
+                                    <div class="c-register_title">
+                                        <h2>クレジットカード情報入力</h2>
+                                    </div>
+                                    <ul>                                        
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">カード番号</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.credit.credit_card_number) ? ' error' }}">
+                                                {{ form_widget(form.credit.credit_card_number) }}
+                                                {{ form_errors(form.credit.credit_card_number) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">有効期限</label>
+                                            </div>
+                                            <div class="content ec-select{{ has_errors(form.credit.expiration_month, form.credit.expiration_year) ? ' error' }}">
+                                                {{ form_widget(form.credit.expiration_month) }}
+                                                {{ form_errors(form.credit.expiration_month) }}
+                                                {{ form_widget(form.credit.expiration_year) }}
+                                                {{ form_errors(form.credit.expiration_year) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">名義人</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.credit.holder_name) ? ' error' }}">
+                                                {{ form_widget(form.credit.holder_name) }}
+                                                {{ form_errors(form.credit.holder_name) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">セキュリティコード</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.credit.security_code) ? ' error' }}">
+                                                {{ form_widget(form.credit.security_code) }}
+                                                {{ form_errors(form.credit.security_code) }}
                                             </div>
                                         </li>
                                     </ul>

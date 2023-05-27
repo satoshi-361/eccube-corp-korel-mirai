@@ -383,4 +383,14 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .s-introduce_txt .container-1,
+    .s-introduce_txt .container-2 {
+        flex-wrap: wrap;
+    }
+
+    .s-introduce_txt .container-3 img,
+    .s-introduce_txt .container-6 img {
+        width: calc(50% - 10px);
+    }
 }

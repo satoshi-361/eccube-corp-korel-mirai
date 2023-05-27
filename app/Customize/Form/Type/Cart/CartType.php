@@ -27,6 +27,7 @@ use Symfony\Component\Form\AbstractType;
 use Eccube\Form\Type\Front\EntryType;
 use Customize\Form\Type\Cart\ShippingType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Plugin\EccubePaymentLite42\Form\Type\Front\CreditCardForTokenPaymentType;
 
 class CartType extends AbstractType
 {
@@ -76,6 +77,9 @@ class CartType extends AbstractType
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
+            ])
+            ->add('credit', CreditCardForTokenPaymentType::class, [
+                'required' => true,
             ]);
     }
 
