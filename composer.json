@@ -36,8 +36,13 @@
         "doctrine/orm": "^2.11",
         "doctrine/persistence": "^2.5",
         "easycorp/easy-log-handler": "^1.0",
+        "ec-cube/amazonpayv2_42": "^4.2",
+        "ec-cube/cmblogpro42": "^1.0",
         "ec-cube/coupon42": "^4.2",
+        "ec-cube/eccubepaymentlite42": "^4.2",
         "ec-cube/mailmagazine42": "^4.2",
+        "ec-cube/orderbysale42": "^1.1",
+        "ec-cube/paypalcheckout42": "^3.0",
         "ec-cube/plugin-installer": "^2.0",
         "ec-cube/productreview42": "^4.2",
         "ec-cube/recommend42": "^4.2",
@@ -214,7 +219,7 @@
             "url": "https://package-api-c2.ec-cube.net/v42",
             "options": {
                 "http": {
-                    "header": ["X-ECCUBE-KEY: "]
+                    "header": ["X-ECCUBE-KEY: fd1a450d881a7cfad13b30648f9d6fde7bb2e778"]
                 }
             }
         }

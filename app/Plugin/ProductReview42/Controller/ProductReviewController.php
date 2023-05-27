@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Eccube\Service\MailService;
 
 /**
  * Class ProductReviewController front.
@@ -44,6 +45,11 @@ class ProductReviewController extends AbstractController
     private $productReviewRepository;
 
     /**
+     * @var MailService
+     */
+    protected $mailService;
+
+    /**
      * ProductReviewController constructor.
      *
      * @param ProductReviewStatusRepository $productStatusRepository
@@ -51,9 +57,11 @@ class ProductReviewController extends AbstractController
      */
     public function __construct(
         ProductReviewStatusRepository $productStatusRepository,
+        MailService $mailService,
         ProductReviewRepository $productReviewRepository
     ) {
         $this->productReviewStatusRepository = $productStatusRepository;
+        $this->mailService = $mailService;
         $this->productReviewRepository = $productReviewRepository;
     }
 
@@ -149,5 +157,38 @@ class ProductReviewController extends AbstractController
     public function display()
     {
         return new Response();
+    }
+
+    
+
+    /**
+     * @Route("/product_review/{id}/review_form", name="product_review_form", requirements={"id" = "\d+"})
+     *
+     * @param Request $request
+     * @param Product $Product
+     *
+     * @return RedirectResponse|Response
+     */
+    public function reviewForm(Request $request, Product $Product)
+    {
+        $data = $request->request->all();
+
+        if ( array_key_exists( 'product_review', $data ) && ! empty( $data = $data['product_review'] ) ) {
+            $ProductReview = new ProductReview();
+    
+            $ProductReview->setProduct($Product);
+            $ProductReview->setStatus($this->productReviewStatusRepository->find(ProductReviewStatus::HIDE));
+            $ProductReview->setReviewerName($data['reviewer_name']);
+            $ProductReview->setRecommendLevel($data['recommend_level']);
+            $ProductReview->setTitle($data['title']);
+            $ProductReview->setComment($data['comment']);
+    
+            $this->entityManager->persist($ProductReview);
+            $this->entityManager->flush($ProductReview);
+            
+            $this->mailService->sendReviewMail($this->getUser(), $ProductReview->getId());
+        }
+
+        return $this->redirectToRoute('product_detail', ['id' => $Product->getId()]);
     }
 }

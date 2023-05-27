@@ -16,7 +16,7 @@ namespace Plugin\RelatedProduct42\Form\Extension\Admin;
 use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Common\EccubeConfig;
 use Eccube\Entity\Product;
-use Eccube\Form\Type\Admin\ProductType;
+use Customize\Form\Type\Admin\ProductType;
 use Plugin\RelatedProduct42\Entity\RelatedProduct;
 use Plugin\RelatedProduct42\Form\Type\Admin\RelatedProductType;
 use Symfony\Component\Form\AbstractTypeExtension;

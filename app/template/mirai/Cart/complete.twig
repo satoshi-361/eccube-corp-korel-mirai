@@ -1,0 +1,82 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'cart_page' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/subpage.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('assets/css/subpage_sp.css') }}" type="text/css">
+{% endblock %}
+
+{% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>ORDER</span></h1>
+            <p class="jp">ご注文内容</p>
+        </div>
+    </div>
+    <!--  -->
+    <main class="main">
+        <div class="page_small_width">
+            <div class="p-order_contain">
+                <div class="p-order_body">
+                    <div class="c-register_top">
+                        <div class="c-register_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                            <h2>ご注文ありがとうございます</h2>
+                        </div>
+                        <div class="c-register_steps wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                            <div class="item_step active">
+                                <span class="no">1</span>
+                                <span class="txt">内容入力</span>
+                            </div>
+                            <div class="item_step active">
+                                <span class="no">2</span>
+                                <span class="txt">内容確認</span>
+                            </div>
+                            <div class="item_step active">
+                                <span class="no">3</span>
+                                <span class="txt">送信完了</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-order_conatin">
+                        <div class="p-register_form">
+                            <div class="p-order_complatetxt wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                <p>ご注文を承りました。<br> ご入力いただきましたメールアドレスにご注文完了メールをお送りしておりますので、ご確認ください。<br> ご注文完了メールが届かない場合は<a href="{{ url('contact') }}" target="_blank">お問い合わせフォーム</a>よりご連絡ください。<br> ご注文商品のお届けまで今しばらくお待ちください。
+                                </p>
+                            </div>
+                            <div class="p-oreder_complate_body wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                <div class="p-oreder_complate_item">
+                                    <span class="head">ご注文番号</span>
+                                    <span class="content">{{ Order.id }}</span>
+                                </div>
+                                <div class="p-oreder_complate_item">
+                                    <span class="head">ご注文日</span>
+                                    <span class="content">{{ Order.order_date|date('Y/m/d') }}</span>
+                                </div>
+                                <div class="p-oreder_complate_item">
+                                    <span class="head">メールアドレス</span>
+                                    <span class="content">{{ Order.email }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c-btn_group wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-btn_rigth">
+                            <a href="{{ url('homepage') }}" class="c-btn">ホームに戻る</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

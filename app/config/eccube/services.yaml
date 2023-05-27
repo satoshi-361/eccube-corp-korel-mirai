@@ -216,3 +216,24 @@ services:
 
     Eccube\EventListener\RateLimiterListener:
         arguments: [ !tagged_locator { tag: 'eccube_rate_limiter' } ]
+
+    Customize\Form\Type\Admin\ProductType:
+        decorates: Eccube\Form\Type\Admin\ProductType
+
+    Customize\Form\Type\Front\ContactType:
+        decorates: Eccube\Form\Type\Front\ContactType
+
+    Customize\Form\Type\Front\EntryType:
+        decorates: Eccube\Form\Type\Front\EntryType
+        
+    Customize\Form\Type\Shopping\OrderType:
+        decorates: Eccube\Form\Type\Shopping\OrderType
+
+    Customize\Form\Type\AddCartType:
+        decorates: Eccube\Form\Type\AddCartType
+
+    Customize\Service\MailService:
+        decorates: Eccube\Service\MailService
+
+    Customize\Twig\Extension\EccubeExtension:
+        decorates: Eccube\Twig\Extension\EccubeExtension

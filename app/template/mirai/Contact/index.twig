@@ -1,0 +1,143 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% form_theme form 'Form/form_div_layout.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
+
+    <style>
+        #contact_query label::after {
+            content: '\a';
+            white-space: pre;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>CONTACT</span></h1>
+        <p class="jp">お問い合わせ</p>
+    </div>
+</div>
+<!--  -->
+<main class="main">
+    <div class="c-subpage_contain">
+        <div class="c-register_top">
+            <div class="c-register_steps wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                <div class="item_step active">
+                    <span class="no">1</span>
+                    <span class="txt">内容入力</span>
+                </div>
+                <div class="item_step">
+                    <span class="no">2</span>
+                    <span class="txt">内容確認</span>
+                </div>
+                <div class="item_step">
+                    <span class="no">3</span>
+                    <span class="txt">送信完了</span>
+                </div>
+            </div>
+            <div class="c-register_top_introtxt wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                <p>
+                    以下のフォームにお問い合わせしたい項目をご選択・ご入力の上、送信内容確認ボタンを押してください。内容に応じて担当の部署へ送られます。内容を確認後、各担当からご連絡いたします。<br/>
+                    ご依頼内容によりましては、ご回答にお時間をいただく場合がございます。予めご了承ください。
+                </p>
+            </div>
+        </div>
+
+        <div class="p-register_conatin">
+            <div class="p-register_form wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                <form method="post" action="{{ url('contact') }}" class="h-adr" novalidate>
+                    {{ form_widget(form._token) }}
+                    <div class="register_form">
+                        <ul>
+                            <li class="form_item">
+                                <div class="head">
+                                    <span class="required">必須</span><label class="">氏名</label>
+                                </div>
+                                <div class="content ec-input {{ has_errors(form.name) ? ' error' }}">
+                                    {{ form_widget(form.name) }}
+                                    {{ form_errors(form.name) }}
+                                </div>
+                            </li>
+                            <li class="form_item">
+                                <div class="head">
+                                    <span class="any">任意</span><label class="">電話番号</label>
+                                </div>
+                                <div class="content ec-input {{ has_errors(form.phone_number) ? ' error' }}">
+                                    {{ form_widget(form.phone_number) }}
+                                    {{ form_errors(form.phone_number) }}
+                                </div>
+                            </li>
+                            <li class="form_item">
+                                <div class="head">
+                                    <span class="required">必須</span><label class="">メールアドレス</label>
+                                </div>
+                                <div class="content ec-input {{ has_errors(form.email) ? ' error' }}">
+                                    {{ form_widget(form.email) }}
+                                    {{ form_errors(form.email) }}
+                                </div>
+                            </li>
+                            <li class="form_item">
+                                <div class="head">
+                                    <span class="required">必須</span><label class="">お問い合わせ項目</label>
+                                </div>
+                                <div class="content ec-radio{{ has_errors(form.query) ? ' error' }}">
+                                    {{ form_widget(form.query) }}
+                                    {{ form_errors(form.query) }}
+                                </div>
+                            </li>
+                            <li class="form_item">
+                                <div class="head">
+                                    <span class="required">必須</span><label class="">お問い合わせ内容</label>
+                                </div>
+                                <div class="content ec-input {{ has_errors(form.contents) ? ' error' }}">
+                                    {{ form_widget(form.contents) }}
+                                    {{ form_errors(form.contents) }}
+                                </div>
+                            </li>
+                            {# エンティティ拡張の自動出力 #}
+                            {% for f in form|filter(f => f.vars.eccube_form_options.auto_render) %}
+                                {% if f.vars.eccube_form_options.form_theme %}
+                                    {% form_theme f f.vars.eccube_form_options.form_theme %}
+                                    {{ form_row(f) }}
+                                {% else %}
+                                    <li class="form_item">
+                                        <div class="head">
+                                            {% set label_class =  f.vars.label_attr.class is defined ? f.vars.label_attr.class : '' %}
+                                            {{ form_label(f, f.vars.label, { 'label_attr': {'class': label_class ~ ' ec-label' }}) }}
+                                        </div>
+                                        <div class="content ec-input {{ has_errors(f) ? ' error' }}">
+                                            {{ form_widget(f) }}
+                                            {{ form_errors(f) }}
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <div class="privacy_check ec-checkbox{{ has_errors(form.privacy_check) ? ' error' }}">
+                            {{ form_widget(form.privacy_check) }}
+                            <label for="contact_privacy_check"><a class="ec-link" href="{{ url('help_privacy') }}" target="_blank" style="text-decoration: underline;">プライバシーポリシー</a>に同意する</label>
+                            {{ form_errors(form.privacy_check) }}
+                        </div>
+                        <div class="c-submit_contain">
+                            <button class="c-btn" type="submit" name="mode" value="confirm">送信内容を確認する</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,51 @@
+
+/*
+マイページセクション
+
+マイページ専用のコンテナブロックです。
+
+ex [マイページ　コンテナ](http://demo3.ec-cube.net/mypage)
+
+Markup:
+include /assets/tmpl/elements/11.1.role.pug
++ec-mypageRole
+
+Styleguide 11.1.2
+*/
+.ec-mypageRole {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #525263;
+    -webkit-text-size-adjust: 100%;
+    width: 100%;
+  }
+  .ec-mypageRole:after {
+    content: " ";
+    display: table;
+  }
+  .ec-mypageRole:after {
+    clear: both;
+  }
+  .ec-mypageRole textarea {
+    /* for chrome fontsize bug */
+    font-family: sans-serif;
+  }
+  .ec-mypageRole img {
+    max-width: 100%;
+  }
+  .ec-mypageRole html {
+    box-sizing: border-box;
+  }
+  .ec-mypageRole *,
+  .ec-mypageRole *::before,
+  .ec-mypageRole *::after {
+    box-sizing: inherit;
+  }
+  .ec-mypageRole img {
+    width: 100%;
+  }

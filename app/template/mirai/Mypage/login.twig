@@ -1,0 +1,88 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'mypage' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
+{% endblock %}
+
+{% block main %}
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>LOGIN</span></h1>
+        <p class="jp">ログイン</p>
+    </div>
+</div>
+<!--  -->
+<main class="main">
+    <div class="c-subpage_contain">
+        <div class="p-loginpage">
+            <div class="p-loginform">
+                <form name="login_mypage" id="login_mypage" method="post" action="{{ url('mypage_login') }}">
+                    {% if app.session.flashBag.has('eccube.login.target.path') %}
+                        {% for targetPath in app.session.flashBag.peek('eccube.login.target.path') %}
+                            <input type="hidden" name="_target_path" value="{{ targetPath }}" />
+                        {% endfor %}
+                    {% endif %}
+                    <div class="loginform_content">
+                        <div class="p-loginform_item">
+                            <div class="head">
+                                <span>メールアドレス</span>
+                            </div>
+                            <div class="loginform_input ec-input">
+                                <input type="email" id="login_email" name="login_email" required="required" maxlength="255" style="ime-mode: disabled;" placeholder="メールアドレス" autofocus="autofocus" class="form-control">
+                            </div>
+                        </div>
+                        <div class="p-loginform_item">
+                            <div class="head">
+                                <span>パスワード</span>
+                            </div>
+                            <div class="loginform_input ec-input">
+                                <input type="password" id="login_pass" name="login_pass" required="required" maxlength="255" placeholder="パスワード" class="form-control">
+                            </div>
+                        </div>
+                        <div class="p-loginform_item">
+                            <div class="head"></div>
+                            <div class="loginform_pw_forget">
+                                <a href="{{ url('forgot') }}">パスワードを忘れた方はこちら</a>
+                            </div>
+                        </div>
+                        {% if BaseInfo.option_remember_me %}
+                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                <input type="hidden" name="login_memory" value="1">
+                            {% else %}
+                                <div class="p-loginform_item">
+                                    <div class="head"></div>
+                                    <div class="loginform_input">
+                                        <input type="checkbox" id="login_memory" name="login_memory" class="form-check-input">
+                                        <label for="login_memory">ログインしたままにする</label>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="loginform_btn">
+                        <div class="p-login_submit">
+                            <button class="c-btn" type="submit">ログイン</button>
+                        </div>
+                        <div class="p-newregister_btn">
+                            <a href="{{ url('entry') }}">新規会員登録はこちら</a>
+                        </div>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

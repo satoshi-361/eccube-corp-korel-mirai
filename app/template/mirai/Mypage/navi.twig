@@ -1,0 +1,18 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+<div class="p-mypage_head">
+    <a href="{{ url('mypage_change') }}" class="mypage_tablink {% if mypageno|default('') == 'change' %}active{% endif %}">{{ '登録情報'|trans }}</a>
+    <a href="{{ url('mypage_favorite') }}" class="mypage_tablink {% if mypageno|default('') == 'favorite' %}active{% endif %}">{{ 'お気に入り'|trans }}</a>
+    <a href="{{ url('mypage') }}" class="mypage_tablink {% if mypageno|default('') == 'index' %}active{% endif %}">{{ '購入履歴'|trans }}</a>
+    <a href="{{ url('mypage_browse_history') }}" class="mypage_tablink {% if mypageno|default('') == 'browse_history' %}active{% endif %}">{{ '閲覧履歴'|trans }}</a>
+</div>
+

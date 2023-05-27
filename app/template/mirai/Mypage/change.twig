@@ -1,0 +1,232 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'mypage' %}
+
+{% set mypageno = 'change' %}
+
+{% form_theme form 'Form/form_div_layout.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/modal.css') }}" type="text/css" />
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="//yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
+
+    <script>
+        $(function(){
+            $('.p-registration_edit_btn').on('click', function() {
+                $('.ec-modal').show();
+            });
+            
+            $('.ec-modal-close').on('click', function() {
+                $('.ec-modal').hide();
+            });
+        });
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>MY PAGE</span></h1>
+        <p class="jp">マイページ</p>
+    </div>
+</div>
+
+<!--  -->
+<main class="main">
+    <div class="page_max_width">
+        <div class="p-mypage_contain">
+            {% include 'Mypage/navi.twig' %}
+            <div class="p-mypage_body">
+                <div id="registration" class="p-mypage_content wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="c-register_title">
+                        <h2>会員情報</h2>
+                    </div>
+                    <div class="p-mypage_box">
+                        <div class="p-registration_item">
+                            <div class="head">
+                                <span>氏名</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Customer.name01 ~ Customer.name02 }}</span>
+                            </div>
+                        </div>
+                        <div class="p-registration_item">
+                            <div class="head">
+                                <span>フリガナ</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Customer.kana01 ~ Customer.kana02 }}</span>
+                            </div>
+                        </div>
+                        <div class="p-registration_item">
+                            <div class="head">
+                                <span>メールアドレス</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Customer.email }}</span>
+                            </div>
+                        </div>
+                        <div class="p-registration_item">
+                            <div class="head">
+                                <span>郵便番号</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Customer.postal_code }}</span>
+                            </div>
+                        </div>
+                        <div class="p-registration_item">
+                            <div class="head">
+                                <span>都道府県</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Customer.Pref.name }}</span>
+                            </div>
+                        </div>
+                        <div class="p-registration_item">
+                            <div class="head">
+                                <span>市区町村</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Customer.addr01 }}</span>
+                            </div>
+                        </div>
+                        <div class="p-registration_item">
+                            <div class="head">
+                                <span>以降の住所</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Customer.addr02 }}</span>
+                            </div>
+                        </div>
+                        <div class="p-registration_item">
+                            <div class="head">
+                                <span>電話番号</span>
+                            </div>
+                            <div class="txt">
+                                <span>{{ Customer.phone_number }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-registration_edit">
+                        <a class="p-registration_edit_btn"><img src="{{ asset('assets/image/common/review_writer.png') }}" alt=""><span>内容を編集する</span></a>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="ec-modal c-modal">
+                <div class="ec-modal-overlay">
+                    <div class="ec-modal-wrap">
+                        <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
+                        <div class="ec-modal-box">
+                            <form method="post" action="{{ url('mypage_change') }}" novalidate class="h-adr">
+                                <span class="p-country-name" style="display:none;">Japan</span>
+                                {{ form_widget(form._token) }}
+                                <ul>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">氏名</label>
+                                        </div>
+                                        <div class="content ec-halfInput">
+                                            {{ form_widget(form.name.name01, { 'attr': { 'placeholder': '姓' }}) }}
+                                            {{ form_widget(form.name.name02, { 'attr': { 'placeholder': '名' }}) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">フリガナ</label>
+                                        </div>
+                                        <div class="content ec-halfInput">
+                                            {{ form_widget(form.kana.kana01, { 'attr': { 'placeholder': 'セイ' }}) }}
+                                            {{ form_widget(form.kana.kana02, { 'attr': { 'placeholder': 'メイ' }}) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">メールアドレス</label>
+                                        </div>
+                                        <div class="content ec-input">
+                                            {{ form_widget(form.email) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">パスワード</label>
+                                        </div>
+                                        <div class="content ec-input">
+                                            {{ form_widget(form.plain_password.first, {
+                                                'attr': { 'placeholder': '半角英数記号%min%〜%max%文字'|trans({ '%min%': eccube_config.eccube_password_min_len, '%max%': eccube_config.eccube_password_max_len }) },
+                                                'type': 'password'
+                                            }) }}
+                                            {{ form_widget(form.plain_password.second, {
+                                                'attr': { 'placeholder': '確認のためもう一度入力してください'|trans },
+                                                'type': 'password'
+                                            }) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">郵便番号</label>
+                                        </div>
+                                        <div class="content ec-input">
+                                            {{ form_widget(form.postal_code) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">都道府県</label>
+                                        </div>
+                                        <div class="content ec-input">
+                                            {{ form_widget(form.address.pref) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">市区町村</label>
+                                        </div>
+                                        <div class="content ec-input">
+                                            {{ form_widget(form.address.addr01) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">以降の住所</label>
+                                        </div>
+                                        <div class="content ec-input">
+                                            {{ form_widget(form.address.addr02) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">電話番号</label>
+                                        </div>
+                                        <div class="content ec-input">
+                                            {{ form_widget(form.phone_number) }}
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="c-modal_submit">
+                                    <button class="c-btn" type="submit">変更を保存する</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

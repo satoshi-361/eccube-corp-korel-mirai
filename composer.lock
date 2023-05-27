@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b12434165b7d1270883e89b9e0b21879",
+    "content-hash": "e399e7d906922c03dbeef3739516c958",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2233,6 +2233,51 @@
             "time": "2019-10-24T07:13:31+00:00"
         },
         {
+            "name": "ec-cube/amazonpayv2_42",
+            "version": "4.2.3",
+            "dist": {
+                "type": "tar",
+                "url": "https://package-api-c2.ec-cube.net/v42/ec-cube/amazonpayv2_42/4.2.3/AmazonPayV2_42-4.2.3.tgz"
+            },
+            "type": "eccube-plugin",
+            "extra": {
+                "code": "AmazonPayV2_42",
+                "id": 2490
+            },
+            "description": "Amazon Payプラグイン(V2対応版)",
+            "transport-options": {
+                "http": {
+                    "header": [
+                        "X-ECCUBE-KEY: fd1a450d881a7cfad13b30648f9d6fde7bb2e778"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "ec-cube/cmblogpro42",
+            "version": "1.0.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://package-api-c2.ec-cube.net/v42/ec-cube/cmblogpro42/1.0.2/CMBlogPro42-1.0.2.tgz"
+            },
+            "require": {
+                "ec-cube/plugin-installer": "~0.0.7 || ^2.0"
+            },
+            "type": "eccube-plugin",
+            "extra": {
+                "code": "CMBlogPro42",
+                "id": 2681
+            },
+            "description": "簡単ブログPro",
+            "transport-options": {
+                "http": {
+                    "header": [
+                        "X-ECCUBE-KEY: fd1a450d881a7cfad13b30648f9d6fde7bb2e778"
+                    ]
+                }
+            }
+        },
+        {
             "name": "ec-cube/coupon42",
             "version": "4.2.4",
             "dist": {
@@ -2257,6 +2302,30 @@
             }
         },
         {
+            "name": "ec-cube/eccubepaymentlite42",
+            "version": "4.2.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://package-api-c2.ec-cube.net/v42/ec-cube/eccubepaymentlite42/4.2.2/EccubePaymentLite42-4.2.2.tgz"
+            },
+            "require": {
+                "ec-cube/plugin-installer": "^2.0"
+            },
+            "type": "eccube-plugin",
+            "extra": {
+                "code": "EccubePaymentLite42",
+                "id": 2667
+            },
+            "description": "EC-CUBEペイメントLite42",
+            "transport-options": {
+                "http": {
+                    "header": [
+                        "X-ECCUBE-KEY: fd1a450d881a7cfad13b30648f9d6fde7bb2e778"
+                    ]
+                }
+            }
+        },
+        {
             "name": "ec-cube/mailmagazine42",
             "version": "4.2.3",
             "dist": {
@@ -2276,6 +2345,54 @@
                 "http": {
                     "header": [
                         "X-ECCUBE-KEY: "
+                    ]
+                }
+            }
+        },
+        {
+            "name": "ec-cube/orderbysale42",
+            "version": "1.1.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://package-api-c2.ec-cube.net/v42/ec-cube/orderbysale42/1.1.0/OrderBySale42-1.1.0.tgz"
+            },
+            "require": {
+                "ec-cube/plugin-installer": "~0.0.6 || ^2.0"
+            },
+            "type": "eccube-plugin",
+            "extra": {
+                "code": "OrderBySale42",
+                "id": 2601
+            },
+            "description": "売上順・売れ筋順並び替えプラグイン for EC-CUBE4",
+            "transport-options": {
+                "http": {
+                    "header": [
+                        "X-ECCUBE-KEY: 8DiujgWw4pvHONxfFuNpUtfQ91TcKgrypua6hqo6"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "ec-cube/paypalcheckout42",
+            "version": "3.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://package-api-c2.ec-cube.net/v42/ec-cube/paypalcheckout42/3.0.0/PayPalCheckout42-3.0.0.tgz"
+            },
+            "require": {
+                "ec-cube/plugin-installer": "~0.0.7 || ^2.0"
+            },
+            "type": "eccube-plugin",
+            "extra": {
+                "code": "PayPalCheckout42",
+                "id": 2571
+            },
+            "description": "ペイパルチェックアウト決済プラグイン(4.2系)",
+            "transport-options": {
+                "http": {
+                    "header": [
+                        "X-ECCUBE-KEY: fd1a450d881a7cfad13b30648f9d6fde7bb2e778"
                     ]
                 }
             }

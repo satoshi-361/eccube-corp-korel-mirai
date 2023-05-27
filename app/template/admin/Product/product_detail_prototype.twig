@@ -1,0 +1,46 @@
+{% set index0 =  (index is defined) ? index : '__index__' %}
+<div class="border-top pt-3 mb-4 product-detail-item">
+    <div class="row">
+        <div class="col-3">
+            <span>タイトル{{ index0 }}</span>
+        </div>
+        <div class="col-9 mb-3">
+            <div>
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <span>詳細{{ index0 }}</span>
+        </div>
+        <div class="col-9 mb-3">
+            <div>
+                {{ form_widget(form.detail, {attr : { rows : "8"} }) }}
+                {{ form_errors(form.detail) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="d-inline-block">
+                <span>{{ '詳細画像' ~ index0|trans }}</span>
+                <i class="fa fa-question-circle fa-lg ms-1"></i>
+            </div>
+        </div>
+        <div class="col mb-2">
+            <p id="message{{index0}}"></p>
+            <div id="upload-zone" class="rounded">
+                {{ form_widget(form.detail_image, { attr : { style : 'display:none;' } }) }}
+                {{ form_errors(form.detail_image) }}
+            </div>
+            <span class="invalid-feedback" id="product_image_error{{index0}}" style="display: none">
+                <span class="d-block">
+                    <span class="form-error-icon badge bg-danger text-uppercase">{{ 'Error'|trans({}, 'validators') }}</span>
+                    <span class="form-error-message"></span>
+                </span>
+            </span>
+        </div>
+    </div>
+</div>

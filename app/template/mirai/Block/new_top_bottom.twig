@@ -1,0 +1,67 @@
+
+<div class="bottom_contain">
+
+    <!-- Movie -->
+    <section class="p-movieview">
+        <div class="p-movieview_contain page_width">
+            <div class="c-section_title">
+                <h3 class="jp">動画で見る</h3>
+                <p><span class="en" style="background: #fff;">Movie</span></p>
+            </div>
+            <div class="p-movieview_body">
+                <div class="p-movieview_flex">
+                    <a href="https://www.youtube.com/watch?v=lVWbp7shoUg" class="p-movieview_item">
+                        <iframe src="https://www.youtube.com/embed/lVWbp7shoUg" frameborder="0"></iframe>
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=lVWbp7shoUg" class="p-movieview_item">
+                        <iframe src="https://www.youtube.com/embed/6B_ebKuitTE" frameborder="0"></iframe>
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=lVWbp7shoUg" class="p-movieview_item">
+                        <iframe src="https://www.youtube.com/embed/pj6buDjxtKg" frameborder="0"></iframe>
+                    </a>
+                </div>
+                <div class="c-more_btn">
+                    <a href="">もっと見る</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--  -->
+    <section class="p-colums">
+        {% set blogRepository = repository('Plugin\\CMBlogPro42\\Entity\\Blog') %}
+        {% set Blogs = blogRepository.findAll() %}
+        <div class="p-colums_contain page_width">
+            <div class="c-section_title">
+                <h3 class="jp">コラム記事</h3>
+                <p><span class="en" style="background: #F9FCF5;">Colum</span></p>
+            </div>
+            <div class="p-colums_body">
+                <div class="p-colums_grid">
+                    {% for blog in Blogs %}
+                        <div class="p-colums_item">
+                            <a href="{{ url('cm_blog_pro_page_detail', {'id': blog.slug ? blog.slug : blog.id}) }}" class="p-colums_img">
+                                {% if blog.getMainListImage %}
+                                    <img src="{{ asset(blog.getMainListImage|no_image_product, 'save_image') }}"></img>
+                                {% else %}
+                                    <img src="{{ asset(''|no_image_product, 'save_image') }}"></img>
+                                {% endif %}
+                            </a>
+                            <div class="p-colums_infor">
+                                <div class="p-colums_date">
+                                    <span>{{ blog.release_date|date('Y/m/d')}}</span>
+                                </div>
+                                <a href="{{ url('cm_blog_pro_page_detail', {'id': blog.slug ? blog.slug : blog.id}) }}" class="p-colums_title">
+                                    <h3>{{ blog.getTitle|length > 45 ? blog.getTitle|striptags|replace({('&nbsp;'):' '})|slice(0, 45)|raw ~ '...' : blog.getTitle|raw }}</h3>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="c-more_btn">
+                    <a href="{{ url('cm_blog_pro_page_list') }}">もっと見る</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

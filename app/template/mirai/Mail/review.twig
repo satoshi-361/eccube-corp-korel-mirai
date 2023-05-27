@@ -1,0 +1,19 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% autoescape 'safe_textmail' %}
+
+お手数ですが、ご確認の程、何卒、宜しくお願い申し上げます。
+
+{{ Customer.name01 }} {{ Customer.name02 }}様がレビューを投稿しました。
+
+レビューID： {{ review_id }}
+
+{% endautoescape %}

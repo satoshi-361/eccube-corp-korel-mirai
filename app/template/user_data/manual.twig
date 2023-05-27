@@ -1,0 +1,76 @@
+{% extends 'default_frame.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/manual.css') }}" type="text/css" />
+{% endblock %}
+
+{% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>MANUAL</span></h1>
+            <p class="jp">取扱説明書</p>
+        </div>
+    </div>
+    <!-- manual -->
+    <main class="main">
+        <div class="c-subpage_contain">
+            <div class="p-manualpage">
+                <div class="c-subsec_head">
+                    <div class="c-subsec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <h2>マニュアル</h2>
+                    </div>
+                </div>
+                <div class="p-manual_body">
+                    <div class="p-manual_grid">
+                        <div class="item">
+                            <div class="item_head">
+                                <h3><span class="en">EARPICK </span><span class="jp">耳かき</span></h3>
+                            </div>
+                            <div class="item_img">
+                                <img src="{{ asset('assets/image/manual/earpick.png') }}" alt="">
+                            </div>
+                            <div class="item_box">
+                                <div class="item_row">
+                                    <div class="item_cate_title">
+                                        <a href=""><span class="icon"> ▶︎ </span><span class="txt">マイクロファイバー製</span></a>
+                                    </div>
+                                    <div class="item_sub_title">
+                                        <ul>
+                                            <li>
+                                                <a href="">ののじ　UTTORI</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="item_row">
+                                    <div class="item_cate_title">
+                                        <a href=""><span class="icon"> ▶︎ </span><span class="txt">ワイヤータイプ</span></a>
+                                    </div>
+                                    <div class="item_sub_title">
+                                        <ul>
+                                            <li>
+                                                <a href="">ののじ 爽快ソフト耳かき</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="item_row">
+                                    <div class="item_cate_title">
+                                        <a href=""><span class="icon"> ▶︎ </span><span class="txt">専門医用</span></a>
+                                    </div>
+                                    <div class="item_sub_title">
+                                        <ul>
+                                            <li>
+                                                <a href="">耳かき　KAGA premium</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,27 @@
+<main class="main">
+    <div class="top_contain">
+        <!-- MV -->
+        <section class="p-mv page_max_width" style="max-width: unset;">
+            <div class="p-mv_img">
+                <img class="pc" src="{{ asset('assets/image/top/fv-pc.png') }}" alt="" style="margin-top: 100px;">
+                <img class="sp" src="{{ asset('assets/image/top/fv-sp.png') }}" alt="" style="margin-top: 40px;">
+            </div>
+        </section>
+
+        <!-- バナー -->
+        <section class="p-banners">
+            <div class="p-banners_contain page_small_width">
+                <div class="p-banner_body">
+                    <div class="p-banner_box p-banner_box01 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+                        <a href="{{ url('entry') }}"><img src="{{ asset('assets/image/top/banner01.png') }}" alt=""></a>
+                    </div>
+                    <div class="p-banner_box p-banner_box02  wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+                        <a href="{{ url('product_detail', { 'id': 19 }) }}"><img src="{{ asset('assets/image/top/banner02.png') }}" alt=""></a>
+                    </div>
+                    <div class="p-banner_box p-banner_box03  wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+                        <img src="{{ asset('assets/image/top/banner03.png') }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>

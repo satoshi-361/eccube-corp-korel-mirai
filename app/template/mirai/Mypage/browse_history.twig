@@ -1,0 +1,124 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set mypageno = 'browse_history' %}
+
+{% set body_class = 'mypage' %}
+
+{% block stylesheet %}
+    <style>
+        .p-mypage_content .p-mypagebox .head_del {
+            width: 5%;
+        }
+        .p-mypage_content .p-mypagebox .other_box img {
+            max-width: 30px;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>MY PAGE</span></h1>
+        <p class="jp">マイページ</p>
+    </div>
+</div>
+<!--  -->
+<main class="main">
+    <div class="page_max_width">
+        <div class="p-mypage_contain">
+            {% include 'Mypage/navi.twig' %}
+            <div class="p-mypage_body">
+                <div id="browse_history" class="p-mypage_content wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <p class="ec-para-normal">{{ '%count%件のお気に入りがあります'|trans({'%count%':pagination.totalItemCount}) }}</p>
+                    <div class="pur_history">
+                        <div class="p-mypagebox">
+                            <div class="head pc">
+                                <div class="head_del">
+                                    <span>削除</span>
+                                </div>
+                                <div class="head_product">
+                                    <span>商品</span>
+                                </div>
+                                <div class="head_price">
+                                    <span>単価</span>
+                                </div>
+                                <div class="head_btn">
+                                    <span></span>
+                                </div>
+                            </div>
+
+                            {% if pagination.totalItemCount > 0 %}
+                            <div class="my-content">
+                                {% for FavoriteProduct in pagination %}
+                                    {% set Product = FavoriteProduct.Product %}
+                                    <div class="content_row">
+                                        <div class="other_box">
+                                            <a class="ec-closeBtn--circle"
+                                            href="{{ url('mypage_favorite_delete', { id : Product.id }) }}" {{ csrf_token_for_anchor() }}
+                                            data-method="delete">
+                                                <img src="{{ asset('assets/icon/cross-dark.svg') }}" alt="close">
+                                            </a>
+                                        </div>
+                                        <div class="main_box">
+                                            <div class="main_img">
+                                                {% if Product is null %}
+                                                    <img src="{{ asset(''|no_image_product, 'save_image') }}"/>
+                                                {% else %}
+                                                    <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}">
+                                                {% endif %}
+                                            </div>
+                                            <div class="main_infor">
+                                                {% if Product.one_word is not empty %}
+                                                    <p class="txt_up">{{ Product.one_word }}</p>
+                                                {% endif %}
+                                                <p class="txt_mid">{{ Product.name }}</p>
+                                                {% if Product.description_detail is not empty %}
+                                                    <p class="txt_bt">{{ Product.description_detail }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="price_box pc">
+                                            <p class="price">
+                                                {% if Product.price02_inc_tax_min == Product.price02_inc_tax_max %}
+                                                    {{ Product.price02_inc_tax_min|price }}
+                                                {% else %}
+                                                    {{ Product.price02_inc_tax_min|price }}～{{ Product.price02_inc_tax_max|price }}
+                                                {% endif %}
+                                                <span class="tax"> (税込)</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn_group pc">
+                                            <div class="buybtn">
+                                                <a href="{{ url('product_detail', {'id': Product.id}) }}">カートに入れる</a>
+                                            </div>
+                                            <form action="{{ url('product_add_favorite', {id:Product.id, path: 'mypage'}) }}" method="post" class="product_add_favorite">
+                                                <button type="submit" id="favorite" class="s-favorite_btn"><i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i>　お気に入り</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="ec-pagerRole">
+                                {% include "pager.twig" with {'pages': pagination.paginationData} %}
+                            </div>
+                            {% else %}
+                                <p class="ec-para-normal">{{ 'お気に入りは登録されていません。'|trans }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

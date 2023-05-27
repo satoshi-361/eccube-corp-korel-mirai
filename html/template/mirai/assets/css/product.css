@@ -1,0 +1,566 @@
+/* PRODUCT page */
+
+.s-product_body {
+    padding: 20px;
+}
+
+.s-product_main {
+    display: flex;
+    justify-content: space-between;
+    gap: 4%;
+}
+
+.s-product_img_box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.s-product_img_box .slideThumb {
+    padding: 5px;
+}
+
+.s-product_img_box .slideThumb img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+}
+
+.s-product_img,
+.s-product_profile {
+    width: 48%;
+}
+
+.s-product_cate {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.s-product_cate a {
+    border: 1px solid #707070;
+    font-family: Arial;
+    font-weight: normal;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: #333;
+    padding: 5px 10px;
+}
+
+.s-product_title h2 {
+    margin-top: 15px;
+    font-family: "Source Han Sans JP";
+    font-weight: bold;
+    font-size: 28px;
+    letter-spacing: 0.1em;
+    line-height: 31px;
+    text-align: left;
+    color: #333;
+}
+
+.s-product_price {
+    margin-top: 20px;
+    font-family: Yu Gothic;
+    font-weight: bold;
+    font-size: 29px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #333;
+}
+
+.s-product_price .tax {
+    font-family: "Source Han Sans JP";
+    font-weight: normal;
+    font-size: 15px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: #333;
+}
+
+.s-btn_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.s-addcart {
+    max-width: 500px;
+    width: 100%;
+}
+
+.s-addcart .s-addcartbtn {
+    width: 100%;
+    height: 65px;
+    border: none;
+    outline: none;
+    position: relative;
+    background: #7fb744;
+    font-family: Arial;
+    font-weight: normal;
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: #fff;
+    transition: all 0.35s;
+}
+
+.s-addcart .s-addcartbtn:hover,
+.s-favorite_btn:hover {
+    background: #648746;
+}
+
+.s-addcart .s-addcartbtn span {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.s-favorite_btn {
+    width: 65px;
+    height: 65px;
+    background: #7fb744;
+    content: "\f004";
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border: none;
+    outline: none;
+    transition: all 0.35s;
+}
+
+.s-product_colors {
+    margin-top: 35px;
+    display: flex;
+}
+
+.s-colors_head {
+    max-width: 130px;
+    width: 100%;
+    font-family: Arial;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #333;
+}
+
+.s-color_item {
+    margin-bottom: 10px;
+    font-family: "Source Han Sans JP";
+    font-weight: normal;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #333;
+}
+
+.s-color_item input {
+    accent-color: #333;
+}
+
+.s-product_infor_add {
+    margin-top: 20px;
+}
+
+.s-product_infor_additem {
+    border-top: 1px solid #c5c5c5;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.s-product_infor_additem .head {
+    max-width: 130px;
+    width: 100%;
+    font-family: Arial;
+    font-weight: normal;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #333;
+}
+
+.s-product_infor_additem .txt {
+    font-family: "Source Han Sans JP";
+    font-weight: normal;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #333;
+}
+
+.s-product_manuallink a {
+    font-family: "Source Han Sans JP";
+    font-weight: normal;
+    text-decoration: underline;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #333;
+    transition: all 0.35s;
+}
+
+.s-product_manuallink a:hover {
+    color: #7FB744;
+}
+
+.s-moviebox {
+    max-width: 550px;
+    height: 400px;
+    margin: 80px auto;
+}
+
+.s-moviebox iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.s-product_introduce {
+    margin: 100px auto;
+}
+
+.s-introduce_top .top_txt {
+    font-family: "Source Han Sans JP";
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 30px;
+    text-align: center;
+    color: #333;
+}
+
+.s-introduce_top .top_head h3 {
+    margin-top: 20px;
+    font-family: "Source Han Sans JP";
+    font-weight: bold;
+    font-size: 40px;
+    letter-spacing: 0.1em;
+    line-height: 1.7;
+    text-align: center;
+    color: #333;
+}
+
+.s-introduce_main {
+    margin-top: 50px;
+    background-color: #fff;
+    padding: 70px;
+}
+
+.s-introduce_single {
+    margin-bottom: 100px;
+}
+
+.s-introduce_single:last-child {
+    margin-bottom: 0;
+}
+
+.s-introduce_title {
+    border-bottom: 1px solid #7FB744;
+}
+
+.s-introduce_title h4 {
+    font-family: "Source Han Sans JP";
+    font-weight: bold;
+    font-size: 23px;
+    line-height: 1.7;
+    text-align: left;
+    color: #7fb744;
+    padding: 5px 0;
+}
+
+.s-introduce_txt {
+    margin-top: 30px;
+    font-family: "Source Han Sans JP";
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 26px;
+    text-align: left;
+    color: #333;
+    /* display: flex;
+    gap: 20px;
+    justify-content: space-between; */
+}
+
+.s-introduce_txt .container-3,
+.s-introduce_txt .container-6 {
+    padding: 5px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.s-introduce_txt .container-3 img,
+.s-introduce_txt .container-6 img {
+    max-width: 450px;
+    min-width: 80px;
+    width: calc(31% - 25px);
+    height: fit-content;
+}
+
+.s-introduce_txt .container-1,
+.s-introduce_txt .container-2 {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.s-introduce_txt .container-1 .image,
+.s-introduce_txt .container-2 .image {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.s-introduce_txt .container-1 .image img {
+    max-width: 450px;
+    min-width: 300px;
+    height: fit-content;
+}
+
+.s-introduce_txt .container-2 .image img {
+    max-width: 250px;
+    min-width: 150px;
+    width: calc(50% - 10px);
+    height: fit-content;
+}
+
+/* .s-introduce_txt img {
+    max-width: 300px;
+    width: 100%;
+    margin-left: 30px;
+}
+
+.s-introduce_txt img[style*="float: right"] {
+    margin-left: 30px;
+}
+
+.s-introduce_txt img[style*="float: left"] {
+    margin-right: 30px;
+}
+
+.s-introduce_txt > p::after {
+    content: '';
+    display: table;
+    clear: both;
+} */
+
+.s-product_review {
+    margin-top: 150px;
+}
+
+.s-product_sec_title h4 {
+    font-family: "Source Han Sans JP";
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 18px;
+    text-align: left;
+    color: #fff;
+    padding: 15px 50px;
+    background-color: #7fb744;
+}
+
+
+/* Product Review */
+
+.s-review_contain {
+    padding: 30px 50px;
+    background: #fff;
+}
+
+.s-review_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.s-review_header_left,
+.s-review_header_right a {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.s-review_sumtitle {
+    font-family: "Source Han Sans JP";
+    font-weight: bold;
+    font-size: 21px;
+    text-align: left;
+    color: #7fb744;
+}
+
+.s-review_allstar {
+    margin-left: 10px;
+    font-size: 25px;
+    color: #f5ed24;
+}
+
+.s-review_marker {
+    margin-left: 20px;
+    font-family: "Source Han Sans JP";
+    font-weight: 500;
+    font-size: 22px;
+    text-align: left;
+    color: #7fb744;
+}
+
+.s-review_counts {
+    font-family: "Source Han Sans JP";
+    font-weight: 500;
+    font-size: 16px;
+    text-align: left;
+    color: #7fb744;
+}
+
+.s-review_header_right button {
+    font-family: "Source Han Sans JP";
+    font-weight: 500;
+    text-decoration: underline;
+    font-size: 18px;
+    line-height: 18px;
+    text-align: left;
+    color: #333;
+    transition: all 0.35s;
+}
+
+.s-review_item {
+    padding: 30px 0;
+    border-top: 1px solid #7FB744;
+}
+
+.s-review_header_right a:hover {
+    color: #7FB744;
+}
+
+.s-review_header_right a img {
+    width: 25px;
+    height: auto;
+}
+
+.s-review_header_right a span {
+    text-decoration: underline;
+}
+
+.s-review_item_head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.s-review_item_content {
+    margin-top: 5px;
+}
+
+.s-review_item_body {
+    margin-top: 15px;
+    font-family: "Source Han Sans JP";
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 25px;
+    text-align: left;
+    color: #333;
+}
+
+.s-review_itemhead_left {
+    display: flex;
+    align-items: center;
+}
+
+.s-review_item_title h4 {
+    font-family: "Source Han Sans JP";
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 1.7;
+    text-align: left;
+    color: #333;
+}
+
+.s-review_star {
+    font-size: 25px;
+    color: #f5ed24;
+}
+
+.s-review_item_name {
+    margin-left: 30px;
+    font-family: "Source Han Sans JP";
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 18px;
+    text-align: left;
+    color: #333;
+}
+
+.s-review_itemhead_right {
+    font-family: "Source Han Sans JP";
+    font-weight: normal;
+    font-size: 16px;
+    text-align: left;
+    color: #333;
+}
+
+
+/*  */
+
+.s-add_detail {
+    margin-top: 100px;
+    background: #fff;
+}
+
+.s-add_detail_item {
+    display: flex;
+    border-bottom: 1px solid #707070;
+    padding: 20px 0;
+}
+
+.s-add_detail_head {
+    padding-left: 50px;
+    max-width: 250px;
+    width: 100%;
+    font-family: "Source Han Sans JP";
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-align: left;
+    color: #333;
+}
+
+.s-add_detail_txt {
+    font-family: "Source Han Sans JP";
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    line-height: 25px;
+    text-align: left;
+    color: #333;
+}
+
+.s-add_detail_txt .small_txt {
+    font-size: 12px;
+}
+
+
+/*  */
+
+.s-recommend {
+    margin: 100px auto;
+}
+
+.s-recommend_body {
+    margin-top: 20px;
+}
+
+.s-recommend_body .p-products_grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}

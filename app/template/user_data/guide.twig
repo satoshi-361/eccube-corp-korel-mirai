@@ -1,0 +1,279 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>USER GUIDE</span></h1>
+        <p class="jp">ご利用ガイド</p>
+    </div>
+</div>
+
+<!-- Trade law -->
+<main class="main">
+    <div class="c-subpage_contain">
+        <div class="p-guidepage">
+            <div class="c-subsec_head">
+                <div class="c-subsec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h2>ご利用ガイド</h2>
+                </div>
+            </div>
+            <div class="p-pagelink">
+                <div class="p-pagelink_contain wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="p-pagelink_grid">
+                        <div class="p-pagelink_item">
+                            <a href="#delivery">
+                                <img src="{{ asset('assets/image/common/delivery.png') }}" alt="">
+                                <p>送料・配送方法</p>
+                            </a>
+                        </div>
+                        <div class="p-pagelink_item">
+                            <a href="#paymethod">
+                                <img src="{{ asset('assets/image/common/paymethod.png') }}" alt="">
+                                <p>お支払い方法</p>
+                            </a>
+                        </div>
+                        <div class="p-pagelink_item">
+                            <a href="#refund">
+                                <img src="{{ asset('assets/image/common/refund.png') }}" alt="">
+                                <p>返品・交換</p>
+                            </a>
+                        </div>
+                        <div class="p-pagelink_item">
+                            <a href="#calendar">
+                                <img src="{{ asset('assets/image/common/calender.png') }}" alt="">
+                                <p>営業日カレンダー</p>
+                            </a>
+                        </div>
+                        <div class="p-pagelink_item">
+                            <a href="#fqa">
+                                <img src="{{ asset('assets/image/common/fqa.png') }}" alt="">
+                                <p>よくあるご質問</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 送料・配送方法について -->
+            <div id="delivery" class="p-guide_subcontain p-delivery_sec">
+                <div class="p-guide_subtitle wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h3>送料・配送方法について</h3>
+                </div>
+                <div class="p-guide_subbody">
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>送料について</h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <table class="shipping_cost">
+                                <tbody>
+                                    <tr>
+                                        <td>会員登録の場合</td>
+                                        <td class="red">送料無料</td>
+                                    </tr>
+                                    <tr>
+                                        <td>非会員登録の場合</td>
+                                        <td class="red">全国一律で550円</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>配送方法について</h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <p>●ご注文受付後５営業日以内に発送いたします。<br> 営業日はカレンダーをご確認ください。
+                                <br> 当店では、商品お届けの日時指定を承っておりません。予めご了承ください。
+                                <br> ※商品の製造状況、配送先、天候等により、通常より日数のかかる場合がございます。
+                                <br>
+                                <br> ご注文いただいた商品は、以下の運送会社にてお届けいたします。
+                                <br> 　・ヤマト運輸株式会社
+                                <br> 　・佐川急便株式会社
+                                <br> 　・日本郵便株式会社
+                                <br> ヤマト運輸株式会社の場合、宅急便のお届けとなります。
+                                <br> 佐川急便株式会社の場合、新潟県の提携倉庫より宅急便のお届けとなります。
+                                <br> 日本郵便株式会社の場合、クリックポスト（ポスト投函配送）でのお届けとなります。
+                                <br> ご注文商品の内容により、当店にていずれかの方法を選択させていただいております。
+                                <br>
+                                <br> 商品の配送状況は、「発送のお知らせ」メールに記載の【発送伝票確認URL】よりご確認いただけます。
+                                <br> ※追跡情報の反映にはお時間がかかる場合がございます。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>複数の商品をご注文の場合</h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <p>ご注文商品がすべてそろってからの発送となりますので、ご了承ください。<br> ご注文が集中した場合、商品のお届けが一時的に遅くなることがあります。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- お支払い方法について -->
+            <div id="paymethod" class="p-guide_subcontain p-paymethod_sec">
+                <div class="p-guide_subtitle wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h3>お支払い方法について</h3>
+                </div>
+                <div class="p-guide_subbody">
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>クレジット決済</h3>
+                        </div>
+                        <div class="c-subpageitem_txt p-paymethod_txt">
+                            <p>下記の5種類のクレジットカードをご利用いただけます。<br> Visa、Mastercard、JCB、American Express、Diners Club<br> お支払いはすべて一括払いとなります。
+                            </p>
+                            <p><img src="{{ asset('assets/image/common/guidepaymethod.png') }}" alt=""></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 返品・交換について -->
+            <div id="refund" class="p-guide_subcontain p-refund_sec">
+                <div class="p-guide_subtitle wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h3>返品・交換について</h3>
+                </div>
+                <div class="p-guide_subbody">
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>不良品の場合</h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <p>商品の発送には万全を期しておりますが、万一、不良品・品違い・品不足などがあった場合は、商品到着後８日以内に「お問い合わせ」ページからご連絡をお願いいたします。この期間を過ぎた返品やご連絡が無い場合の返品はお受けできない場合がございます。 </p>
+                        </div>
+                    </div>
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>お客様のご都合で返品される場合</h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <p>
+                                商品到着後８日以内にご連絡ください。この期間を過ぎた返品やご連絡が無い場合の返品はお受けできない場合がございます。お客様のご都合で返品される場合は未開封の状態に限り返品が可能です。<br/>
+                                ※未開封とは、商品のパッケージや包装ビニールを開封していない状態です。<br/>
+                                <br/>
+                                ▼次の商品は、返品条件が異なります。下記の返品条件をご確認ください。<br/>
+                                〈対象商品〉<br/>
+                                「フェアリーゴッドマザー 生体ゆるなでブラシ」（14日間返品保証）<br/>
+                                ※ご一緒にご注文いただきました他の商品は「14日間返品保証」の対象外となります。<br/>
+                                <a href="https://www.yokohama-city.co.jp/lp/fsyb/return.html" style="text-decoration: underline; color: -webkit-link;">返品条件はこちら</a><br/>
+                                <br/>
+                                ご不明な点等ございましたら「お問い合せ」ページよりお問合せください。 
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>返品送料</h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <p>お客様のご都合による返品につきましてはお客様のご負担とさせていただきます。なお、着払いでご返送された場合は、送料をご請求させていただきます。あらかじめご了承ください。 </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 営業日カレンダー -->
+            <div id="calendar" class="p-guide_subcontain p-calendar_sec">
+                <div class="p-guide_subtitle wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h3>営業日カレンダー</h3>
+                </div>
+                <div class="p-guide_subbody">
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_txt">
+                            <img src="{{ asset('assets/image/calendar.png') }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- よくあるご質問 -->
+            <div id="fqa" class="p-guide_subcontain p-fqa_sec">
+                <div class="p-guide_subtitle wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h3>よくあるご質問</h3>
+                </div>
+                <div class="p-fqa_subbody">
+                    <div class="accordion jp">
+                        <div class="accordion-item wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                            <button id="accordion-button-1" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">回答テキストが閉じている際のサンプルです</span><span class="icon" aria-hidden="true"></span></button>
+                            <div class="accordion-content">
+                                <p><span class="a">A</span><span>答えが入ります。答えが入ります。答えが入ります。答えが入ります。答えが入ります。
+                                    答えが入ります。答えが入ります。答えが入ります。答えが入ります。答えが入ります。
+                                    答えが入ります。答えが入ります。答えが入ります。答えが入ります。答えが入ります。
+                                </span></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
+                            <button id="accordion-button-2" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">配送方法を教えて下さい。</span><span class="icon" aria-hidden="true"></span></button>
+                            <div class="accordion-content">
+                                <p><span class="a">A</span><span>ご注文いただいた商品は、以下の運送会社にてお届けいたします。<br>
+                                    　・ヤマト運輸株式会社<br>
+                                    　・佐川急便株式会社<br>
+                                    　・日本郵便株式会社<br>
+                                    ヤマト運輸株式会社の場合、宅急便のお届けとなります。<br>
+                                    佐川急便株式会社の場合、新潟県の提携倉庫より宅急便のお届けとなります。<br>
+                                    日本郵便株式会社の場合、クリックポスト（ポスト投函配送）でのお届けとなります。<br>
+                                    ご注文商品の内容により、当店にていずれかの方法を選択させていただいております。<br>
+                                    <br>
+                                    会員登録の場合、送料無料<br>
+                                    非会員登録の場合は、全国一律で550円いただいております。
+                                </span></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
+                            <button id="accordion-button-3" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">配達日、時間は指定できますか？</span><span class="icon" aria-hidden="true"></span></button>
+                            <div class="accordion-content">
+                                <p><span class="a">A</span><span>当店では、商品お届けの日時指定を承っておりません。予めご了承ください。<br>
+                                    なお、商品の配送状況は、「発送のお知らせ」メールに記載の【発送伝票確認URL】よりご確認いただけます。
+                                </span></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
+                            <button id="accordion-button-4" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">支払い方法を教えて下さい。</span><span class="icon" aria-hidden="true"></span></button>
+                            <div class="accordion-content">
+                                <p><span class="a">A</span><span>クレジットカードにてお支払いいただけます。
+                                </span></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
+                            <button id="accordion-button-5" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">会員登録をすると何か特典はありますか？</span><span class="icon" aria-hidden="true"></span></button>
+                            <div class="accordion-content">
+                                <p><span class="a">A</span><span>ご注文の際のお客様情報の入力が不要になります。さらにアドレス帳や購入履歴など、便利な機能をお使いいただけます。<br>送料が無料になります。
+                                </span></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
+                            <button id="accordion-button-5" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">会員情報の変更、退会の手続きの仕方がわかりません。</span><span class="icon" aria-hidden="true"></span></button>
+                            <div class="accordion-content">
+                                <p><span class="a">A</span><span>ログインの上、マイページから変更、退会の手続きをおこなってください。
+                                </span></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
+                            <button id="accordion-button-5" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">のしがけ、またはギフト用のラッピングには対応していますか。</span><span class="icon" aria-hidden="true"></span></button>
+                            <div class="accordion-content">
+                                <p><span class="a">A</span><span>のしがけ、またはギフト用のラッピング対応につきましては承っておりません。ご了承ください。
+                                </span></p>
+                            </div>
+                        </div>
+                        <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
+                            <button id="accordion-button-5" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">商品の返品・交換はできますか？</span><span class="icon" aria-hidden="true"></span></button>
+                            <div class="accordion-content">
+                                <p><span class="a">A</span><span>商品の発送には万全を期しておりますが、万一、不良品・品違い・品不足などがあった場合は、商品到着後8日以内に「お問い合わせ」ページからご連絡をお願いいたします。この期間を過ぎた返品やご連絡が無い場合の返品はお受けできない場合がございます。<br>
+                                    お客様のご都合で返品される場合<br>
+                                    未開封の状態で、商品到着後８日以内に「お問い合わせ」ページへ返品希望を連絡済みである場合に限り返品が可能です。<br>
+                                    ※未開封とは、商品のパッケージや包装ビニールを開封していない状態です。<br>
+                                    返品送料はお客様のご負担とさせていただきます。<br>
+                                    なお、着払いでご返送された場合は、送料をご請求させていただきます。あらかじめご了承ください。
+                                </span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

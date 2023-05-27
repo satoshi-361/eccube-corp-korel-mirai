@@ -1,0 +1,150 @@
+{% extends 'default_frame.twig' %}
+
+{% block javascript %}{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/subpage.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/subpage_sp.css') }}" type="text/css" />
+{% endblock %}
+
+{% block main %}
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>COLUMN</span></h1>
+        <p class="jp">コラム一覧</p>
+    </div>
+</div>
+<!--  -->
+<main class="main">
+    <div class="c-subpage_contain">
+        <div class="p-blogpage">
+            <div class="p-blogpage_head wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                <div class="p-blog_categorytabs">
+                    {% for category in categories %}
+                        <div class="p-categorytab">
+                            <a href="{{ url('cm_blog_pro_page_list', {categories: [category.getId()]}) }}">{{ category.getName|raw }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="p-blog_contain">
+                <div class="p-blog_body">
+                    {% if pagination.totalItemCount > 0 %}
+                    <p class="p-blog_counter"> {{ pagination.totalItemCount }}件中 </p>
+                    <div class="p-blog_grid">
+                        {% for blog in pagination %}
+                            <div class="p-blog_item wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                <div class="p-blog_img">
+                                    <a href="{{ url('cm_blog_pro_page_detail', {'id': blog.slug ? blog.slug : blog.id}) }}">
+                                        {% if blog.getMainListImage %}
+                                            <img src="{{ asset(blog.getMainListImage|no_image_product, 'save_image') }}" class='item_blog_image'></img>
+                                        {% else %}
+                                            <img src="{{ asset(''|no_image_product, 'save_image') }}" class='item_blog_image'></img>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                <div class="p-blog_infor">
+                                    <div class="p-blogitem_cate">
+                                        {% for BlogCategory in blog.BlogCategories %} {{ BlogCategory.Category.name }} {% endfor %}
+                                    </div>
+                                    <div class="p-blogitem_date">
+                                        <span>{{ blog.release_date|date('Y/m/d')}}</span>
+                                    </div>
+                                    <div class="p-blogitem_title">
+                                        <a href="{{ url('cm_blog_pro_page_detail', {'id': blog.slug ? blog.slug : blog.id}) }}">
+                                            <h3>{{ blog.getTitle|length > 45 ? blog.getTitle|striptags|replace({('&nbsp;'):' '})|slice(0, 45)|raw ~ '...' : blog.getTitle|raw }}</h3>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                        <div class="ec-pagerRole">
+                            {% include "pager.twig" with {'pages': pagination.paginationData, 'routes' : 'cm_blog_pro_page_list'} %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="p-blogsidebar">
+                    <div class="p-blogsidebar_sec wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="p-blogsidebar_title">
+                            <p>POPULAR</p>
+                        </div>
+                        <div class="p-blogsidebar_box">
+                            {% set BlogRepository = repository('Plugin\\CMBlogPro42\\Entity\\Blog') %}
+                            <div class="p-popularblogs">
+                                {% for PopularBlogInfo in PopularBlogs %}
+                                    {% set blog = BlogRepository.find(PopularBlogInfo.id) %}
+                                    <div class="p-blog_img">
+                                        <a href="{{ url('cm_blog_pro_page_detail', {'id': blog.slug ? blog.slug : blog.id}) }}">
+                                            {% if blog.getMainListImage %}
+                                                <img src="{{ asset(blog.getMainListImage|no_image_product, 'save_image') }}" class='item_blog_image'></img>
+                                            {% else %}
+                                                <img src="{{ asset(''|no_image_product, 'save_image') }}" class='item_blog_image'></img>
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="p-blog_infor">
+                                        <div class="p-blogitem_cate">
+                                            {% for BlogCategory in blog.BlogCategories %} {{ BlogCategory.Category.name }} {% endfor %}
+                                        </div>
+                                        <div class="p-blogitem_date">
+                                            <span>{{ blog.release_date|date('Y/m/d')}}</span>
+                                        </div>
+                                        <div class="p-blogitem_title">
+                                            <a href="{{ url('cm_blog_pro_page_detail', {'id': blog.slug ? blog.slug : blog.id}) }}">
+                                                <h3>{{ blog.getTitle|length > 45 ? blog.getTitle|striptags|replace({('&nbsp;'):' '})|slice(0, 45)|raw ~ '...' : blog.getTitle|raw }}</h3>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                        </div>
+                    </div>
+                    <div class="p-blogsidebar_sec wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="p-blogsidebar_title">
+                            <p>CATEGORY</p>
+                        </div>
+                        <div class="p-blogsidebar_box">
+                            <div class="p-sidebar_catelist">
+                                <ul>
+                                    {% for category in categories %}
+                                        <li>
+                                            <a href="{{ url('cm_blog_pro_page_list', {categories: [category.getId()]}) }}">{{ category.getName|raw }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-blogsidebar_sec wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="p-blogsidebar_title">
+                            <p>TAG</p>
+                        </div>
+                        <div class="p-blogsidebar_box">
+                            <div class="p-sidebar_tagslist">
+                                <ul>
+                                    <li>
+                                        <a href="{{ url('cm_blog_pro_page_list', { 'tag': 'お知らせ' }) }}">#お知らせ</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('cm_blog_pro_page_list', { 'tag': 'コラム記事' }) }}">#コラム記事</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('cm_blog_pro_page_list', { 'tag': '商品紹介' }) }}">#商品紹介</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('cm_blog_pro_page_list', { 'tag': 'レシピ紹介' }) }}">#レシピ紹介</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('cm_blog_pro_page_list', { 'tag': 'メディア情報' }) }}">#メディア情報</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

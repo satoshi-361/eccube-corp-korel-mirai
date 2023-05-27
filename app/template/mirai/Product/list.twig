@@ -1,0 +1,457 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'product_page' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
+    <style>
+        a:hover img {
+            opacity: .8;
+        }
+        .main_contain {
+            margin-top: 50px;
+        }
+
+        .ec-searchnavRole {
+            margin-bottom: 0;
+            padding: 0;
+        }
+        .ec-searchnavRole .ec-searchnavRole__infos {
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+            line-height: 1.4;
+            color: #525263;
+            -webkit-text-size-adjust: 100%;
+            width: 100%;
+            max-width: 1130px;
+            display: flex;
+            border-top: 0;
+            margin-bottom: 16px;
+            padding-top: 5px;
+        }
+        .ec-searchnavRole .ec-searchnavRole__infos:after {
+            content: " ";
+            display: table;
+        }
+        .ec-searchnavRole .ec-searchnavRole__infos:after {
+            clear: both;
+        }
+        .ec-searchnavRole .ec-searchnavRole__infos textarea {
+        /* for chrome fontsize bug */
+            font-family: sans-serif;
+        }
+        .ec-searchnavRole .ec-searchnavRole__infos img {
+            max-width: 100%;
+        }
+        .ec-searchnavRole .ec-searchnavRole__infos html {
+            box-sizing: border-box;
+        }
+        .ec-searchnavRole .ec-searchnavRole__infos *,
+        .ec-searchnavRole .ec-searchnavRole__infos *::before,
+        .ec-searchnavRole .ec-searchnavRole__infos *::after {
+            box-sizing: inherit;
+        }
+        .ec-searchnavRole .ec-searchnavRole__infos img {
+            width: 100%;
+        }
+        .ec-searchnavRole .ec-searchnavRole__counter {
+            margin-bottom: 16px;
+            width: 100%;
+        }
+        .ec-searchnavRole .ec-searchnavRole__actions {
+            text-align: right;
+            width: 100%;
+        }
+        
+        .ec-topicpath {
+            letter-spacing: -0.4em;
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+            -webkit-margin-start: 0;
+            -webkit-margin-end: 0;
+            -webkit-padding-start: 0;
+            border-top: 1px solid #ccc;
+            /* border-bottom: 1px dotted #ccc; */
+            padding: 10px;
+            list-style: none;
+            overflow: hidden;
+            font-size: 12px;
+            color: #014FB5;
+        }
+        .ec-topicpath .ec-topicpath__item a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .ec-topicpath .ec-topicpath__item a:hover {
+            text-decoration: none;
+        }
+        .ec-topicpath .ec-topicpath__divider {
+            color: #000;
+        }
+        .ec-topicpath .ec-topicpath__item, .ec-topicpath .ec-topicpath__divider, .ec-topicpath .ec-topicpath__item--active {
+            display: inline-block;
+            min-width: 16px;
+            text-align: center;
+            position: relative;
+            letter-spacing: normal;
+        }
+        .ec-topicpath .ec-topicpath__item--active {
+            font-weight: bold;
+        }
+        .ec-topicpath .ec-topicpath__item--active a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .ec-topicpath .ec-topicpath__item--active a:hover {
+            text-decoration: none;
+        }
+
+        @media only screen and (max-width: 767px) {
+            .ec-searchnavRole .ec-searchnavRole__infos {
+                flex-direction: column;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        eccube.productsClassCategories = {
+            {% for Product in pagination %}
+            "{{ Product.id|escape('js') }}": {{ class_categories_as_json(Product)|raw }}{% if loop.last == false %}, {% endif %}
+            {% endfor %}
+        };
+
+        $(function() {
+
+            // 表示件数を変更
+            $('.disp-number').change(function() {
+                var dispNumber = $(this).val();
+                $('#disp_number').val(dispNumber);
+                $('#pageno').val(1);
+                $("#form1").submit();
+            });
+
+            // 並び順を変更
+            $('.order-by').change(function() {
+                var orderBy = $(this).val();
+                $('#orderby').val(orderBy);
+                $('#pageno').val(1);
+                $("#form1").submit();
+            });
+
+            $('.add-cart').on('click', function(e) {
+                var $form = $(this).parents('li').find('form');
+
+                // 個数フォームのチェック
+                var $quantity = $form.parent().find('.quantity');
+                if ($quantity.val() < 1) {
+                    $quantity[0].setCustomValidity('{{ '1以上で入力してください。'|trans }}');
+                    setTimeout(function() {
+                        loadingOverlay('hide');
+                    }, 100);
+                    return true;
+                } else {
+                    $quantity[0].setCustomValidity('');
+                }
+                e.preventDefault();
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: $form.attr('method'),
+                    data: $form.serialize(),
+                    dataType: 'json',
+                    beforeSend: function(xhr, settings) {
+                        // Buttonを無効にする
+                        $('.add-cart').prop('disabled', true);
+                    }
+                }).done(function(data) {
+                    // レスポンス内のメッセージをalertで表示
+                    $.each(data.messages, function() {
+                        $('#ec-modal-header').text(this);
+                    });
+
+                    $('.ec-modal').show()
+
+                    // カートブロックを更新する
+                    $.ajax({
+                        url: '{{ url('block_cart') }}',
+                        type: 'GET',
+                        dataType: 'html'
+                    }).done(function(html) {
+                        $('.ec-headerRole__cart').html(html);
+                    });
+                }).fail(function(data) {
+                    alert('{{ 'カートへの追加に失敗しました。'|trans }}');
+                }).always(function(data) {
+                    // Buttonを有効にする
+                    $('.add-cart').prop('disabled', false);
+                });
+            });
+        });
+
+        $('.ec-modal-wrap').on('click', function(e) {
+            // モーダル内の処理は外側にバブリングさせない
+            e.stopPropagation();
+        });
+        $('.ec-modal-overlay, .ec-modal, .ec-modal-close, .ec-inlineBtn--cancel').on('click', function() {
+            $('.ec-modal').hide()
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>ALL ITEM</span></h1>
+            <p class="jp">{% if Category is not empty %} {{ Category.name }} {% else %} 商品一覧 {% endif %}</p>
+        </div>
+    </div>
+    <div class="main_contain page_width">
+        <div id="side" class="sidebar">
+            <div class="p-sidebar_title">
+                <h3 class="jp">目的から探す</h3>
+                <p><span class="en">Category</span></p>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">EARPICK </span><span class="jp">耳かき</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 10 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-earpick_01.png') }}" alt="マイクロファイバー製"></p>
+                                <p class="cate_label">マイクロ<br>ファイバー製</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 11 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-earpick_02.png') }}" alt="ワイヤータイプ"></p>
+                                <p class="cate_label">ワイヤー<br>タイプ</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 12 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-earpick_03.png') }}" alt="専門医用"></p>
+                                <p class="cate_label">専門医用</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">BODY CARE</span><span class="jp">ボディケア</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 6 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-bodycare_01.png') }}" alt="ヘルスケア雑貨"></p>
+                                <p class="cate_label">ヘルスケア<br>雑貨</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 7 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-bodycare_02.png') }}" alt="オーラルマウスケア"></p>
+                                <p class="cate_label">オーラル<br>マウスケア</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">BEAUTY</span><span class="jp">ビューティー</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 14 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-beauty_01.png') }}" alt="ヘアブラシ"></p>
+                                <p class="cate_label">ヘアブラシ</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">TABLE WEAR</span><span class="jp">テーブルウェア用品</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 21 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table01.png') }}" alt="カトラリー"></p>
+                                <p class="cate_label">カトラリー</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 22 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table02.png') }}" alt="UDカトラリー"></p>
+                                <p class="cate_label">UDカトラリー</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 23 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table03.png') }}" alt="デザインカトラリー"></p>
+                                <p class="cate_label">デザイン<br>カトラリー</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 24 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table04.png') }}" alt="離乳食スプーン"></p>
+                                <p class="cate_label">離乳食スプーン</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 25 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table05.png') }}" alt="食器(グラス)"></p>
+                                <p class="cate_label">食器(グラス)</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">KITCHEN</span><span class="jp">キッチン用品</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 16 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-kitchen01.png') }}" alt="包丁"></p>
+                                <p class="cate_label">包丁</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 17 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-kitchen02.png') }}" alt="ピーラー"></p>
+                                <p class="cate_label">ピーラー</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 18 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-kitchen03.png') }}" alt="菜箸"></p>
+                                <p class="cate_label">菜箸</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 19 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-kitchen04.png') }}" alt="ハサミ"></p>
+                                <p class="cate_label">ハサミ</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">OTHER</span><span class="jp">その他</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 27 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-other_01.png') }}" alt="ペットブラシ"></p>
+                                <p class="cate_label">ペットブラシ</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="p-main_body">
+            {% if search_form.category_id.vars.errors|length > 0 %}
+                <div class="ec-searchnavRole">
+                    <p class="errormsg text-danger">{{ 'ご指定のカテゴリは存在しません'|trans }}</p>
+                </div>
+            {% else %}
+                <div class="ec-searchnavRole">
+                    <form name="form1" id="form1" method="get" action="?">
+                        {% for item in search_form %}
+                            <input type="hidden" id="{{ item.vars.id }}"
+                                name="{{ item.vars.full_name }}"
+                                {% if item.vars.value is not empty %}value="{{ item.vars.value }}" {% endif %}/>
+                        {% endfor %}
+                    </form>
+                    <div class="ec-searchnavRole__topicpath">
+                        <ol class="ec-topicpath">
+                            <li class="ec-topicpath__item"><a href="{{ url('product_list') }}">{{ '全て'|trans }}</a>
+                            </li>
+                            {% if Category is not null %}
+                                {% for Path in Category.path %}
+                                    <li class="ec-topicpath__divider">|</li>
+                                    <li class="ec-topicpath__item{% if loop.last %}--active{% endif %}"><a
+                                                href="{{ url('product_list') }}?category_id={{ Path.id }}">{{ Path.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if search_form.vars.value and search_form.vars.value.name %}
+                                <li class="ec-topicpath__divider">|</li>
+                                <li class="ec-topicpath__item">{{ '「%name%」の検索結果'|trans({ '%name%': search_form.vars.value.name }) }}</li>
+                            {% endif %}
+                        </ol>
+                    </div>
+                    <div class="ec-searchnavRole__infos">
+                        <div class="ec-searchnavRole__counter">
+                            {% if pagination.totalItemCount > 0 %}
+                                {{ '<span class="ec-font-bold">%count%件</span><span>の商品が見つかりました</span>'|trans({ '%count%': pagination.totalItemCount })|raw }}
+                            {% else %}
+                                <span>{{ 'お探しの商品は見つかりませんでした'|trans }}</span>
+                            {% endif %}
+                        </div>
+                        {% if pagination.totalItemCount > 0 %}
+                            <div class="ec-searchnavRole__actions">
+                                <div class="ec-select">
+                                    {{ form_widget(search_form.disp_number, {'id': '', 'attr': {'class': 'disp-number'}}) }}
+                                    {{ form_widget(search_form.orderby, {'id': '', 'attr': {'class': 'order-by'}}) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if pagination.totalItemCount > 0 %}
+                    <div class="p-products_grid">
+                        {% for Product in pagination %}
+                            <div class="p-product_item">
+                                <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_img">
+                                    <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}" alt="{{ Product.name }}" loading="lazy">
+                                </a>
+                                <div class="p-product_infor">
+                                    <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_title">
+                                        <h3>{{ Product.name }}</h3>
+                                    </a>
+                                    <div class="p-product_detail">
+                                        <p>{{ Product.description_detail }}</p>
+                                    </div>
+                                    <div class="p-product_price">
+                                        <span>{{ Product.getPrice02Max|price }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="ec-pagerRole">
+                        {% include "pager.twig" with {'pages': pagination.paginationData} %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

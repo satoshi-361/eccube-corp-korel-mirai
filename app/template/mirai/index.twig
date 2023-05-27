@@ -1,0 +1,375 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'front_page' %}
+{% set recommend_products = repository('Plugin\\Recommend42\\Entity\\RecommendProduct').getRecommendProduct %}
+
+{% block stylesheet %}
+    <style>
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(function() {
+            $('#defaultOpen').click();
+        });
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+    <div class="main_contain page_width">
+        <div id="side" class="sidebar">
+            <div class="p-sidebar_title">
+                <h3 class="jp">目的から探す</h3>
+                <p><span class="en" style="background: #F9FCF5;">Category</span></p>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">EARPICK </span><span class="jp">耳かき</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 10 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-earpick_01.png') }}" alt="マイクロファイバー製"></p>
+                                <p class="cate_label">マイクロ<br>ファイバー製</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 11 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-earpick_02.png') }}" alt="ワイヤータイプ"></p>
+                                <p class="cate_label">ワイヤー<br>タイプ</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 12 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-earpick_03.png') }}" alt="専門医用"></p>
+                                <p class="cate_label">専門医用</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">BODY CARE</span><span class="jp">ボディケア</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 6 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-bodycare_01.png') }}" alt="ヘルスケア雑貨"></p>
+                                <p class="cate_label">ヘルスケア<br>雑貨</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 7 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-bodycare_02.png') }}" alt="オーラルマウスケア"></p>
+                                <p class="cate_label">オーラル<br>マウスケア</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">BEAUTY</span><span class="jp">ビューティー</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 14 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-beauty_01.png') }}" alt="ヘアブラシ"></p>
+                                <p class="cate_label">ヘアブラシ</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">TABLE WEAR</span><span class="jp">テーブルウェア用品</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 21 }) }}">
+                                <p class="cate_icon" style="width: 60px;"></p>
+                                <p class="cate_label">カトラリー</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 22 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table02.png') }}" alt="UDカトラリー"></p>
+                                <p class="cate_label">UDカトラリー</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 23 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table03.png') }}" alt="デザインカトラリー"></p>
+                                <p class="cate_label">デザイン<br>カトラリー</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 24 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table04.png') }}" alt="離乳食スプーン"></p>
+                                <p class="cate_label">離乳食スプーン</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 25 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-table05.png') }}" alt="食器(グラス)"></p>
+                                <p class="cate_label">食器(グラス)</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">KITCHEN</span><span class="jp">キッチン用品</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 16 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-kitchen01.png') }}" alt="包丁"></p>
+                                <p class="cate_label">包丁</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 17 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-kitchen02.png') }}" alt="ピーラー"></p>
+                                <p class="cate_label">ピーラー</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 18 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-kitchen03.png') }}" alt="菜箸"></p>
+                                <p class="cate_label">菜箸</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 19 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-kitchen04.png') }}" alt="ハサミ"></p>
+                                <p class="cate_label">ハサミ</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="p-sidebar_cate__box">
+                <div class="p-sidebar_cate__title">
+                    <h3><span class="en">OTHER</span><span class="jp">その他</span></h3>
+                </div>
+                <div class="p-sidebar_content">
+                    <ul>
+                        <li>
+                            <a href="{{ url('product_list', { 'category_id': 27 }) }}">
+                                <p class="cate_icon"><img src="{{ asset('assets/image/top/category-icon/cate-icon-other_01.png') }}" alt="ペットブラシ"></p>
+                                <p class="cate_label">ペットブラシ</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="p-main_body">
+            <!-- Pick up -->
+            <section class="p-pickup">
+                <div class="p-pickup_contain">
+                    <div class="c-section_title">
+                        <h3 class="jp">おすすめアイテム</h3>
+                        <p><span class="en" style="background: #F9FCF5;">Pick up</span></p>
+                    </div>
+                    <div class="p-pickup_body">
+                        <div class="p-products_grid">
+                            {% for RecommendProduct in recommend_products %}
+                                {% set Product = RecommendProduct.Product %}
+                                <div class="p-product_item">
+                                    <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_img">
+                                        <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}" alt="{{ Product.name }}" loading="lazy">
+                                    </a>
+                                    <div class="p-product_infor">
+                                        <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_title">
+                                            <h3>{{ Product.name }}</h3>
+                                        </a>
+                                        <div class="p-product_detail">
+                                            <p>{{ Product.description_detail }}</p>
+                                        </div>
+                                        <div class="p-product_price">
+                                            <span>{{ Product.getPrice02Max|price }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Ranking -->
+            <section class="p-ranking">
+                <div class="p-ranking_contain">
+                    <div class="c-section_title">
+                        <h3 class="jp">ランキング</h3>
+                        <p><span class="en" style="background: #F9FCF5;">Ranking</span></p>
+                    </div>
+                    <div class="p-ranking_body">
+                        <div class="p-ranking_category_tab">
+                            <button class="tablink" onclick="openPage( 'earpick', this)" id="defaultOpen">耳かき</button>
+                            <button class="tablink" onclick="openPage( 'bodycare', this)">ボディケア</button>
+                            <button class="tablink" onclick="openPage( 'beauty', this)">ビューティー</button>
+                            <button class="tablink" onclick="openPage( 'tableware', this)">テーブルウェア</button>
+                            <button class="tablink" onclick="openPage( 'kitchentools', this)">キッチンツール</button>
+                            <button class="tablink" onclick="openPage( 'other', this)">その他</button>
+                        </div>
+                        <div class="p-ranking_tabcontain">
+                            <div class="tabcontent" id="earpick">
+                                <div class="p-products_grid">
+                                    {% for Product in earpick_list %}
+                                        <div class="p-product_item">
+                                            <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_img">
+                                                <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}" alt="{{ Product.name }}" loading="lazy">
+                                            </a>
+                                            <div class="p-product_infor">
+                                                <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_title">
+                                                    <h3>{{ Product.name }}</h3>
+                                                </a>
+                                                <div class="p-product_detail">
+                                                    <p>{{ Product.description_detail }}</p>
+                                                </div>
+                                                <div class="p-product_price">
+                                                    <span>{{ Product.getPrice02Max|price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="tabcontent" id="bodycare">
+                                <div class="p-products_grid">
+                                    {% for Product in bodycare_list %}
+                                        <div class="p-product_item">
+                                            <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_img">
+                                                <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}" alt="{{ Product.name }}" loading="lazy">
+                                            </a>
+                                            <div class="p-product_infor">
+                                                <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_title">
+                                                    <h3>{{ Product.name }}</h3>
+                                                </a>
+                                                <div class="p-product_detail">
+                                                    <p>{{ Product.description_detail }}</p>
+                                                </div>
+                                                <div class="p-product_price">
+                                                    <span>{{ Product.getPrice02Max|price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="tabcontent" id="beauty">
+                                <div class="p-products_grid">
+                                    {% for Product in beauty_list %}
+                                        <div class="p-product_item">
+                                            <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_img">
+                                                <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}" alt="{{ Product.name }}" loading="lazy">
+                                            </a>
+                                            <div class="p-product_infor">
+                                                <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_title">
+                                                    <h3>{{ Product.name }}</h3>
+                                                </a>
+                                                <div class="p-product_detail">
+                                                    <p>{{ Product.description_detail }}</p>
+                                                </div>
+                                                <div class="p-product_price">
+                                                    <span>{{ Product.getPrice02Max|price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="tabcontent" id="tableware">
+                                <div class="p-products_grid">
+                                    {% for Product in tableware_list %}
+                                        <div class="p-product_item">
+                                            <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_img">
+                                                <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}" alt="{{ Product.name }}" loading="lazy">
+                                            </a>
+                                            <div class="p-product_infor">
+                                                <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_title">
+                                                    <h3>{{ Product.name }}</h3>
+                                                </a>
+                                                <div class="p-product_detail">
+                                                    <p>{{ Product.description_detail }}</p>
+                                                </div>
+                                                <div class="p-product_price">
+                                                    <span>{{ Product.getPrice02Max|price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="tabcontent" id="kitchentools">
+                                <div class="p-products_grid">
+                                    {% for Product in kitchentools_list %}
+                                        <div class="p-product_item">
+                                            <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_img">
+                                                <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}" alt="{{ Product.name }}" loading="lazy">
+                                            </a>
+                                            <div class="p-product_infor">
+                                                <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_title">
+                                                    <h3>{{ Product.name }}</h3>
+                                                </a>
+                                                <div class="p-product_detail">
+                                                    <p>{{ Product.description_detail }}</p>
+                                                </div>
+                                                <div class="p-product_price">
+                                                    <span>{{ Product.getPrice02Max|price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="tabcontent" id="other">
+                                <div class="p-products_grid">
+                                    {% for Product in other_list %}
+                                        <div class="p-product_item">
+                                            <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_img">
+                                                <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}" alt="{{ Product.name }}" loading="lazy">
+                                            </a>
+                                            <div class="p-product_infor">
+                                                <a href="{{ url('product_detail', {'id': Product.id}) }}" class="p-product_title">
+                                                    <h3>{{ Product.name }}</h3>
+                                                </a>
+                                                <div class="p-product_detail">
+                                                    <p>{{ Product.description_detail }}</p>
+                                                </div>
+                                                <div class="p-product_price">
+                                                    <span>{{ Product.getPrice02Max|price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}

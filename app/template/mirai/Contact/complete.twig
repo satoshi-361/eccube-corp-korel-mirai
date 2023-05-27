@@ -1,0 +1,58 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>CONTACT</span></h1>
+            <p class="jp">お問い合わせ</p>
+        </div>
+    </div>
+    <!--  -->
+    <main class="main">
+        <div class="c-subpage_contain">
+            <div class="c-register_top">
+                <div class="c-register_steps wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="item_step active">
+                        <span class="no">1</span>
+                        <span class="txt">内容入力</span>
+                    </div>
+                    <div class="item_step active">
+                        <span class="no">2</span>
+                        <span class="txt">内容確認</span>
+                    </div>
+                    <div class="item_step active">
+                        <span class="no">3</span>
+                        <span class="txt">送信完了</span>
+                    </div>
+                </div>
+                <div class="contact_complate_txt wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <p>お問い合わせありがとうございます</p>
+                </div>
+                <div class="c-register_top_introtxt wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <p>送信いただいた内容は担当者が確認し、折り返しご連絡いたします。<br> また、お問い合わせ内容の確認メールを自動配信でお送りしております。
+                        <br> メールが届かない場合は、送信が完了していないことがございます。
+                        <br> お手数ではございますが、下記メールアドレス宛までご連絡ください。
+                        <br> E-Mail: contact@yokohama-mirai.jp
+                    </p>
+                </div>
+                <div class="p-register_conatin wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="c-btn_group">
+                        <div class="c-btn_rigth">
+                            <a href="{{ url('homepage') }}" class="c-btn">ホームに戻る</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,147 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% form_theme form 'Form/form_div_layout.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
+{% endblock %}
+
+{% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>CONTACT</span></h1>
+            <p class="jp">お問い合わせ</p>
+        </div>
+    </div>
+    <!--  -->
+    <main class="main">
+        <div class="c-subpage_contain">
+            <div class="c-register_top">
+                <div class="c-register_steps wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="item_step active">
+                        <span class="no">1</span>
+                        <span class="txt">内容入力</span>
+                    </div>
+                    <div class="item_step active">
+                        <span class="no">2</span>
+                        <span class="txt">内容確認</span>
+                    </div>
+                    <div class="item_step">
+                        <span class="no">3</span>
+                        <span class="txt">送信完了</span>
+                    </div>
+                </div>
+                <div class="c-register_top_introtxt wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <p>
+                        送信前に入力内容をご確認ください。<br/>
+                        ボタンをクリックされると、入力内容が送信されます。
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-register_conatin">
+                <div class="p-register_form wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <form method="post" action="{{ url('contact') }}" class="h-adr">
+                        {{ form_widget(form._token) }}
+                        <div class="register_form">
+                            <ul>
+                                <li class="form_item">
+                                    <div class="head">
+                                        <span class="required">必須</span><label class="">氏名</label>
+                                    </div>
+                                    <div class="content">
+                                        {{ form.name.vars.data }}
+                                        {{ form_widget(form.name, { type : 'hidden' }) }}
+                                    </div>
+                                </li>
+                                <li class="form_item">
+                                    <div class="head">
+                                        <span class="any">任意</span><label class="">電話番号</label>
+                                    </div>
+                                    <div class="content {{ has_errors(form.phone_number) ? ' error' }}">
+                                        {{ form.phone_number.vars.data }}
+                                        {{ form_widget(form.phone_number, { type : 'hidden' }) }}
+                                    </div>
+                                </li>
+                                <li class="form_item">
+                                    <div class="head">
+                                        <span class="required">必須</span><label class="">メールアドレス</label>
+                                    </div>
+                                    <div class="content {{ has_errors(form.email) ? ' error' }}">
+                                        {{ form.email.vars.data }}
+                                        {{ form_widget(form.email, { type : 'hidden' }) }}
+                                    </div>
+                                </li>
+                                <li class="form_item">
+                                    <div class="head">
+                                        <span class="required">必須</span><label class="">お問い合わせ項目</label>
+                                    </div>
+                                    <div class="content ec-radio {{ has_errors(form.query) ? ' error' }}">
+                                        {{ form.query.vars.data }}
+                                        {{ form_widget(form.query, { type : 'hidden' }) }}
+                                    </div>
+                                </li>
+                                <li class="form_item">
+                                    <div class="head">
+                                        <span class="required">必須</span><label class="">お問い合わせ内容</label>
+                                    </div>
+                                    <div class="content {{ has_errors(form.contents) ? ' error' }}">
+                                        {{ form.contents.vars.data }}
+                                        {{ form_widget(form.contents, { type : 'hidden' }) }}
+                                    </div>
+                                </li>
+                                {# エンティティ拡張の自動出力 #}
+                                {% for f in form|filter(f => f.vars.eccube_form_options.auto_render) %}
+                                    {% if f.vars.eccube_form_options.form_theme %}
+                                        {% form_theme f f.vars.eccube_form_options.form_theme %}
+                                        {{ form_row(f) }}
+                                    {% else %}
+                                        <li class="form_item">
+                                            <div class="head">
+                                                {% set label_class =  f.vars.label_attr.class is defined ? f.vars.label_attr.class : '' %}
+                                                {{ form_label(f, f.vars.label, { 'label_attr': {'class': label_class ~ ' ec-label' }}) }}
+                                            </div>
+                                            <div class="content {{ has_errors(f) ? ' error' }}">
+                                                {{ f.vars.data }}
+                                                {{ form_widget(f, { type: 'hidden'}) }}
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {{ form_widget(form.privacy_check, { type: 'hidden'}) }}
+                            <div class="p-register_conatin">
+                                <div class="c-btn_group">
+                                    <div class="c-btn_left">
+                                        <button type="submit"
+                                            class="c-btn"
+                                            name="mode"
+                                            value="back">{{ '編集に戻る'|trans }}
+                                        </button>
+                                    </div>
+                                    <div class="c-btn_rigth">
+                                        <button type="submit"
+                                            class="c-btn"
+                                            name="mode"
+                                            value="complete">{{ 'この内容で送信する'|trans }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

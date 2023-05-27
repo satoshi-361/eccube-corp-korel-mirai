@@ -1,0 +1,34 @@
+#paypal-acdc, #paypal-acdc-form div {
+    display: block;
+}
+.paypal-button-container {
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    padding: 20px;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+}
+.card_container {
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    padding: 20px;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+}
+.card_field{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    height:40px;
+    background:white;
+    font-size:17px;
+    color:#3a3a3a;
+    font-family:helvetica, tahoma, calibri, sans-serif;
+}

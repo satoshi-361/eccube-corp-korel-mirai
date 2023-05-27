@@ -1,0 +1,125 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set mypageno = 'index' %}
+
+{% set body_class = 'mypage' %}
+
+{% block stylesheet %}
+    {# <link rel="stylesheet" href="{{ asset('assets/css/mypage.css') }}" type="text/css"> #}
+    <style>
+        .ec-para-normal {
+            margin: auto 30px;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>MY PAGE</span></h1>
+        <p class="jp">マイページ</p>
+    </div>
+</div>
+<!--  -->
+<main class="main">
+    <div class="page_max_width">
+        <div class="p-mypage_contain">
+            {% include 'Mypage/navi.twig' %}
+            <div class="p-mypage_body">
+                <div id="purchase_history" class="p-mypage_content wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <p class="ec-para-normal">{{ '%count%件の履歴があります'|trans({'%count%':pagination.totalItemCount}) }}</p>
+                    <div class="pur_history">
+                        <div class="p-mypagebox">
+                            <div class="head pc">
+                                <div class="head_first">
+                                    <span></span>
+                                </div>
+                                <div class="head_product">
+                                    <span>商品</span>
+                                </div>
+                                <div class="head_num">
+                                    <span>数量</span>
+                                </div>
+                                <div class="head_price">
+                                    <span>単価</span>
+                                </div>
+                                <div class="head_btn">
+                                    <span></span>
+                                </div>
+                            </div>
+
+                            {% if pagination.totalItemCount > 0 %}
+                            <div class="my-content">
+                                {% for Order in pagination %}
+                                    {% for OrderItem in Order.MergedProductOrderItems %}
+                                        {% set Product = OrderItem.Product %}
+                                        <div class="content_row">
+                                            <div class="other_box">
+                                                {% if loop.index0 %}
+                                                    <p class="date">{{ Order.order_date|date_sec }}</p>
+                                                    <div class="delivery_link">
+                                                        <a href=""><span>配送状況を確認</span></a>
+                                                    </div>
+                                                    <div class="orderdetails">
+                                                        <a href="{{ url('mypage_history', {'order_no': Order.order_no}) }}">注文詳細を表示する</a>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="main_box">
+                                                <div class="main_img">
+                                                    {% if Product is null %}
+                                                        <img src="{{ asset(''|no_image_product, 'save_image') }}"/>
+                                                    {% else %}
+                                                        <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="main_infor">
+                                                    {% if Product.one_word is not empty %}
+                                                        <p class="txt_up">{{ Product.one_word }}</p>
+                                                    {% endif %}
+                                                    <p class="txt_mid">{{ Product.name }}</p>
+                                                    {% if Product.description_detail is not empty %}
+                                                        <p class="txt_bt">{{ Product.description_detail }}</p>
+                                                    {% endif %}
+                                                    <p class="price_box sp"><span class="price">{{ OrderItem.price_inc_tax|price }}<span class="tax"></span>(税込)</span> ✖ <span class="count">{{ OrderItem.quantity }}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="pro_amount pc">
+                                                <span>{{ OrderItem.quantity }}</span>
+                                            </div>
+                                            <div class="price_box pc">
+                                                <p class="price">{{ OrderItem.price_inc_tax|price }}<span class="tax"> (税込)</span></p>
+                                            </div>
+                                            <div class="buybtn">
+                                                <a href="{{ url('product_detail', {'id': Product.id}) }}">もう一度購入</a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                            <div class="ec-pagerRole">
+                                {% include "pager.twig" with {'pages': pagination.paginationData} %}
+                            </div>
+                            {% else %}
+                                <p class="ec-para-normal">{{ 'ご注文履歴はありません。'|trans }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

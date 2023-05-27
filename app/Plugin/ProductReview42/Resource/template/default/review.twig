@@ -18,6 +18,8 @@
     {{ positive_stars[positive] }}{{ negative_stars[negative] }}
 {% endmacro %}
 
+<link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('assets/css/modal.css') }}" type="text/css" />
 <style type="text/css">
 
     #product_review_area {
@@ -62,11 +64,16 @@
         margin-left: 16px;
     }
 
+    #product_review_recommend_level span {
+        font-size: 20px;
+        color: #f5ed24;
+        line-height: 1;
+    }
 </style>
 
 <script>
     $(function() {
-        $('#product_review_area').appendTo($('.ec-layoutRole__main, .ec-layoutRole__mainWithColumn, .ec-layoutRole__mainBetweenColumn'));
+        $('.s-product_introduce').after($('.s-product_review'));
 
         $('#product_review_area .ec-rectHeading').on('click', function() {
             $content = $('#reviewContent');
@@ -81,69 +88,159 @@
             }
             return false;
         });
+
+        $('#review_button').on('click', function() {
+            $('#review-modal').show();
+        });
+
+        $('.ec-modal-close').on('click', function() {
+            $('#review-modal').hide();
+        });
     });
 </script>
 
-<!--▼レビューエリア-->
-<div id="product_review_area">
-    <div class="ec-role">
+
+
+<!-- 商品レビュー -->
+<section class="s-product_review">
+    <div class="s-product_sec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+        <h4>商品レビュー</h4>
+    </div>
+    <div class="s-review_contain wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
         {% set positive_avg_star = ProductReviewAvg %}
         {% set negative_avg_star = 5 - positive_avg_star %}
-
-        <div class="ec-rectHeading is_active">
-            <h4>{{ 'product_review.front.product_detail.title'|trans }}
-                <!--平均の星の数-->
-                <span class="recommend_average">{{ stars.stars(positive_avg_star, negative_avg_star) }}</span>
-                <!--レビュー数-->
-                <span>({{ ProductReviewCount }})</span>
-                <span class="chevron pull-right">
-                    <i class="fas fa-angle-up fa-lg"></i>
-                </span>
-            </h4>
+        <div class="s-review_header">
+            <div class="s-review_header_left">
+                <div class="s-review_sumtitle">
+                    <span>総合評価</span>
+                </div>
+                <div class="s-review_allstar">
+                    <span>{{ stars.stars(positive_avg_star, negative_avg_star) }}</span>
+                </div>
+                <div class="s-review_marker">
+                    <span>{{ ProductReviewAvg|number_format(1) }}</span>
+                </div>
+                <div class="s-review_counts">
+                    <span>（{{ ProductReviewCount }}件）</span>
+                </div>
+            </div>
+            <div class="s-review_header_right">
+                <a id="review_button">
+                    <img src="{{ asset('assets/image/common/review_writer.png') }}" alt=""><span>レビューを書く</span>
+                </a>
+            </div>
         </div>
-        <div id="reviewContent">
+
+        <div class="s-review_body">
             {% if ProductReviews %}
-                <ul class="review_list">
-                    {% for ProductReview in ProductReviews %}
-                        <li>
-                            <p class="review_date">
-                                <!--投稿日-->
-                                {{ ProductReview.create_date|date_day }}
-
-                                <!--投稿者-->
-                                <span class="recommend_name">
-                                            {% if ProductReview.reviewer_url %}
-                                                <a href="{{ ProductReview.reviewer_url }}" rel="ugc nofollow"
-                                                   target="_blank">{{ 'product_review.front.product_detail.name'|trans({ '%name%': ProductReview.reviewer_name }) }}</a>
-                                            {% else %}
-                                                {{ 'product_review.front.product_detail.name'|trans({ '%name%': ProductReview.reviewer_name }) }}
-                                            {% endif %}
-                                        </span>
-
-                                <!--星の数-->
-                                {% set positive_star = ProductReview.recommend_level %}
-                                {% set negative_star = 5 - positive_star %}
-                                <span class="recommend_level">
-                                            {{ stars.stars(positive_star, negative_star) }}
-                                        </span>
-                            </p>
-
-                            <!--タイトル-->
-                            <strong>{{ ProductReview.title }}</strong>
-
-                            <!--レビューコメント-->
-                            <p>{{ ProductReview.comment|nl2br }}</p>
-                        </li>
-                    {% endfor %}
-                </ul>
+                {% for ProductReview in ProductReviews %}
+                    {% set positive_star = ProductReview.recommend_level %}
+                    {% set negative_star = 5 - positive_star %}
+                    <div class="s-review_item">
+                        <div class="s-review_item_title">
+                            <h4>{{ ProductReview.title }}</h4>
+                        </div>
+                        <div class="s-review_item_content">
+                            <div class="s-review_item_head">
+                                <div class="s-review_itemhead_left">
+                                    <div class="s-review_star">
+                                        <span>{{ stars.stars(positive_star, negative_star) }}</span>
+                                    </div>
+                                    <div class="s-review_item_name">
+                                        <span>{{ ProductReview.reviewer_name }}さん</span>
+                                    </div>
+                                </div>
+                                <div class="s-review_itemhead_right">
+                                    <p>投稿日：<span>{{ ProductReview.create_date|date_day }}</span></p>
+                                </div>
+                            </div>
+                            <div class="s-review_item_body">
+                                <p>{{ ProductReview.comment|nl2br }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             {% else %}
                 <p>{{ 'product_review.front.product_detail.no_review'|trans }}</p>
             {% endif %}
         </div>
-        <div>
-            <a href="{{ url('product_review_index', { id: Product.id }) }}"
-               class="ec-inlineBtn--action">{{ 'product_review.front.product_detail.post_review'|trans }}</a>
+        
+        <div class="ec-modal c-modal" id="review-modal">
+            <div class="ec-modal-overlay">
+                <div class="ec-modal-wrap">
+                    <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
+                    <div class="ec-modal-box">
+                        <form method="post" action="{{ url('product_review_form', { id: Product.id }) }}">
+                            <ul>
+                                <li class="form_row">
+                                    <div class="head">
+                                        <label class="">お名前</label>
+                                    </div>
+                                    <div class="content ec-input">
+                                        <input type="text" id="product_review_reviewer_name" name="product_review[reviewer_name]"
+                                            required="required" maxlength="255">
+                                    </div>
+                                </li>
+                                <li class="form_row">
+                                    <div class="head">
+                                        <label class="">評価</label>
+                                    </div>
+                                    <div class="content ec-radio">
+                                        <div id="product_review_recommend_level"> 
+                                            <input type="radio" id="product_review_recommend_level_0"
+                                                name="product_review[recommend_level]" required="required" value="5">
+                                            <label for="product_review_recommend_level_0">
+                                                <span>★★★★★</span>
+                                            </label> <br/>
+                                            <input type="radio" id="product_review_recommend_level_1" name="product_review[recommend_level]"
+                                                required="required" value="4">
+                                            <label for="product_review_recommend_level_1">
+                                                <span>★★★★</span>
+                                            </label> <br/>
+                                            <input type="radio" id="product_review_recommend_level_2" name="product_review[recommend_level]"
+                                                required="required" value="3">
+                                            <label for="product_review_recommend_level_2">
+                                                <span>★★★</span>
+                                            </label> <br/>
+                                            <input type="radio" id="product_review_recommend_level_3" name="product_review[recommend_level]"
+                                                required="required" value="2">
+                                            <label for="product_review_recommend_level_3">
+                                                <span>★★</span>
+                                            </label> <br/>
+                                            <input type="radio" id="product_review_recommend_level_4" name="product_review[recommend_level]"
+                                                required="required" value="1">
+                                            <label for="product_review_recommend_level_4">
+                                                <span>★</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="form_row">
+                                    <div class="head">
+                                        <label class="">タイトル</label>
+                                    </div>
+                                    <div class="content ec-input">
+                                        <input type="text" id="product_review_title" name="product_review[title]" required="required"
+                                            maxlength="255">
+                                    </div>
+                                </li>
+                                <li class="form_row">
+                                    <div class="head">
+                                        <label class="">本文</label>
+                                    </div>
+                                    <div class="content ec-input">
+                                        <textarea id="product_review_comment" name="product_review[comment]" required="required"
+                                            maxlength="3000"></textarea>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="c-modal_submit">
+                                <button class="c-btn" type="submit">この内容で投稿する</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<!-- ▲レビューエリア -->
+</section>

@@ -1,0 +1,1 @@
+{"name":"ec-cube\/eccubepaymentlite42","version":"4.2.2","description":"EC-CUBE\u30da\u30a4\u30e1\u30f3\u30c8Lite42","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"^2.0"},"extra":{"code":"EccubePaymentLite42","id":2667}}

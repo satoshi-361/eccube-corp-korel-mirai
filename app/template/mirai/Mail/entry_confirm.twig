@@ -1,0 +1,24 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% autoescape 'safe_textmail' %}
+この度は会員登録依頼をいただきまして、有り難うございます。
+
+{{ Customer.name01 }} {{ Customer.name02 }} 様
+
+横浜みらいでございます。
+現在は仮登録の状態です。
+
+本会員登録を完了するには下記URLにアクセスしてください。
+
+{{ activateUrl }}
+
+上記URLにて本会員登録が完了いたしましたら改めてご登録内容ご確認メールをお送り致します。
+{% endautoescape %}

@@ -1,0 +1,554 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'cart_page' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/subpage.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('assets/css/subpage_sp.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('assets/css/cart.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/modal.css') }}" type="text/css" />
+    <style>
+        #cart_shipping_address label::after {
+            content: '\a';
+            white-space: pre;
+        }
+        
+        .visually-hidden {
+            display: none;
+        }
+        .content .invalid-feedback {
+            font-size: 12px;
+            font-weight: bold;
+            color: #DE5D50;
+        }
+
+        .ec-modal .c-btn_group {
+            margin: 20px auto 0;
+            gap: 20px;
+        }
+
+        .c-btn_next .c-btn {
+            height: 40px;
+            border: unset;
+            border-radius: 3px;
+            background: #8bb655;
+            font-family: "Yu Gothic";
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 28px;
+            text-align: center;
+            color: white;
+        }
+        .c-btn_cancel .c-btn {
+            width: 100px;
+            height: 40px;
+            border: unset;
+            border-radius: 3px;
+            background: #c8c8c8;
+            font-family: "Yu Gothic";
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 28px;
+            text-align: center;
+            color: white;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .ec-modal .ec-modal-box {
+                padding: 20px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    <script src="//yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
+
+    <script>
+        function copyToDeliver() {
+            $("#{{form.shipping.name.name01.vars.id }}").val($("#{{ form.customer.name.name01.vars.id }}").val());
+            $("#{{form.shipping.name.name02.vars.id }}").val($("#{{ form.customer.name.name02.vars.id }}").val());
+            $("#{{form.shipping.kana.kana01.vars.id }}").val($("#{{ form.customer.kana.kana01.vars.id }}").val());
+            $("#{{form.shipping.kana.kana02.vars.id }}").val($("#{{ form.customer.kana.kana02.vars.id }}").val());
+            $("#{{form.shipping.postal_code.vars.id }}").val($("#{{ form.customer.postal_code.vars.id }}").val());
+            $("#{{form.shipping.address.pref.vars.id }}").val($("#{{ form.customer.address.pref.vars.id }}").val());
+            $("#{{form.shipping.address.addr01.vars.id }}").val($("#{{ form.customer.address.addr01.vars.id }}").val());
+            $("#{{form.shipping.address.addr02.vars.id }}").val($("#{{ form.customer.address.addr02.vars.id }}").val());
+            $("#{{form.shipping.phone_number.vars.id }}").val($("#{{ form.customer.phone_number.vars.id }}").val());
+        }
+        function clearDeliver() {
+            $("#{{form.shipping.name.name01.vars.id }}").val('');
+            $("#{{form.shipping.name.name02.vars.id }}").val('');
+            $("#{{form.shipping.kana.kana01.vars.id }}").val('');
+            $("#{{form.shipping.kana.kana02.vars.id }}").val('');
+            $("#{{form.shipping.postal_code.vars.id }}").val('');
+            $("#{{form.shipping.address.pref.vars.id }}").val('');
+            $("#{{form.shipping.address.addr01.vars.id }}").val('');
+            $("#{{form.shipping.address.addr02.vars.id }}").val('');
+            $("#{{form.shipping.phone_number.vars.id }}").val('');
+        }
+
+        $(function() {
+            $('#cart_is_member').on('change', function() {
+                if ( ! $(this).is(':checked') ) {
+                    $('.ec-modal').show();
+                }
+            });
+
+            $('.ec-modal-close, .ec-modal .ec-inlineBtn--cancel').on('click', function() {
+                $('.ec-modal').hide();
+            });
+
+            $('input[name="cart[shipping_address]"]').on('change', function(){
+                if ( $(this).val() == 0 ) {
+                    // 登録の住所に届ける
+                    copyToDeliver();
+                } else {
+                    //  登録以外の住所に届ける
+                    clearDeliver();
+                }
+            })
+        });
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>ORDER</span></h1>
+        <p class="jp">ご注文内容</p>
+    </div>
+</div>
+
+<!--  -->
+<main class="main">
+    <div class="page_small_width">
+        <div class="p-order_contain">
+            {% if totalQuantity > 0 %}
+                <form name="form" id="form_cart" class="ec-cartRole" method="post" action="{{ url('cart') }}">
+                    <div class="p-cart_body wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        {{ form_widget(form._token) }}
+                        {% for CartIndex,Cart in Carts %}
+                            {% set cartKey = Cart.cart_key %}
+                            {% for error in app.session.flashbag.get('eccube.front.cart.' ~ cartKey ~ '.request.error') %}
+                                <div class="ec-cartRole__error">
+                                    <div class="ec-alert-warning">
+                                        <div class="ec-alert-warning__icon"><img src="{{ asset('assets/icon/exclamation-white.svg') }}"></div>
+                                        <div class="ec-alert-warning__text">
+                                            {{ error|trans|nl2br }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="ec-cartRole__cart">
+                                <div class="ec-cartTable">
+                                    <ol class="ec-cartHeader">
+                                        <li class="ec-cartHeader__label">{{ '削除'|trans }}</li>
+                                        <li class="ec-cartHeader__label">{{ '商品内容'|trans }}</li>
+                                        <li class="ec-cartHeader__label">{{ '数量'|trans }}</li>
+                                        <li class="ec-cartHeader__label">{{ '小計'|trans }}</li>
+                                    </ol>
+                                    {% for CartItem in Cart.CartItems %}
+                                        {% set ProductClass = CartItem.ProductClass %}
+                                        {% set Product = ProductClass.Product %}
+                                        <ul class="ec-cartRow">
+                                            <li class="ec-cartRow__delColumn">
+                                                <a href="{{ url('cart_handle_item', {'operation': 'remove', 'productClassId': ProductClass.id, 'pageName': 'cart' }) }}" {{ csrf_token_for_anchor() }} class="ec-icon" data-method="put" data-message="カートから商品を削除してもよろしいですか?">
+                                                    <img src="{{ asset('assets/icon/cross.svg') }}" alt="delete">
+                                                </a>
+                                            </li>
+                                            <li class="ec-cartRow__contentColumn">
+                                                <div class="ec-cartRow__img">
+                                                    <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">
+                                                        <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                    </a>
+                                                </div>
+                                                <div class="ec-cartRow__summary">
+                                                    <div class="ec-cartRow__name">
+                                                        <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">{{ Product.name }}</a>
+                                                        {% if ProductClass.ClassCategory1 and ProductClass.ClassCategory1.id %}
+                                                            <br>{{ ProductClass.ClassCategory1.ClassName.name }}：{{ ProductClass.ClassCategory1 }}
+                                                        {% endif %}
+                                                        {% if ProductClass.ClassCategory2 and ProductClass.ClassCategory2.id %}
+                                                            <br>{{ ProductClass.ClassCategory2.ClassName.name }}：{{ ProductClass.ClassCategory2 }}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="ec-cartRow__unitPrice">{{ CartItem.price|price }}</div>
+                                                    <div class="ec-cartRow__sutbtotalSP">{{ '小計：'|trans }}{{ CartItem.total_price|price }}</div>
+                                                </div>
+                                            </li>
+                                            <li class="ec-cartRow__amountColumn">
+                                                <div class="ec-cartRow__amount">{{ CartItem.quantity|number_format }}</div>
+                                                <div class="ec-cartRow__amountSP">{{ '数量：'|trans }}{{ CartItem.quantity|number_format }}</div>
+                                                <div class="ec-cartRow__amountUpDown">
+                                                    {% if CartItem.quantity > 1 %}
+                                                        <a href="{{ url('cart_handle_item', {'operation': 'down', 'productClassId': ProductClass.id, 'pageName': 'cart'}) }}" {{ csrf_token_for_anchor() }} class="ec-cartRow__amountDownButton load-overlay" data-method="put" data-confirm="false">
+                                                            <span class="ec-cartRow__amountDownButton__icon"><img src="{{ asset('assets/icon/minus-dark.svg') }}" alt="reduce"></span>
+                                                        </a>
+                                                    {% else %}
+                                                        <div class="ec-cartRow__amountDownButtonDisabled">
+                                                            <span class="ec-cartRow__amountDownButton__icon"><img src="{{ asset('assets/icon/minus.svg') }}" alt="reduce"></span>
+                                                        </div>
+                                                    {% endif %}
+                                                    <a href="{{ url('cart_handle_item', {'operation': 'up', 'productClassId': ProductClass.id, 'pageName': 'cart'}) }}" {{ csrf_token_for_anchor() }} class="ec-cartRow__amountUpButton load-overlay" data-method="put" data-confirm="false">
+                                                        <span class="ec-cartRow__amountUpButton__icon"><img src="{{ asset('assets/icon/plus-dark.svg') }}" alt="increase"></span>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                            <li class="ec-cartRow__subtotalColumn">
+                                                <div class="ec-cartRow__sutbtotal">{{ CartItem.total_price|price }}</div>
+                                            </li>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="ec-cartRole__progress">
+                                {% if BaseInfo.delivery_free_amount and BaseInfo.delivery_free_quantity %}
+                                    <br/>
+                                    {% if is_delivery_free[cartKey] %}
+                                        {{ '現在送料無料です。'|trans }}
+                                    {% else %}
+                                        {{ 'あと「<strong>%price%</strong>」または「<strong>%quantity%個</strong>」のお買い上げで<strong class="ec-color-red">送料無料</strong>になります。'|trans({ '%price%': least[cartKey]|price, '%quantity%': quantity[cartKey]|number_format })|raw }}
+                                    {% endif %}
+                                {% elseif BaseInfo.delivery_free_amount %}
+                                    <br/>
+                                    {% if is_delivery_free[cartKey] %}
+                                        {{ '現在送料無料です。'|trans }}
+                                    {% else %}
+                                        {{ 'あと「<strong>%price%</strong>」のお買い上げで<strong class="ec-color-red">送料無料</strong>になります。'|trans({ '%price%': least[cartKey]|price })|raw }}
+                                    {% endif %}
+                                {% elseif BaseInfo.delivery_free_quantity %}
+                                    <br/>
+                                    {% if is_delivery_free[cartKey] %}
+                                        {{ '現在送料無料です。'|trans }}
+                                    {% else %}
+                                        {{ 'あと「<strong>%quantity%個</strong>」のお買い上げで<strong class="ec-color-red">送料無料</strong>になります。'|trans({ '%quantity%': quantity[cartKey]|number_format })|raw }}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="p-order_body">
+                        <div class="c-register_top">
+                            <div class="c-register_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                <h2>お客様情報入力</h2>
+                            </div>
+                            <div class="c-register_steps wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                <div class="item_step active">
+                                    <span class="no">1</span>
+                                    <span class="txt">内容入力</span>
+                                </div>
+                                <div class="item_step">
+                                    <span class="no">2</span>
+                                    <span class="txt">内容確認</span>
+                                </div>
+                                <div class="item_step">
+                                    <span class="no">3</span>
+                                    <span class="txt">送信完了</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-order_conatin">
+                            <div class="p-register_form">
+                                <!-- お客様情報入力 -->
+                                <div class="p-orederform_sec h-adr customer_input wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                    <span class="p-country-name" style="display:none;">Japan</span>
+                                    <ul>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">氏名</label>
+                                            </div>
+                                            <div class="content ec-halfInput{{ has_errors(form.customer.name.name01, form.customer.name.name02) ? ' error' }}">
+                                                {{ form_widget(form.customer.name.name01, {'attr': { 'placeholder': '姓' }}) }}
+                                                {{ form_widget(form.customer.name.name02, {'attr': { 'placeholder': '名' }}) }}
+                                                {{ form_errors(form.customer.name.name01) }}
+                                                {{ form_errors(form.customer.name.name02) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">フリガナ</label>
+                                            </div>
+                                            <div class="content ec-halfInput{{ has_errors(form.customer.kana.kana01, form.customer.kana.kana02) ? ' error' }}">
+                                                {{ form_widget(form.customer.kana.kana01, {'attr': { 'placeholder': 'セイ' }}) }}
+                                                {{ form_widget(form.customer.kana.kana02, {'attr': { 'placeholder': 'メイ' }}) }}
+                                                {{ form_errors(form.customer.kana.kana01) }}
+                                                {{ form_errors(form.customer.kana.kana02) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">性別</label>
+                                            </div>
+                                            <div class="content ec-radio{{ has_errors(form.customer.sex) ? ' error' }}">
+                                                {{ form_widget(form.customer.sex) }}
+                                                {{ form_errors(form.customer.sex) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">生年月日</label>
+                                            </div>
+                                            <div class="content ec-birth{{ has_errors(form.customer.birth) ? ' error' }}">
+                                                {{ form_widget(form.customer.birth) }}
+                                                {{ form_errors(form.customer.birth) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">メールアドレス</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.customer.email) ? ' error' }}">
+                                                {{ form_widget(form.customer.email) }}
+                                                {{ form_errors(form.customer.email) }}
+                                            </div>
+                                        </li>
+                                        {% if app.user is empty %}
+                                            <li class="form_item">
+                                                <div class="head">
+                                                    <span class="required">必須</span><label class="">パスワード</label>
+                                                </div>
+                                                <div class="content ec-input{{ has_errors(form.customer.plain_password.first) ? ' error' }}">
+                                                    {{ form_widget(form.customer.plain_password.first, {
+                                                        'attr': { 'placeholder': '半角英数記号%min%〜%max%文字'|trans({ '%min%': eccube_config.eccube_password_min_len, '%max%': eccube_config.eccube_password_max_len }) },
+                                                        'type': 'password'
+                                                    }) }}
+                                                    {{ form_errors(form.customer.plain_password.first) }}
+                                                </div>
+                                            </li>
+                                            <li class="form_item">
+                                                <div class="head">
+                                                    <span class="required">必須</span><label class="">パスワード(再入力)</label>
+                                                </div>
+                                                <div class="content ec-input{{ has_errors(form.customer.plain_password.second) ? ' error' }}">
+                                                    {{ form_widget(form.customer.plain_password.second, {
+                                                        'attr': { 'placeholder': '確認のためもう一度入力してください'|trans },
+                                                        'type': 'password'
+                                                    }) }}
+                                                    {{ form_errors(form.customer.plain_password.second) }}
+                                                </div>
+                                            </li>
+                                        {% else %}
+                                            <li style="display: none;">
+                                                <input type="password" id="cart_customer_plain_password_first" name="cart[customer][plain_password][first]" required="required" placeholder="半角英数記号12〜50文字" class="form-control" value="dla20191215!A">
+                                                <input type="password" id="cart_customer_plain_password_second" name="cart[customer][plain_password][second]" required="required" placeholder="確認のためもう一度入力してください" class="form-control"  value="dla20191215!A">
+                                            </li>
+                                        {% endif %}
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">郵便番号</label>
+                                            </div>
+                                            <div class="content ec-zipInput{{ has_errors(form.customer.postal_code) ? ' error' }}">
+                                                {{ form_widget(form.customer.postal_code) }}<a href="https://www.post.japanpost.jp/zipcode/" target="_blank" class="btn_zip"><span>{{ '住所検索'|trans }}</span></a>
+                                                {{ form_errors(form.customer.postal_code) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">都道府県</label>
+                                            </div>
+                                            <div class="content ec-select{{ has_errors(form.customer.address.pref) ? ' error' }}">
+                                                {{ form_widget(form.customer.address.pref) }}
+                                                {{ form_errors(form.customer.address.pref) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">市区町村</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.customer.address.addr01) ? ' error' }}">
+                                                {{ form_widget(form.customer.address.addr01, { 'attr': { 'placeholder': '市区町村名(例：大阪市北区)' }}) }}
+                                                {{ form_errors(form.customer.address.addr01) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">以降の住所</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.customer.address.addr02) ? ' error' }}">
+                                                {{ form_widget(form.customer.address.addr02, { 'attr': { 'placeholder': '番地・ビル名(例：西梅田1丁目6-8)' }}) }}
+                                                {{ form_errors(form.customer.address.addr02) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">電話番号</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.customer.phone_number) ? ' error' }}">
+                                                {{ form_widget(form.customer.phone_number) }}
+                                                {{ form_errors(form.customer.phone_number) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="any">任意</span><label class="">会員登録の有無</label>
+                                            </div>
+                                            <div class="content ec-checkbox{{ has_errors(form.is_member) ? ' error' }}">
+                                                {{ form_widget(form.is_member, { 'attr': { 'checked': true } }) }}
+                                                {{ form_errors(form.is_member) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">お届け先住所</label>
+                                            </div>
+                                            <div class="content ec-radio{{ has_errors(form.shipping_address) ? ' error' }}">
+                                                {{ form_widget(form.shipping_address) }}
+                                                {{ form_errors(form.shipping_address) }}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="privacy_check ec-checkbox{{ has_errors(form.privacy_check) ? ' error' }}">
+                                        <input type="checkbox" id="cart_privacy_check" name="cart[privacy_check]" required="required" class="form-check-input" value="1">
+                                        <label for="cart_privacy_check"><a class="ec-link" href="https://yokohama-mirai.jp/help/privacy" target="_blank" style="text-decoration: underline;">プライバシーポリシー</a>に同意する</label>
+                                        {{ form_errors(form.privacy_check) }}
+                                    </div>
+                                </div>
+                                <!-- お届け先情報入力 -->
+                                <div class="p-orederform_sec h-adr customer_input wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                                    <div class="c-register_title">
+                                        <h2>お届け先情報入力</h2>
+                                    </div>
+                                    <span class="p-country-name" style="display:none;">Japan</span>
+                                    <ul>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">氏名</label>
+                                            </div>
+                                            <div class="content ec-halfInput{{ has_errors(form.shipping.name.name01, form.shipping.name.name02) ? ' error' }}">
+                                                {{ form_widget(form.shipping.name.name01, {'attr': { 'placeholder': '姓' }}) }}
+                                                {{ form_widget(form.shipping.name.name02, {'attr': { 'placeholder': '名' }}) }}
+                                                {{ form_errors(form.shipping.name.name01) }}
+                                                {{ form_errors(form.shipping.name.name02) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">フリガナ</label>
+                                            </div>
+                                            <div class="content ec-halfInput{{ has_errors(form.shipping.kana.kana01, form.shipping.kana.kana02) ? ' error' }}">
+                                                {{ form_widget(form.shipping.kana.kana01, {'attr': { 'placeholder': 'セイ' }}) }}
+                                                {{ form_widget(form.shipping.kana.kana02, {'attr': { 'placeholder': 'メイ' }}) }}
+                                                {{ form_errors(form.shipping.kana.kana01) }}
+                                                {{ form_errors(form.shipping.kana.kana02) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">郵便番号</label>
+                                            </div>
+                                            <div class="content ec-zipInput{{ has_errors(form.shipping.postal_code) ? ' error' }}">
+                                                {{ form_widget(form.shipping.postal_code) }}<a href="https://www.post.japanpost.jp/zipcode/" target="_blank" class="btn_zip"><span>{{ '住所検索'|trans }}</span></a>
+                                                {{ form_errors(form.shipping.postal_code) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">都道府県</label>
+                                            </div>
+                                            <div class="content ec-select{{ has_errors(form.shipping.address.pref) ? ' error' }}">
+                                                {{ form_widget(form.shipping.address.pref) }}
+                                                {{ form_errors(form.shipping.address.pref) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">市区町村</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.shipping.address.addr01) ? ' error' }}">
+                                                {{ form_widget(form.shipping.address.addr01, { 'attr': { 'placeholder': '市区町村名(例：大阪市北区)' }}) }}
+                                                {{ form_errors(form.shipping.address.addr01) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">以降の住所</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.shipping.address.addr02) ? ' error' }}">
+                                                {{ form_widget(form.shipping.address.addr02, { 'attr': { 'placeholder': '番地・ビル名(例：西梅田1丁目6-8)' }}) }}
+                                                {{ form_errors(form.shipping.address.addr02) }}
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">電話番号</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.shipping.phone_number) ? ' error' }}">
+                                                {{ form_widget(form.shipping.phone_number) }}
+                                                {{ form_errors(form.shipping.phone_number) }}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ec-modal">
+                            <div class="ec-modal-overlay">
+                                <div class="ec-modal-wrap">
+                                    <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
+                                    <div class="ec-modal-box">
+                                        <div>
+                                            <img src="{{ asset('assets/image/common/delivery_fee_modal.png') }}" />
+                                        </div>
+                                        <div class="c-btn_group">
+                                            <div class="c-btn_cancel">
+                                                <button class="c-btn ec-inlineBtn--cancel">戻る</button>
+                                            </div>
+                                            <div class="c-btn_next">
+                                                <a href="{{ url('entry') }}" class="c-btn" >会員登録へ進む</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c-btn_group wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                            <div class="c-btn_left">
+                                <a href="{{ path('homepage') }}" class="c-btn">買い物を続ける</a>
+                            </div>
+                            <div class="c-btn_rigth">
+                                <button class="c-btn" type="submit" name="mode" value="confirm">この内容で進む</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {% else %}
+                {% for CartIndex,Cart in Carts %}
+                    {% set cartKey = Cart.cart_key %}
+                    {% for error in app.session.flashbag.get('eccube.front.cart.' ~ cartKey ~ '.request.error') %}
+                        <div class="ec-cartRole__error">
+                            <div class="ec-alert-warning">
+                                <div class="ec-alert-warning__icon"><img src="{{ asset('assets/icon/exclamation-white.svg') }}"></div>
+                                <div class="ec-alert-warning__text">
+                                    {{ error|trans|nl2br }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                <div class="ec-role">
+                    <div class="ec-off3Grid">
+                        <div class="ec-off3Grid__cell">
+                            <div class="ec-alert-warning">
+                                <div class="ec-alert-warning__icon"><img src="{{ asset('assets/icon/exclamation-white.svg') }}"></div>
+                                <div class="ec-alert-warning__text">{{ '現在カート内に商品はございません。'|trans }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -87,6 +87,7 @@ class ProductReviewEvent implements EventSubscriberInterface
         $parameters['ProductReviews'] = $ProductReviews;
         $parameters['ProductReviewAvg'] = $avg;
         $parameters['ProductReviewCount'] = $count;
+
         $event->setParameters($parameters);
     }
 }

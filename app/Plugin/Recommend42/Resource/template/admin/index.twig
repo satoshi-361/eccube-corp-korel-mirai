@@ -115,7 +115,7 @@
                                             </div>
                                             <div class="col-6 d-flex">{{ RecommendProduct.comment|raw|purify|nl2br }}</div>
 
-                                            <div class="col text-end">
+                                            <div class="col text-end align-items-center">
                                                 <a href="{{ url('plugin_recommend_edit', { id : RecommendProduct.id }) }}"
                                                    class="btn btn-ec-actionIcon me-3 action-edit"
                                                    data-bs-toggle="tooltip"
@@ -123,13 +123,13 @@
                                                    title="{{ 'admin.common.edit'|trans }}"><i
                                                             class="fa fa-pencil fa-lg text-secondary"></i></a>
                                                 <a
-                                                        class="btn btn-ec-actionIcon me-3"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#confirmModal-{{ RecommendProduct.id }}"
-                                                        data-bs-tooltip="tooltip"
-                                                        data-bs-placement="top"
-                                                        title="{{ 'admin.common.delete'|trans }}"><i
-                                                            class="fa fa-close fa-lg text-secondary"></i></a>
+                                                    class="btn btn-ec-actionIcon me-3"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#confirmModal-{{ RecommendProduct.id }}"
+                                                    data-bs-tooltip="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="{{ 'admin.common.delete'|trans }}"><i
+                                                        class="fa fa-close fa-lg text-secondary"></i></a>
                                             </div>
 
                                             <div class="modal fade" id="confirmModal-{{ RecommendProduct.id }}" tabindex="-1"

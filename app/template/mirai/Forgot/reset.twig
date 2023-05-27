@@ -1,0 +1,91 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'mypage' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
+    <style>
+        .c-register_top_introtxt {
+            margin-bottom: 30px;
+        }
+        .invalid-feedback {
+            font-size: 12px;
+            font-weight: bold;
+            color: #DE5D50;
+        }
+
+        #password_first {
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>LOGIN</span></h1>
+        <p class="jp">ログイン</p>
+    </div>
+</div>
+<!--  -->
+<main class="main">
+    <div class="c-subpage_contain">
+        <div class="p-loginpage">
+            <div class="c-register_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                <h2>パスワード再発行</h2>
+            </div>
+            <div class="c-register_top_introtxt wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                <p>新しいパスワードを入力してください。</p>
+            </div>
+            <div class="p-loginform wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                <form id="form1" method="post" novalidate>
+                    {{ form_widget(form._token) }}
+                    <div class="loginform_content">
+                        <div class="p-loginform_item">
+                            <div class="head">
+                                <span>メールアドレス</span>
+                            </div>
+                            <div class="loginform_input ec-input{{ has_errors(form.login_email) ? ' error' }}">
+                                {{ form_widget(form.login_email) }}
+                                {{ form_errors(form.login_email) }}
+                            </div>
+                        </div>
+                        <div class="p-loginform_item">
+                            <div class="head">
+                                <span>メールアドレス</span>
+                            </div>
+                            <div class="loginform_input ec-input{{ has_errors(form.password.first, form.password.second) ? ' error' }}">
+                                {{ form_widget(form.password.first, {
+                                    'attr': { 'placeholder': '半角英数記号%min%〜%max%文字'|trans({ '%min%': eccube_config.eccube_password_min_len, '%max%': eccube_config.eccube_password_max_len }) },
+                                    'type': 'password'
+                                }) }}
+                                {{ form_errors(form.password.first) }}
+                                {{ form_widget(form.password.second, {
+                                    'attr': { 'placeholder': '確認のためもう一度入力してください'|trans },
+                                    'type': 'password'
+                                }) }}
+                                {{ form_errors(form.password.second) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="loginform_btn">
+                        <div class="p-login_submit">
+                            <button class="c-btn" type="submit">パスワードを登録</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
