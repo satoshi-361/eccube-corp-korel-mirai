@@ -126,23 +126,23 @@ file that was distributed with this source code.
     <script>
         function execTrade(response) {
             if (response.resultCode != 000) {
-                $('#cart_credit_token').value = '';
+                document.getElementById('cart_credit_token').value = '';
             } else {
-                $('#cart_credit_token').value = response.tokenObject.token;
+                document.getElementById('cart_credit_token').value = response.tokenObject.token;
             }
-            $('#form_cart').submit()
+            document.getElementById('form_cart').submit()
         }
         $(function() {
             $('.c-btn_rigth button[type="submit"]').on('click', function(e) {
                 e.preventDefault();
                 var cardObj = {};
-                var year = $('#cart_credit_expiration_year').value;
-                var month = ('00' + $('#cart_credit_expiration_month').value).slice(-2)
-                cardObj.cardno = $('#cart_credit_credit_card_number').value;
+                var year = document.getElementById('cart_credit_expiration_year').value;
+                var month = ('00' + document.getElementById('cart_credit_expiration_month').value).slice(-2)
+                cardObj.cardno = document.getElementById('cart_credit_credit_card_number').value;
                 cardObj.expire = year + month;
-                cardObj.securitycode = $('#cart_credit_security_code').value;
-                cardObj.holdername = $('#cart_credit_holder_name').value;
-                EpsilonToken.init($("#cart_credit_contract_code").value);
+                cardObj.securitycode = document.getElementById('cart_credit_security_code').value;
+                cardObj.holdername = document.getElementById('cart_credit_holder_name').value;
+                EpsilonToken.init(document.getElementById("cart_credit_contract_code").value);
                 EpsilonToken.getToken(cardObj, execTrade);
             });
         });
@@ -163,6 +163,7 @@ file that was distributed with this source code.
         <div class="p-order_contain">
             {% if totalQuantity > 0 %}
                 <form name="form" id="form_cart" class="ec-cartRole" method="post" action="{{ url('cart') }}">
+                    <input type="hidden" name="mode" value="confirm" />
                     <div class="p-cart_body wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
                         {{ form_widget(form._token) }}
                         {% for CartIndex,Cart in Carts %}
@@ -425,15 +426,6 @@ file that was distributed with this source code.
                                                 {{ form_errors(form.is_member) }}
                                             </div>
                                         </li>
-                                        <li class="form_item">
-                                            <div class="head">
-                                                <span class="required">必須</span><label class="">お届け先住所</label>
-                                            </div>
-                                            <div class="content ec-radio{{ has_errors(form.shipping_address) ? ' error' }}">
-                                                {{ form_widget(form.shipping_address) }}
-                                                {{ form_errors(form.shipping_address) }}
-                                            </div>
-                                        </li>
                                     </ul>
                                     <div class="privacy_check ec-checkbox{{ has_errors(form.privacy_check) ? ' error' }}">
                                         <input type="checkbox" id="cart_privacy_check" name="cart[privacy_check]" required="required" class="form-check-input" value="1">
@@ -448,6 +440,15 @@ file that was distributed with this source code.
                                     </div>
                                     <span class="p-country-name" style="display:none;">Japan</span>
                                     <ul>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">お届け先住所</label>
+                                            </div>
+                                            <div class="content ec-radio{{ has_errors(form.shipping_address) ? ' error' }}">
+                                                {{ form_widget(form.shipping_address) }}
+                                                {{ form_errors(form.shipping_address) }}
+                                            </div>
+                                        </li>
                                         <li class="form_item">
                                             <div class="head">
                                                 <span class="required">必須</span><label class="">氏名</label>
@@ -561,7 +562,7 @@ file that was distributed with this source code.
                                             <div class="head">
                                                 <span class="required">必須</span><label class="">セキュリティコード</label>
                                             </div>
-                                            <div class="content ec-input{{ has_errors(form.credit.security_code) ? ' error' }}">
+                                            <div class="content ec-halfInput{{ has_errors(form.credit.security_code) ? ' error' }}">
                                                 {{ form_widget(form.credit.security_code) }}
                                                 {{ form_errors(form.credit.security_code) }}
                                             </div>
@@ -595,7 +596,7 @@ file that was distributed with this source code.
                                 <a href="{{ path('homepage') }}" class="c-btn">買い物を続ける</a>
                             </div>
                             <div class="c-btn_rigth">
-                                <button class="c-btn" type="submit" name="mode" value="confirm">この内容で進む</button>
+                                <button class="c-btn" type="submit">この内容で進む</button>
                             </div>
                         </div>
                     </div>
