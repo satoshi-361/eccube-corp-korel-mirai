@@ -222,7 +222,7 @@ ul li {
 
 .header span.jp {
     font-weight: 500;
-    font-size: 10px;
+    font-size: 14px;
     line-height: 1;
     text-align: center;
     color: #7fb744;
@@ -560,6 +560,12 @@ ul li {
 .p-banners {
     margin-top: 50px;
     padding: 0 20px;
+}
+
+.p-banners h2 {
+    margin-bottom: 30px;
+    text-align: center;
+    color: #006934;
 }
 
 .p-banner_box {

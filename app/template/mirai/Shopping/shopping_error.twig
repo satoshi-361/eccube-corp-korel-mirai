@@ -12,26 +12,41 @@ file that was distributed with this source code.
 
 {% set body_class = 'cart_page' %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/subpage.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('assets/css/subpage_sp.css') }}" type="text/css">
+
+    <style>
+        .ec-blockBtn--cancel {
+            color: white;
+            background: #7FB744;
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %}
+
 {% block main %}
 
-<div class="ec-role">
-    <div class="ec-pageHeader">
-        <h1>{{ '購入エラー'|trans }}</h1>
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>ORDER</span></h1>
+        <p class="jp">購入エラー</p>
     </div>
 </div>
 
-<!-- アラートメッセージ -->
-{{ include('Shopping/alert.twig', { 'error_only': true }) }}
-
-<div class="ec-role">
-    <div class="ec-off3Grid">
-        <div class="ec-off3Grid__cell">
-            <div class="ec-off4Grid">
-                <div class="ec-off4Grid__cell">
-                    <a class="ec-blockBtn--cancel" href="{{ url('cart') }}">{{ 'カートに戻る'|trans }}</a>
-                </div>
+<!--  -->
+<main class="main">
+    <div class="page_small_width">
+        <!-- アラートメッセージ -->
+        {{ include('Shopping/alert.twig', { 'error_only': true }) }}
+        
+        <div class="c-btn_group">
+            <div class="c-btn_cancel">
+                <a class="ec-blockBtn--cancel" href="{{ url('cart') }}">{{ 'カートに戻る'|trans }}</a>
             </div>
         </div>
     </div>
-</div>
+</main>
 {% endblock %}

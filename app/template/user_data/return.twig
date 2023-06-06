@@ -1,0 +1,116 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>USER GUIDE</span></h1>
+        <p class="jp">ご利用ガイド</p>
+    </div>
+</div>
+
+<!-- Trade law -->
+<main class="main">
+    <div class="c-subpage_contain">
+        <div class="p-guidepage">
+            <div class="c-subsec_head">
+                <div class="c-subsec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h2>ご利用ガイド</h2>
+                </div>
+            </div>
+            <div class="p-pagelink">
+                <div class="p-pagelink_contain wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="p-pagelink_grid">
+                        <div class="p-pagelink_item">
+                            <a href="{{ url('homepage') }}user_data/guide#delivery">
+                                <img src="{{ asset('assets/image/common/delivery.png') }}" alt="">
+                                <p>送料・配送方法</p>
+                            </a>
+                        </div>
+                        <div class="p-pagelink_item">
+                            <a href="{{ url('homepage') }}user_data/guide#paymethod">
+                                <img src="{{ asset('assets/image/common/paymethod.png') }}" alt="">
+                                <p>お支払い方法</p>
+                            </a>
+                        </div>
+                        <div class="p-pagelink_item">
+                            <a href="{{ url('homepage') }}user_data/guide#refund">
+                                <img src="{{ asset('assets/image/common/refund.png') }}" alt="">
+                                <p>返品・交換</p>
+                            </a>
+                        </div>
+                        <div class="p-pagelink_item">
+                            <a href="{{ url('homepage') }}user_data/guide#calendar">
+                                <img src="{{ asset('assets/image/common/calender.png') }}" alt="">
+                                <p>営業日カレンダー</p>
+                            </a>
+                        </div>
+                        <div class="p-pagelink_item">
+                            <a href="{{ url('homepage') }}user_data/guide#fqa">
+                                <img src="{{ asset('assets/image/common/fqa.png') }}" alt="">
+                                <p>よくあるご質問</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 14日間返品保証について -->
+            <div class="p-guide_subcontain p-refund_sec">
+                <div class="p-guide_subtitle wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h3>14日間返品保証について</h3>
+                </div>
+                <div class="p-guide_subbody">
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>< 14日間返品保証について ></h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <p>
+                                対象商品「フェアリーゴッドマザー 生体ゆるなでブラシ」を初回ご購入いただいた方で、万が一お肌に合わなかった場合は、商品到着後14日以内に限り、返品・返金を承ります。<br>
+                                返品をご希望の方は、下記の〈返品保証の条件〉〈注意事項〉を必ずご確認ください。<br>
+                                商品の発送には万全を期しておりますが、万一、不良品・品違い・品不足などがあった場合は、商品到着後8日以内に「お問い合わせ」ページからご連絡をお願いいたします。<br>
+                                この期間を過ぎた返品やご連絡が無い場合の返品はお受けできない場合がございます。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>< 返品保証の条件 ></h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <p>
+                                ●返品をご希望の場合は、商品到着後14日以内に必ず当社にご連絡ください。返品先及び返金方法をご案内させていただきます。<br>
+                                ●返品される場合は、必ず理由をお知らせください。お客様からいただいた理由は、今後のよりよい商品開発のために活用させていただきます。<br>
+                                ●キャンペーンでの割引分は返金対象とはなりません。返金額は割引後の実際にお支払いいただいた商品代金のみとなります。また、返品にかかる送料および返金の際の手数料はお客様負担となります。<br>
+                                ●おひとり様1回1個限りとさせていただきます。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <div class="c-subpageitem_title">
+                            <h3>< 注意事項 ></h3>
+                        </div>
+                        <div class="c-subpageitem_txt">
+                            <p>
+                                ※次の方は製品のご使用ができませんので、「14日間返品保証」の対象外となります。あらかじめご了承ください。<br>
+                                ●肌の金属アレルギー症状やアレルギー体質の方<br>
+                                ●ペースメーカーなどの体内植込電子機器や、心電計など装着型の医用電子機器をお使いの方<br>
+                                ●妊娠している方、出産直後の方<br>
+                                ●副作用としての肌にアレルギーなどの症状（発疹、かゆみなど）が出て困る方<br>
+                                ●敏感肌の方<br>
+                                ※下記の場合は返品保証の対象外となります。予めご了承ください。<br>
+                                ●事前連絡なく商品を返送された場合<br>
+                                ●返品保証期間（商品到着から14日）を過ぎた場合<br>
+                                ●商品を紛失された場合<br>
+                                ●ご使用中に破損・汚損された場合<br>
+                                ●製品の部品や付属品、取扱説明書や箱などが欠品している場合<br>
+                                ●故意または悪意によると判断された場合
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

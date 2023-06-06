@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
      */
     class ProductClass extends \Eccube\Entity\AbstractEntity
     {
-    use \Plugin\PayPalCheckout42\Entity\ProductClassTrait, \Plugin\EccubePaymentLite42\Entity\ProductClassTrait;
+    use \Plugin\EccubePaymentLite42\Entity\ProductClassTrait;
 
         private $price01_inc_tax = null;
         private $price02_inc_tax = null;

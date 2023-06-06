@@ -90,7 +90,13 @@ file that was distributed with this source code.
                                         <li class="ec-cartRow__contentColumn">
                                             <div class="ec-cartRow__img">
                                                 <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">
-                                                    <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                    {% if CartItem.property is not empty %}
+                                                        {% set properties = Product.color|split('/') %}
+                                                        {% set propertyIndex = properties|keys|filter(item => properties[item] == CartItem.property)|first %}
+                                                        <img src="{{ asset(Product.ProductImage[propertyIndex].file_name|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                    {% else %}
+                                                        <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                    {% endif %}
                                                 </a>
                                             </div>
                                             <div class="ec-cartRow__summary">
@@ -292,6 +298,18 @@ file that was distributed with this source code.
                                             {{ form_widget(form.customer.phone_number, { type : 'hidden' }) }}
                                         </div>
                                     </li>
+                                    <li class="form_item">
+                                        <div class="head">
+                                            <span class="required">任意</span><label class="">会員登録の有無</label>
+                                        </div>
+                                        <div class="content">
+                                            {% if form.is_member.vars.data %}
+                                                登録する
+                                            {% else %}
+                                                登録しない
+                                            {% endif %}
+                                        </div>
+                                    </li>
                                 </ul>
                                 {{ form_widget(form.is_member, { type : 'hidden' }) }}
                                 {{ form_widget(form.shipping_address, { type : 'hidden' }) }}
@@ -374,6 +392,8 @@ file that was distributed with this source code.
                             <!-- クレジットカード情報入力 -->
                             <div class="p-orederform_sec h-adr customer_input wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
                                 <input type='hidden' value='{{ token }}' name='token' id="token" />
+                                {{ form_widget(form.credit.token) }}
+                                {{ form_widget(form.credit.contract_code) }}
                                 <div class="c-register_title">
                                     <h2>クレジットカード情報入力</h2>
                                 </div>
@@ -383,7 +403,7 @@ file that was distributed with this source code.
                                             <span class="required">必須</span><label class="">カード番号</label>
                                         </div>
                                         <div class="content">
-                                            {{ form.credit.credit_card_number.vars.data }}
+                                            ********{{ form.credit.credit_card_number.vars.data|slice(-4) }}
                                             {{ form_widget(form.credit.credit_card_number, { type : 'hidden' }) }}
                                         </div>
                                     </li>
@@ -392,7 +412,7 @@ file that was distributed with this source code.
                                             <span class="required">必須</span><label class="">有効期限</label>
                                         </div>
                                         <div class="content">
-                                            {{ form.credit.expiration_year.vars.data ~ form.credit.expiration_month.vars.data }}
+                                            {{ form.credit.expiration_year.vars.data }}年 {{ form.credit.expiration_month.vars.data }}月
                                             {{ form_widget(form.credit.expiration_year, { type : 'hidden' }) }}
                                             {{ form_widget(form.credit.expiration_month, { type : 'hidden' }) }}
                                         </div>
@@ -411,7 +431,7 @@ file that was distributed with this source code.
                                             <span class="required">必須</span><label class="">セキュリティコード</label>
                                         </div>
                                         <div class="content">
-                                            {{ form.credit.security_code.vars.data }}
+                                            ****
                                             {{ form_widget(form.credit.security_code, { type : 'hidden' }) }}
                                         </div>
                                     </li>

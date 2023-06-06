@@ -42,7 +42,7 @@
         font-size: calc(14/1200*100vw);
     }
     .header span.jp {
-        font-size: calc(10/1200*100vw);
+        font-size: calc(14/1200*100vw);
     }
     .header_icons ul.icons_list {
         gap: calc(20/1200*100vw);
@@ -71,6 +71,10 @@
     .p-banners {
         margin-top: calc(50/1200*100vw);
         padding: 0 20px;
+    }
+    .p-banners h2 {
+        margin-bottom: calc(50/1200*100vw);
+        font-size: 15px;
     }
     .p-banner_box {
         gap: calc(20/1200*100vw);
@@ -540,5 +544,9 @@
     .copyright {
         font-size: calc(28/768*100vw);
         padding: 10px;
+    }
+
+    .p-banner_box img {
+        max-width: 335px;
     }
 }

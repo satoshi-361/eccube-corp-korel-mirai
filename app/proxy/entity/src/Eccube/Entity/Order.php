@@ -43,7 +43,7 @@ use Eccube\Service\TaxRuleService;
      */
     class Order extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, ItemHolderInterface
     {
-        use NameTrait, \Plugin\PayPalCheckout42\Entity\OrderTrait, \Plugin\AmazonPayV2_42\Entity\OrderTrait, \Plugin\EccubePaymentLite42\Entity\OrderTrait;
+        use NameTrait, \Plugin\EccubePaymentLite42\Entity\OrderTrait;
         use PointTrait;
 
         /**

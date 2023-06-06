@@ -232,5 +232,11 @@ services:
     Customize\Service\MailService:
         decorates: Eccube\Service\MailService
 
+    Customize\Service\OrderHelper:
+        decorates: Eccube\Service\OrderHelper
+
+    Customize\Service\CartService:
+        decorates: Eccube\Service\CartService
+
     Customize\Twig\Extension\EccubeExtension:
         decorates: Eccube\Twig\Extension\EccubeExtension

@@ -205,7 +205,7 @@
   }
   .ec-cartRow .ec-cartRow__delColumn {
     border-bottom: 1px dotted #ccc;
-    text-align: center;
+    /* text-align: center; */
     display: table-cell;
     width: 14%;
     vertical-align: middle;

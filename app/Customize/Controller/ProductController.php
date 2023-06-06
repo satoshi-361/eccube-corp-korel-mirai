@@ -408,7 +408,7 @@ class ProductController extends AbstractController
         );
 
         // カートへ追加
-        $this->cartService->addProduct($addCartData['product_class_id'], $addCartData['quantity']);
+        $this->cartService->addProduct($addCartData['product_class_id'], $addCartData['quantity'], $addCartData['property']);
 
         // 明細の正規化
         $Carts = $this->cartService->getCarts();

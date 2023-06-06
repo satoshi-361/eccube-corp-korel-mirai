@@ -293,6 +293,7 @@ button {
 
 .s-introduce_txt .container-3,
 .s-introduce_txt .container-6 {
+    margin-top: 30px;
     padding: 5px 20px;
     display: flex;
     align-items: center;
@@ -306,14 +307,20 @@ button {
     max-width: 450px;
     min-width: 80px;
     width: calc(31% - 25px);
-    height: fit-content;
+    /* height: fit-content; */
 }
 
 .s-introduce_txt .container-1,
 .s-introduce_txt .container-2 {
+    margin-top: 30px;
     display: flex;
     justify-content: space-between;
-    gap: 30px;
+    gap: 20px;
+}
+
+.s-introduce_txt .container-1 div:not(.image),
+.s-introduce_txt .container-2 p {
+    width: calc(100% - 280px);
 }
 
 .s-introduce_txt .container-1 .image,
@@ -324,16 +331,13 @@ button {
 }
 
 .s-introduce_txt .container-1 .image img {
-    max-width: 450px;
-    min-width: 300px;
-    height: fit-content;
+    width: 250px;
+    /* height: fit-content; */
 }
 
 .s-introduce_txt .container-2 .image img {
-    max-width: 250px;
-    min-width: 150px;
-    width: calc(50% - 10px);
-    height: fit-content;
+    width: 120px;
+    /* height: fit-content; */
 }
 
 /* .s-introduce_txt img {

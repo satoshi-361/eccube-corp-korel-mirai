@@ -38,7 +38,7 @@
             </div>
             <div class="p-colums_body">
                 <div class="p-colums_grid">
-                    {% for blog in Blogs %}
+                    {% for blog in Blogs if blog.Status.id == 1 %}
                         <div class="p-colums_item">
                             <a href="{{ url('cm_blog_pro_page_detail', {'id': blog.slug ? blog.slug : blog.id}) }}" class="p-colums_img">
                                 {% if blog.getMainListImage %}

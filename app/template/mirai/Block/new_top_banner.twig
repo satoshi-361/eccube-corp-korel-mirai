@@ -3,8 +3,8 @@
         <!-- MV -->
         <section class="p-mv page_max_width" style="max-width: unset;">
             <div class="p-mv_img">
-                <img class="pc" src="{{ asset('assets/image/top/fv-pc.png') }}" alt="" style="margin-top: 100px;">
-                <img class="sp" src="{{ asset('assets/image/top/fv-sp.png') }}" alt="" style="margin-top: 40px;">
+                <img class="pc" src="{{ asset('assets/image/top/fv-pc.svg') }}" alt="" style="margin-top: 100px;">
+                <img class="sp" src="{{ asset('assets/image/top/fv-sp.svg') }}" alt="" style="margin-top: 40px;">
             </div>
         </section>
 
@@ -12,14 +12,28 @@
         <section class="p-banners">
             <div class="p-banners_contain page_small_width">
                 <div class="p-banner_body">
+                    <h2 style="text-align: center; color: #006934;">
+                        商品がまだ少ないため、アイテムを追加している最中である旨を表記いただけますでしょうか。<br>
+                        また、プレオープン前ですが、キャベピィMAX品不足の為、アップグレード版キャベピィMAX-EXを先行発売しております。等の表記もお願いします。
+                    </h2>
+                    
                     <div class="p-banner_box p-banner_box01 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
-                        <a href="{{ url('entry') }}"><img src="{{ asset('assets/image/top/banner01.png') }}" alt=""></a>
+                        <a href="{{ url('entry') }}">
+                            <img src="{{ asset('assets/image/top/banner01.png') }}" class="pc">
+                            <img src="{{ asset('assets/image/top/banner01_sp.png') }}" class="sp">
+                        </a>
                     </div>
                     <div class="p-banner_box p-banner_box02  wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
-                        <a href="{{ url('product_detail', { 'id': 19 }) }}"><img src="{{ asset('assets/image/top/banner02.png') }}" alt=""></a>
+                        <a href="{{ url('product_detail', { 'id': 19 }) }}">
+                            <img src="{{ asset('assets/image/top/banner02.png') }}" class="pc">
+                            <img src="{{ asset('assets/image/top/banner02_sp.png') }}" class="sp">
+                        </a>
                     </div>
                     <div class="p-banner_box p-banner_box03  wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
-                        <img src="{{ asset('assets/image/top/banner03.png') }}" alt="">
+                        <a href="{{ url('product_detail', { 'id': 15 }) }}">
+                            <img src="{{ asset('assets/image/top/banner03.png') }}" class="pc">
+                            <img src="{{ asset('assets/image/top/banner03_sp.png') }}" class="sp">
+                        </a>
                     </div>
                 </div>
             </div>

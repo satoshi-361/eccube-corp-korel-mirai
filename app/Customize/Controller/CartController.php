@@ -38,6 +38,9 @@ use Eccube\Entity\CartItem;
 use Eccube\Entity\Customer;
 use Eccube\Entity\Master\DeviceType;
 use Eccube\Entity\Master\OrderItemType;
+use Eccube\Entity\Master\TaxDisplayType;
+use Eccube\Entity\Master\TaxType;
+use Eccube\Entity\Master\RoundingType;
 use Eccube\Entity\Master\OrderStatus;
 use Eccube\Entity\Order;
 use Eccube\Entity\OrderItem;
@@ -72,6 +75,9 @@ use Eccube\Repository\Master\CustomerStatusRepository;
 use Plugin\EccubePaymentLite42\Form\Type\Front\CreditCardForTokenPaymentType;
 use Plugin\EccubePaymentLite42\Service\GmoEpsilonRequestService;
 use Plugin\EccubePaymentLite42\Service\GmoEpsilonUrlService;
+use Customize\Service\CreditService;
+use Eccube\Service\MailService;
+use Eccube\Repository\DeliveryFeeRepository;
 
 class CartController extends AbstractController
 {
@@ -201,9 +207,24 @@ class CartController extends AbstractController
     private $gmoEpsilonUrlService;
     
     /**
+     * @var CreditService
+     */
+    private $creditService;
+    
+    /**
      * @var GmoEpsilonRequestService
      */
     private $gmoEpsilonRequestService;
+
+    /**
+     * @var MailService
+     */
+    protected $mailService;
+
+    /**
+     * @var DeliveryFeeRepository
+     */
+    protected $deliveryFeeRepository;
 
     /**
      * CartController constructor.
@@ -217,6 +238,7 @@ class CartController extends AbstractController
      * @param CustomerRepository $customerRepository
      * @param CustomerStatusRepository $customerStatusRepository
      * @param TokenStorageInterface $tokenStorage
+     * @param DeliveryFeeRepository $deliveryFeeRepository
      */
     public function __construct(
         ProductClassRepository $productClassRepository,
@@ -243,7 +265,10 @@ class CartController extends AbstractController
         TokenStorageInterface $tokenStorage,
         GmoEpsilonUrlService $gmoEpsilonUrlService,
         GmoEpsilonRequestService $gmoEpsilonRequestService,
-        SessionInterface $session
+        SessionInterface $session,
+        CreditService $creditService,
+        MailService $mailService,
+        DeliveryFeeRepository $deliveryFeeRepository
     ) {
         $this->productClassRepository = $productClassRepository;
         $this->cartService = $cartService;
@@ -269,7 +294,10 @@ class CartController extends AbstractController
         $this->session = $session;
         $this->gmoEpsilonUrlService = $gmoEpsilonUrlService;
         $this->gmoEpsilonRequestService = $gmoEpsilonRequestService;
+        $this->creditService = $creditService;
         $this->tokenStorage = $tokenStorage;
+        $this->mailService = $mailService;
+        $this->deliveryFeeRepository = $deliveryFeeRepository;
     }
 
     /**
@@ -328,7 +356,6 @@ class CartController extends AbstractController
                 [
                     'customer' => $user,
                     'shipping_address' => 0,
-                    'shipping' => $user,
                 ]
             );
         }
@@ -350,13 +377,15 @@ class CartController extends AbstractController
                         'quantity' => $quantity,
                         'is_delivery_free' => $isDeliveryFree,
                         'url_token_js' => $this->gmoEpsilonUrlService->getUrl('token'),
-                        'token' => $form->getData()['token'],
+                        'token' => $form['credit']['token']->getData(),
                     ]);
 
                 case 'complete':
                     $Customer = $form['customer']->getData();
+                    // すでに会員登録されている場合
+                    $flagShippingFree = false;
 
-                    if ( ! $Customer->getId() && $form['is_member']->getData() ) {
+                    if ($flagShippingFree = ( !$Customer->getId() && $form['is_member']->getData() )) {
                         // 新規会員登録する
                         $encoder = $this->encoderFactory->getEncoder($Customer);
                         $salt = $encoder->createSalt();
@@ -378,14 +407,30 @@ class CartController extends AbstractController
                         $token = new UsernamePasswordToken($Customer, 'customer', ['ROLE_USER']);
                         $this->tokenStorage->setToken($token);
                         $request->getSession()->migrate(true);
+                    } else if ( $Customer->getId() ) {
+                        $flagShippingFree = true;
                     }
 
-                    $data = $form->getData();
-                    $cart_key = $request->request->all();
-                    // dd($data, $cart_key);
-                    
-                    $Order = $this->createNewOrder( $this->cartService->getCart(), $data );
+                    $data = $form->getData();                    
+                    $Order = $this->createNewOrder( $this->cartService->getCart(), $data, $flagShippingFree );
                     $this->purchaseFlow->validate($Order, new PurchaseContext(clone $Order, $Order->getCustomer()));
+
+                    $response = $this->creditService->apply($Order, $request->request->get('token'));
+                    // dd($response->getResponse());
+
+                    if ( is_object($response) && get_class($response) == \Eccube\Service\Payment\PaymentDispatcher::class ) {
+                        return $response->getResponse()->send();
+                    }
+                    
+                    $this->cartService->clear();
+                    $this->mailService->sendOrderMail($Order);
+
+                    $OrderStatus = $this->orderStatusRepository->find(OrderStatus::NEW);
+                    $Order->setOrderStatus($OrderStatus);
+                    $Order->setPaymentDate(new \DateTime());
+                    $Order->setOrderDate(new \DateTime());
+
+                    $this->entityManager->flush();
 
                     return $this->redirect($this->generateUrl('cart_complete'));
             }
@@ -561,8 +606,9 @@ class CartController extends AbstractController
         return $this->redirectToRoute('shopping');
     }
 
-    protected function createNewOrder( $Cart, $data ) {
+    protected function createNewOrder( $Cart, $data, $flagShippingFree = true ) {
         $Customer = $data['customer'];
+        $shippingCustomer = $data['shipping'];
 
         $OrderStatus = $this->orderStatusRepository->find(OrderStatus::NEW);
         $Order = new Order($OrderStatus);
@@ -584,7 +630,7 @@ class CartController extends AbstractController
         }, []);
 
         foreach ($OrderItemsGroupBySaleType as $OrderItems) {
-            $Shipping = $this->createShippingFromCustomer($Customer);
+            $Shipping = $this->createShippingFromCustomer($shippingCustomer);
             $Shipping->setOrder($Order);
             $this->addOrderItems($Order, $Shipping, $OrderItems);
             $this->setDefaultDelivery($Shipping);
@@ -592,6 +638,7 @@ class CartController extends AbstractController
             $Order->addShipping($Shipping);
         }
 
+        $this->addDeliveryOrderItem($Order, $Shipping, $flagShippingFree = true);
         $this->setDefaultPayment($Order);
         $this->purchaseFlow->validate($Order, new PurchaseContext(clone $Order, $Order->getCustomer()));
 
@@ -627,9 +674,9 @@ class CartController extends AbstractController
     protected function createOrderItemsFromCartItems($CartItems)
     {
         $ProductItemType = $this->orderItemTypeRepository->find(OrderItemType::PRODUCT);
-        $RoundingType = $this->roundingTypeRepository->find(1);
-        $TaxType = $this->taxTypeRepository->find(1);
-        $TaxDisplay = $this->taxDisplayTypeRepository->find(1);
+        $RoundingType = $this->roundingTypeRepository->find(RoundingType::ROUND);
+        $TaxType = $this->taxTypeRepository->find(TaxType::TAXATION);
+        $TaxDisplay = $this->taxDisplayTypeRepository->find(TaxDisplayType::INCLUDED);
 
         return array_map(function ($item) use ($ProductItemType, $RoundingType, $TaxType, $TaxDisplay) {
             /* @var $item CartItem */
@@ -647,6 +694,7 @@ class CartController extends AbstractController
                 ->setPrice($ProductClass->getPrice02())
                 ->setQuantity($item->getQuantity())
                 ->setOrderItemType($ProductItemType)
+                ->setProperty($item->getProperty())
                 ->setRoundingType($RoundingType)
                 ->setTaxType($TaxType)
                 ->setTaxDisplayType($TaxDisplay);
@@ -671,20 +719,19 @@ class CartController extends AbstractController
      *
      * @return Shipping
      */
-    protected function createShippingFromCustomer(Customer $Customer)
+    protected function createShippingFromCustomer($array)
     {
         $Shipping = new Shipping();
         $Shipping
-            ->setName01($Customer->getName01())
-            ->setName02($Customer->getName02())
-            ->setKana01($Customer->getKana01())
-            ->setKana02($Customer->getKana02())
-            ->setCompanyName($Customer->getCompanyName())
-            ->setPhoneNumber($Customer->getPhoneNumber())
-            ->setPostalCode($Customer->getPostalCode())
-            ->setPref($Customer->getPref())
-            ->setAddr01($Customer->getAddr01())
-            ->setAddr02($Customer->getAddr02());
+            ->setName01($array['name01'])
+            ->setName02($array['name02'])
+            ->setKana01($array['kana01'])
+            ->setKana02($array['kana02'])
+            ->setPhoneNumber($array['phone_number'])
+            ->setPostalCode($array['postal_code'])
+            ->setPref($array['pref'])
+            ->setAddr01($array['addr01'])
+            ->setAddr02($array['addr02']);
 
         return $Shipping;
     }
@@ -761,5 +808,43 @@ class CartController extends AbstractController
             $OrderItem->setOrder($Order);
             $OrderItem->setShipping($Shipping);
         }
+    }
+
+    /**
+     * @param Order $Order
+     * @param Shipping $Shipping
+     * @param array $OrderItems
+     */
+    protected function addDeliveryOrderItem(Order $Order, Shipping $Shipping, $flagShippingFree = true)
+    {
+        $DeliveryFeeType = $this->entityManager
+            ->find(OrderItemType::class, OrderItemType::DELIVERY_FEE);
+        $TaxInclude = $this->entityManager
+            ->find(TaxDisplayType::class, TaxDisplayType::INCLUDED);
+        $Taxation = $this->entityManager
+            ->find(TaxType::class, TaxType::TAXATION);
+        $RoundingType = $this->roundingTypeRepository->find(RoundingType::ROUND);
+
+        /** @var DeliveryFee|null $DeliveryFee */
+        $DeliveryFee = $this->deliveryFeeRepository->findOneBy([
+            'Delivery' => $Shipping->getDelivery(),
+            'Pref' => $Shipping->getPref(),
+        ]);
+        $fee = is_object($DeliveryFee) & !$flagShippingFree ? $DeliveryFee->getFee() : 0;
+
+        $OrderItem = new OrderItem();
+        $OrderItem->setProductName($DeliveryFeeType->getName())
+            ->setPrice($fee)
+            ->setQuantity(1)
+            ->setOrderItemType($DeliveryFeeType)
+            ->setShipping($Shipping)
+            ->setOrder($Order)
+            ->setRoundingType($RoundingType)
+            ->setTaxDisplayType($TaxInclude)
+            ->setTaxType($Taxation)
+            ->setProcessorName(DeliveryFeePreprocessor::class);
+
+        $Order->addItem($OrderItem);
+        $Shipping->addOrderItem($OrderItem);
     }
 }

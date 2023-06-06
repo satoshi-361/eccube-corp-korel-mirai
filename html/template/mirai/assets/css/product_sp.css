@@ -389,8 +389,27 @@
         flex-wrap: wrap;
     }
 
+    .s-introduce_txt .container-1 .image,
+    .s-introduce_txt .container-2 .image,
+    .s-introduce_txt .container-3 .image,
+    .s-introduce_txt .container-6 .image {
+        width: 100%;
+    }
+
+    .s-introduce_txt .container-1 img,
+    .s-introduce_txt .container-2 img {
+        width: 150px;
+        margin: auto;
+    }
+
     .s-introduce_txt .container-3 img,
     .s-introduce_txt .container-6 img {
-        width: calc(50% - 10px);
+        width: 120px;
+        margin: auto;
+    }
+    
+    .s-introduce_txt .container-1 div:not(.image),
+    .s-introduce_txt .container-2 p {
+        width: 100%;
     }
 }

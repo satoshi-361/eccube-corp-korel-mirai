@@ -1,0 +1,61 @@
+{% extends 'default_frame.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/manual.css') }}" type="text/css" />
+{% endblock %}
+
+{% set images = ['EARPICK.png', 'BODY_CARE.png', 'BEAUTY.png', 'TABLE_WEAR.png', 'KITCHEN.png', 'OTHER.png'] %}
+
+{% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>MANUAL</span></h1>
+            <p class="jp">取扱説明書</p>
+        </div>
+    </div>
+    <!-- manual -->
+    <main class="main">
+        <div class="c-subpage_contain">
+            <div class="p-manualpage">
+                <div class="c-subsec_head">
+                    <div class="c-subsec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <h2>マニュアル</h2>
+                    </div>
+                </div>
+                <div class="p-manual_body">
+                    <div class="p-manual_grid">
+                        {% for TopCategory in CategoryRepository.findBy({'Parent': 4}, {'sort_no': 'ASC'}) %}
+                            <div class="item">
+                                <div class="item_head">
+                                    <h3><span class="en">{{ TopCategory.en_name }} </span><span class="jp">{{ TopCategory.name }}</span></h3>
+                                </div>
+                                <div class="item_img">
+                                    <img src="{{ asset('assets/image/manual/') ~ images[loop.index0] }}" alt="">
+                                </div>
+                                <div class="item_box">
+                                    {% for Category in TopCategory.Children %}
+                                        <div class="item_row">
+                                            <div class="item_cate_title">
+                                                <a href=""><span class="icon"> ▶︎ </span><span class="txt">{{ Category.name }}</span></a>
+                                            </div>
+                                            <div class="item_sub_title">
+                                                <ul>
+                                                    {% for ProductCategory in ProductCategoryRepository.findBy({'Category': Category }) %}
+                                                        {% set Product = ProductCategory.Product %}
+                                                        <li>
+                                                            <a href="{{ url('manual_detail', {id: Product.id}) }}">{{ Product.name }}</a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

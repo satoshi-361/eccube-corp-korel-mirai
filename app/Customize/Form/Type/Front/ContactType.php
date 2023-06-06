@@ -58,7 +58,7 @@ class ContactType extends BaseType
                 'required' => true,
                 'choices' => [
                     '商品について' => '商品について',
-                    '当ショップについ' => '当ショップについ',
+                    '当ショップについて' => '当ショップについて',
                     'その他' => 'その他',
                 ],
                 'expanded' => true,

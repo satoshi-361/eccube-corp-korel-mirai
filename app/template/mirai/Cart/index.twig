@@ -64,9 +64,31 @@ file that was distributed with this source code.
             color: white;
         }
 
+        .content .example {
+            margin-top: 2px;
+            text-align: right;
+            color: #7FB744;
+        }
+
+        .content.ec-halfInput .example {
+            width: 50%;
+        }
+
+        .card-group .cards {
+            margin: 20px auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
         @media only screen and (min-width: 768px) {
             .ec-modal .ec-modal-box {
                 padding: 20px;
+            }
+            
+            .card-group .cards {
+                gap: 5px;
             }
         }
     </style>
@@ -120,17 +142,57 @@ file that was distributed with this source code.
                 }
             })
         });
+
+        copyToDeliver();
     </script>
 
     <script src='{{ url_token_js }}'></script>
     <script>
+        {# トークンを送信 #}
+        const gmo_token_error_messages = {
+            "100" : "カード番号に数字以外の文字が含まれています",
+            "101" : "カード番号の桁数が正しくありません",
+            "110" : "有効期限が入力されていません",
+            "111" : "有効期限に数値以外の文字が含まれています",
+            "112" : "有効期限は6又は4ケタで指定してください",
+            "113" : "有効期限は有効な年月を指定してください",
+            "121" : "セキュリティコードに数字以外の文字が含まれています",
+            "122" : "セキュリティコードは4桁以内で指定してください",
+            "131" : "名義人に無効な文字が含まれています",
+            "132" : "名義人は50桁以内で指定してください",
+        };
+
+        const gmo_token_error_element = {
+            "100" : "credit_card_number",
+            "101" : "credit_card_number",
+            "110" : "expiration_month",
+            "111" : "expiration_month",
+            "112" : "expiration_month",
+            "113" : "expiration_month",
+            "121" : "security_code",
+            "122" : "security_code",
+            "131" : "holder_name",
+            "132" : "holder_name",
+        };
+
+        function getErrorMessage(error_code) {
+            if (typeof gmo_token_error_messages[error_code] == null) {
+                return  + "決済エラーです。";
+            } else {
+                return gmo_token_error_messages[error_code];
+            }
+        }
+
         function execTrade(response) {
-            if (response.resultCode != 000) {
+            if (response.resultCode != '000') {
                 document.getElementById('cart_credit_token').value = '';
+                alert(getErrorMessage(response.resultCode)); // エラーの場合
+
+                return;
             } else {
                 document.getElementById('cart_credit_token').value = response.tokenObject.token;
+                document.getElementById('form_cart').submit();
             }
-            document.getElementById('form_cart').submit()
         }
         $(function() {
             $('.c-btn_rigth button[type="submit"]').on('click', function(e) {
@@ -193,12 +255,19 @@ file that was distributed with this source code.
                                             <li class="ec-cartRow__delColumn">
                                                 <a href="{{ url('cart_handle_item', {'operation': 'remove', 'productClassId': ProductClass.id, 'pageName': 'cart' }) }}" {{ csrf_token_for_anchor() }} class="ec-icon" data-method="put" data-message="カートから商品を削除してもよろしいですか?">
                                                     <img src="{{ asset('assets/icon/cross.svg') }}" alt="delete">
+                                                    <span style="margin-top: 5px; display: inline-block;">削除</span>
                                                 </a>
                                             </li>
                                             <li class="ec-cartRow__contentColumn">
                                                 <div class="ec-cartRow__img">
                                                     <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">
-                                                        <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                        {% if CartItem.property is not empty %}
+                                                            {% set properties = Product.color|split('/') %}
+                                                            {% set propertyIndex = properties|keys|filter(item => properties[item] == CartItem.property)|first %}
+                                                            <img src="{{ asset(Product.ProductImage[propertyIndex].file_name|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                        {% else %}
+                                                            <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                        {% endif %}
                                                     </a>
                                                 </div>
                                                 <div class="ec-cartRow__summary">
@@ -351,7 +420,8 @@ file that was distributed with this source code.
                                                         'attr': { 'placeholder': '半角英数記号%min%〜%max%文字'|trans({ '%min%': eccube_config.eccube_password_min_len, '%max%': eccube_config.eccube_password_max_len }) },
                                                         'type': 'password'
                                                     }) }}
-                                                    {{ form_errors(form.customer.plain_password.first) }}
+                                                    {# {{ form_errors(form.customer.plain_password.first) }} #}
+                                                    <div class="invalid-feedback d-block">半角英数記号12〜50文字</div>
                                                 </div>
                                             </li>
                                             <li class="form_item">
@@ -363,7 +433,8 @@ file that was distributed with this source code.
                                                         'attr': { 'placeholder': '確認のためもう一度入力してください'|trans },
                                                         'type': 'password'
                                                     }) }}
-                                                    {{ form_errors(form.customer.plain_password.second) }}
+                                                    {# {{ form_errors(form.customer.plain_password.second) }} #}
+                                                    <div class="invalid-feedback d-block">確認のためもう一度入力してください</div>
                                                 </div>
                                             </li>
                                         {% else %}
@@ -426,12 +497,17 @@ file that was distributed with this source code.
                                                 {{ form_errors(form.is_member) }}
                                             </div>
                                         </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">プライバシーポリシー</label>
+                                            </div>
+                                            <div class="content ec-checkbox{{ has_errors(form.privacy_check) ? ' error' }}">
+                                                <input type="checkbox" id="cart_privacy_check" name="cart[privacy_check]" required="required" class="form-check-input" value="1">
+                                                <label for="cart_privacy_check"><a class="ec-link" href="https://yokohama-mirai.jp/help/privacy" target="_blank" style="text-decoration: underline;">プライバシーポリシー</a>に同意する</label>
+                                                {{ form_errors(form.privacy_check) }}
+                                            </div>
+                                        </li>
                                     </ul>
-                                    <div class="privacy_check ec-checkbox{{ has_errors(form.privacy_check) ? ' error' }}">
-                                        <input type="checkbox" id="cart_privacy_check" name="cart[privacy_check]" required="required" class="form-check-input" value="1">
-                                        <label for="cart_privacy_check"><a class="ec-link" href="https://yokohama-mirai.jp/help/privacy" target="_blank" style="text-decoration: underline;">プライバシーポリシー</a>に同意する</label>
-                                        {{ form_errors(form.privacy_check) }}
-                                    </div>
                                 </div>
                                 <!-- お届け先情報入力 -->
                                 <div class="p-orederform_sec h-adr customer_input wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
@@ -528,6 +604,29 @@ file that was distributed with this source code.
                                     <div class="c-register_title">
                                         <h2>クレジットカード情報入力</h2>
                                     </div>
+                                    <div class="card-group">
+                                        <p> 下記の5種類のクレジットカードをご利用いただけます。<br/>
+                                            Visa、Mastercards JCB、American Expressv Diners Club <br/>
+                                            お支払いはすべて一括払いとなります。
+                                        </p>
+                                        <div class="cards">
+                                            <div class="image">
+                                                <img src="{{ asset('assets/image/common/credit/jcb.png') }}" />
+                                            </div>
+                                            <div class="image">
+                                                <img src="{{ asset('assets/image/common/credit/visa.png') }}" />
+                                            </div>
+                                            <div class="image">
+                                                <img src="{{ asset('assets/image/common/credit/diners.png') }}" />
+                                            </div>
+                                            <div class="image">
+                                                <img src="{{ asset('assets/image/common/credit/express.png') }}" />
+                                            </div>
+                                            <div class="image">
+                                                <img src="{{ asset('assets/image/common/credit/master_card.png') }}" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <ul>                                        
                                         <li class="form_item">
                                             <div class="head">
@@ -536,6 +635,7 @@ file that was distributed with this source code.
                                             <div class="content ec-input{{ has_errors(form.credit.credit_card_number) ? ' error' }}">
                                                 {{ form_widget(form.credit.credit_card_number) }}
                                                 {{ form_errors(form.credit.credit_card_number) }}
+                                                <p class="example">例：4111345123412312</p>
                                             </div>
                                         </li>
                                         <li class="form_item">
@@ -565,6 +665,7 @@ file that was distributed with this source code.
                                             <div class="content ec-halfInput{{ has_errors(form.credit.security_code) ? ' error' }}">
                                                 {{ form_widget(form.credit.security_code) }}
                                                 {{ form_errors(form.credit.security_code) }}
+                                                <p class="example">例：123</p>
                                             </div>
                                         </li>
                                     </ul>
@@ -583,9 +684,9 @@ file that was distributed with this source code.
                                             <div class="c-btn_cancel">
                                                 <button class="c-btn ec-inlineBtn--cancel">戻る</button>
                                             </div>
-                                            <div class="c-btn_next">
-                                                <a href="{{ url('entry') }}" class="c-btn" >会員登録へ進む</a>
-                                            </div>
+                                            {# <div class="c-btn_next">
+                                                <button class="c-btn ec-inlineBtn--cancel">戻る</button>
+                                            </div> #}
                                         </div>
                                     </div>
                                 </div>
@@ -596,7 +697,7 @@ file that was distributed with this source code.
                                 <a href="{{ path('homepage') }}" class="c-btn">買い物を続ける</a>
                             </div>
                             <div class="c-btn_rigth">
-                                <button class="c-btn" type="submit">この内容で進む</button>
+                                <button class="c-btn" type="submit">確認する</button>
                             </div>
                         </div>
                     </div>

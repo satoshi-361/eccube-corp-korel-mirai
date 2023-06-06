@@ -31,7 +31,7 @@
 .p-manual_grid .item .item_head h3 .jp {
     font-family: "Source Han Sans JP";
     font-weight: normal;
-    font-size: 12px;
+    font-size: 22px;
     text-align: center;
     color: #fff;
 }
@@ -72,6 +72,10 @@
     text-decoration: underline;
 }
 
+.p-manual_body .body image {
+    width: 100%;
+}
+
 @media screen and (max-width: 1100px) {
     .p-manual_body {
         margin-top: calc(80/1100*100vw);
@@ -85,9 +89,6 @@
     }
     .p-manual_grid .item .item_head h3 .en {
         font-size: calc(22/1100*100vw);
-    }
-    .p-manual_grid .item .item_head h3 .jp {
-        font-size: 12px;
     }
     .p-manual_grid .item .item_row {
         margin-top: calc(20/1100*100vw);
@@ -120,7 +121,7 @@
         font-size: calc(22/768*100vw);
     }
     .p-manual_grid .item .item_head h3 .jp {
-        font-size: calc(12/768*100vw);
+        font-size: calc(20/768*100vw);
     }
     .p-manual_grid .item .item_row {
         margin-top: calc(20/768*100vw);

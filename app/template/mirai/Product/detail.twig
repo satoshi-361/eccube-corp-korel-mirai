@@ -157,8 +157,6 @@
             }
 
             .special-note {
-                font-size: 20px;
-                font-weight: bold;
                 margin: 25px auto;
                 text-align: center;
             }
@@ -168,12 +166,6 @@
                     padding: 40px 10px;
                     width: 50%;
                     margin: 20px auto;
-                }
-            }
-    
-            @media only screen and (max-width: 768px) {
-                .special-note {
-                    font-size: 15px;
                 }
             }
         </style>
@@ -414,7 +406,7 @@
                             <span> {{ Product.one_word }} </span>
                         </div>
                         <div class="s-product_title">
-                            <h2> {{ Product.name }} </h2>
+                            <h2> {{ Product.name|raw|nl2br }} </h2>
                         </div>
                         <div class="s-product_price">
                             <p><span class="price">{{ Product.price02_max|price }}</span><span class="tax"> (税込)</span></p>
@@ -486,7 +478,11 @@
                     {% if Product.color is not empty %}
                         <div class="s-product_colors">
                             <div class="s-colors_head">
-                                <p>COLORS</p>
+                                {% if Product.id == 15 %}
+                                    <p>SIZE</p>
+                                {% else %}
+                                    <p>COLORS</p>
+                                {% endif %}
                             </div>
                             <div class="s-colors_box">
                                 {% for index, color in Product.color|split('/') %}
@@ -585,7 +581,7 @@
                             <h4>{{ Product.title1 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail1|raw|nl2br }}</p>
+                            <p>{{ Product.detail1|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -596,7 +592,7 @@
                             <h4>{{ Product.title2 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail2|raw|nl2br }}</p>
+                            <p>{{ Product.detail2|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -607,7 +603,7 @@
                             <h4>{{ Product.title3 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail3|raw|nl2br }}</p>
+                            <p>{{ Product.detail3|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -618,7 +614,7 @@
                             <h4>{{ Product.title4 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail4|raw|nl2br }}</p>
+                            <p>{{ Product.detail4|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -629,7 +625,7 @@
                             <h4>{{ Product.title5 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail5|raw|nl2br }}</p>
+                            <p>{{ Product.detail5|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -640,7 +636,7 @@
                             <h4>{{ Product.title6 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail6|raw|nl2br }}</p>
+                            <p>{{ Product.detail6|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -651,7 +647,7 @@
                             <h4>{{ Product.title7 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail7|raw|nl2br }}</p>
+                            <p>{{ Product.detail7|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -662,7 +658,7 @@
                             <h4>{{ Product.title8 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail8|raw|nl2br }}</p>
+                            <p>{{ Product.detail8|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -673,7 +669,7 @@
                             <h4>{{ Product.title9 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail9|raw|nl2br }}</p>
+                            <p>{{ Product.detail9|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -684,7 +680,7 @@
                             <h4>{{ Product.title10 }}</h4>
                         </div>
                         <div class="s-introduce_txt">
-                            <p>{{ Product.detail10|raw|nl2br }}</p>
+                            <p>{{ Product.detail10|raw }}</p>
                         </div>
                     </div>
                     {% endif %}
@@ -791,18 +787,16 @@
                                 <span>ご注意</span>
                             </div>
                             <div class="s-add_detail_txt">
-                                {% if '画面上の色はブラウザやご使用のパソコンの設定により実物と異なる場合があります。' not in Product.property_note %}
-                                <p>{{ Product.property_note|raw|nl2br }}</p>
-                                {% endif %}
+                                <p>{{ Product.property_note|split('※')|first|raw|nl2br }}</p>
                             </div>
                         </div>
                     {% endif %}
                 </div>
             </section>
-                
-            {% if '画面上の色はブラウザやご使用のパソコンの設定により実物と異なる場合があります。' in Product.property_note %}
+
+            {% if '※' in Product.property_note %}
             <p class="wow fadeInUp special-note" data-wow-duration="1s" data-wow-delay="0.3s">
-                画面上の色はブラウザやご使用のパソコンの設定により実物と異なる場合があります。
+                ※ {{ Product.property_note|split('※')|last|raw|nl2br }}
             </p>
             {% endif %}
     

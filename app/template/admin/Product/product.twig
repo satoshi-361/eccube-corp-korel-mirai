@@ -19,7 +19,7 @@ file that was distributed with this source code.
 
 {% block javascript %}
     {# <script type="text/javascript" src="{{ asset('assets/tinymce/tinymce.min.js', 'user_data') }}"></script> #}
-    <script src="https://cdn.tiny.cloud/1/oixja2sf494z7rmfsfpmj1hkkbvneo706839evrm1az60lp8/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/vlyseh77toghj6ugp7455zja6ixb2m716bwnnzjlfjv1uriu/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         $(document).on('drop dragover', function(e) {
             e.preventDefault();
@@ -243,6 +243,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
             
             tinymce.init({
@@ -260,6 +262,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
         
             tinymce.init({
@@ -277,6 +281,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
             
             tinymce.init({
@@ -294,6 +300,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
             
             tinymce.init({
@@ -311,6 +319,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
             
             tinymce.init({
@@ -328,6 +338,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
             
             tinymce.init({
@@ -345,6 +357,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
             
             tinymce.init({
@@ -362,6 +376,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
             
             tinymce.init({
@@ -379,6 +395,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
             
             tinymce.init({
@@ -396,6 +414,8 @@ file that was distributed with this source code.
                 relative_urls: false,
                 hidden_input: false,
                 forced_root_block : false,
+                force_br_newlines: false,
+                force_p_newlines: false
             });
         });
 
@@ -500,7 +520,7 @@ file that was distributed with this source code.
                                     </div>
                                 </div>
                                 {% if has_class == false %}
-                                    <div class="row">
+                                    <div class="row" style="display: none;">
                                         <div class="col-3">
                                             <div class="d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'tooltip.product.sale_type'|trans }}">
                                                 <span>{{ 'admin.product.sale_type'|trans }}</span>
