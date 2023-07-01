@@ -1,5 +1,19 @@
 {% extends 'default_frame.twig' %}
 
+{% block stylesheet %}
+    <style>
+        #calendar .c-subpageitem_txt {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+        }
+        #calendar .c-subpageitem_txt img {
+            width: 100%;
+            max-width: 390px;
+        }
+    </style>
+{% endblock %}
+
 {% block main %}
 
 <div class="c-page_head page_small_width">
@@ -73,7 +87,7 @@
                                     </tr>
                                     <tr>
                                         <td>非会員登録の場合</td>
-                                        <td class="red">全国一律で550円</td>
+                                        <td class="red">全国一律で550円（税込）</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -98,7 +112,7 @@
                                 <br> 日本郵便株式会社の場合、クリックポスト（ポスト投函配送）でのお届けとなります。
                                 <br> ご注文商品の内容により、当店にていずれかの方法を選択させていただいております。
                                 <br>
-                                <br> 商品の配送状況は、「発送のお知らせ」メールに記載の【発送伝票確認URL】よりご確認いただけます。
+                                <br> 商品の配送状況は、「商品出荷のお知らせ」メールに記載の【発送伝票確認URL】よりご確認いただけます。
                                 <br> ※追跡情報の反映にはお時間がかかる場合がございます。
                             </p>
                         </div>
@@ -184,7 +198,8 @@
                 <div class="p-guide_subbody">
                     <div class="p-subitem wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
                         <div class="c-subpageitem_txt">
-                            <img src="{{ asset('assets/image/calendar.png') }}" alt="">
+                            <img src="{{ asset('assets/image/month-1.png') }}" alt="">
+                            <img src="{{ asset('assets/image/month-2.png') }}" alt="">
                         </div>
                     </div>
                 </div>
@@ -231,14 +246,14 @@
                         <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
                             <button id="accordion-button-5" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">会員登録をすると何か特典はありますか？</span><span class="icon" aria-hidden="true"></span></button>
                             <div class="accordion-content">
-                                <p><span class="a">A</span><span>ご注文の際のお客様情報の入力が不要になります。さらにアドレス帳や購入履歴など、便利な機能をお使いいただけます。<br>送料が無料になります。
+                                <p><span class="a">A</span><span>ご注文の際のお客様情報の入力が不要になります。さらに購入履歴など、便利な機能をお使いいただけます。<br>送料が無料になります。
                                 </span></p>
                             </div>
                         </div>
                         <div class="accordion-item wow fadeInUp " data-wow-duration="1s " data-wow-delay="0.3s">
-                            <button id="accordion-button-5" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">会員情報の変更、退会の手続きの仕方がわかりません。</span><span class="icon" aria-hidden="true"></span></button>
+                            <button id="accordion-button-5" aria-expanded="false"><span class="q">Q</span><span class="accordion-title">会員登録解除の方法はどのようになりますでしょうか。</span><span class="icon" aria-hidden="true"></span></button>
                             <div class="accordion-content">
-                                <p><span class="a">A</span><span>ログインの上、マイページから変更、退会の手続きをおこなってください。
+                                <p><span class="a">A</span><span>ログインの上、マイページから登録情報の変更退会のお手続きをお願いします。
                                 </span></p>
                             </div>
                         </div>

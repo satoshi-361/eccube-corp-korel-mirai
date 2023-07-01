@@ -96,8 +96,8 @@ class RequestDirectCardPaymentService
         $parameters = [
             'contract_code' => $this->Config->getContractCode(),
             'user_id' => $user_id,
-            'user_name' => $Customer->getName01().$Customer->getName02(),
-            'user_mail_add' => $Customer->getEmail(),
+            'user_name' => $Order->getName01().$Order->getName02(),
+            'user_mail_add' => $Order->getEmail(),
             'order_number' => $orderNumber,
             'item_name' => $itemInfo['item_name'],
             'item_code' => $itemInfo['item_code'],

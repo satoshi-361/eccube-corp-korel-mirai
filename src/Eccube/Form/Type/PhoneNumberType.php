@@ -70,6 +70,11 @@ class PhoneNumberType extends AbstractType
                 'type' => 'digit',
                 'message' => 'form_error.numeric_only',
             ]);
+            
+            $constraints[] = new Assert\Regex([
+                'pattern' => '/(\d{2,3})\-?(\d{3,4})\-?(\d{4})/i',
+                'message' => 'form_error.wrong_phone_number',
+            ]);
 
             return array_merge($constraints, $value);
         });

@@ -104,8 +104,9 @@ file that was distributed with this source code.
                                     <span class="required">必須</span><label class="">メールアドレス</label>
                                 </div>
                                 <div class="content">
-                                    {{ form.email.vars.data }}
-                                    {{ form_widget(form.email, { type : 'hidden' }) }}
+                                    {{ form.email.first.vars.data }}
+                                    {{ form_widget(form.email.first, { type : 'hidden' }) }}
+                                    {{ form_widget(form.email.second, { type : 'hidden' }) }}
                                 </div>
                             </li>
                             <li class="form_item">

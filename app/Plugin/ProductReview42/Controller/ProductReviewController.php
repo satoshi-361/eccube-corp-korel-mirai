@@ -173,6 +173,10 @@ class ProductReviewController extends AbstractController
     {
         $data = $request->request->all();
 
+        if ( is_null($this->getUser()) ) {
+            return $this->redirectToRoute('mypage_login');
+        }
+
         if ( array_key_exists( 'product_review', $data ) && ! empty( $data = $data['product_review'] ) ) {
             $ProductReview = new ProductReview();
     

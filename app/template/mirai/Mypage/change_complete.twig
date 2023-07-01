@@ -14,28 +14,84 @@ file that was distributed with this source code.
 
 {% set body_class = 'mypage' %}
 
+{% block stylesheet %}
+    <style>
+        .ec-reportHeading h2 {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .ec-off3Grid__cell {
+            text-align: center;
+        }
+        .ec-off3Grid__cell .ec-icon {
+            width: 200px;
+            margin: auto;
+        }
+        .ec-off4Grid__cell {
+            text-align: center;
+        }
+        .ec-off4Grid__cell a {
+            width: 160px;
+            height: 40px;
+            margin: 20px auto;
+            border-radius: 5px;
+            background: #7fb744;
+            font-family: Arial;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 0.1em;
+            line-height: 26px;
+            text-align: center;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .35s;
+        }
+        .ec-off4Grid__cell a:hover {
+            background: #648746;
+        }
+    </style>
+{% endblock %}
+
 {% block main %}
-    <div class="ec-layoutRole__main">
-        <div class="ec-mypageRole">
-            <div class="ec-pageHeader">
-                <h1>{{ 'マイページ'|trans }}/{{ '会員情報編集(完了)'|trans }}</h1>
-            </div>
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>MY PAGE</span></h1>
+        <p class="jp">マイページ</p>
+    </div>
+</div>
+
+<!--  -->
+<main class="main">
+    <div class="page_max_width">
+        <div class="p-mypage_contain">
             {% include 'Mypage/navi.twig' %}
-        </div>
-        <div class="ec-registerCompleteRole">
-            <div class="ec-reportHeading">
-                <h2>{{ '会員登録内容の変更が完了いたしました'|trans }}</h2>
-            </div>
-            <div class="ec-off2Grid ec-text-ac">
-                <div class="ec-off2Grid__cell">
-                    <p class="ec-reportDescription">{{ 'メールアドレスとパスワードでログイン後、ショッピングをお楽しみください。'|trans }}</p>
-                </div>
-            </div>
-            <div class="ec-off4Grid">
-                <div class="ec-off4Grid__cell">
-                    <a class="ec-blockBtn--cancel" href="{{ url('homepage') }}">{{ '戻る'|trans }}</a>
+            <div class="p-mypage_body">
+                <div id="registration" class="p-mypage_content wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="c-register_title">
+                        <h2>登録情報変更完了</h2>
+                    </div>
+                    <div class="ec-mypageRole">
+                        <div class="ec-withdrawCompleteRole">
+                            <div class="ec-reportHeading">
+                                <h2>{{ '会員登録情報の変更が完了いたしました。'|trans }}</h2>
+                            </div>
+                            <div class="ec-off3Grid ec-text-ac">
+                                <div class="ec-off3Grid__cell">
+                                    <p class="ec-reportDescription">{{ '引き続き、ショッピングをお楽しみください。'|trans|nl2br }}</p>
+                                </div>
+                            </div>
+                            <div class="ec-off4Grid">
+                                <div class="ec-off4Grid__cell">
+                                    <a href="{{ url('homepage') }}" class="ec-blockBtn--cancel">{{ 'トップページへ'|trans }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

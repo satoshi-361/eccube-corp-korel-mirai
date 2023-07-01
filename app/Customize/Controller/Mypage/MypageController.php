@@ -416,11 +416,5 @@ class MypageController extends AbstractController
         return [
             'pagination' => $pagination,
         ];
-
-        
-
-        return [
-            'browseHistory' => $qb->getQuery()->getResult()
-        ];
     }
 }

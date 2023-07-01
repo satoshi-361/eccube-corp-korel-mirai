@@ -160,6 +160,29 @@
                 margin: 25px auto;
                 text-align: center;
             }
+
+            /* .property-color fieldset {
+                margin-bottom: 20px;
+                border: 1px solid #7fb744;
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: center;
+            }
+            .property-color.ec-radio div {
+                display: block;
+            }
+            .property-color .form-check-label {
+                display: unset;
+            }
+            .property-color .form-check-label::after {
+                content: '\a';
+                white-space: pre;
+            }
+
+            .s-product_body.page_small_width .s-btn_box {
+                align-items: end;
+            } */
     
             @media only screen and (min-width: 768px) {
                 .ec-modal .ec-modal-wrap {
@@ -253,10 +276,17 @@
     
                 $('.s-color_item input[name="color"]').on('change', function(e) {
                     if (e.target.checked) {
-                        var index = $(this).attr('data-index');
-                        $('.item_visual').slick('slickGoTo', index, false);
+                        var index = parseInt($(this).attr('data-index'));
+                        $('.item_visual').slick('slickGoTo', index + 1, false);
+
+                        let classcategory = $('#classcategory_id1 option').eq(index);
+                        $('#classcategory_id1').val(classcategory.val()).change();
                     }
                 })
+                
+                {% if form.classcategory_id1 is defined %}
+                    $('.item_visual').slick('slickGoTo', 1, false);
+                {% endif %}
             });
         </script>
         <script>
@@ -291,11 +321,11 @@
                     }
     
                     event.preventDefault();
-                    $('.s-color_item input[name="color"]').each(function() {
-                        if ($(this).is(':checked')) {
-                            $('#property').val($(this).attr('text'));
-                        }
-                    });
+                    // $('.s-color_item input[name="color"]').each(function() {
+                    //     if ($(this).is(':checked')) {
+                    //         $('#property').val($(this).attr('text'));
+                    //     }
+                    // });
     
                     $form = $('#form1');
                     $.ajax({
@@ -337,8 +367,13 @@
                 e.stopPropagation();
             });
             $('.ec-modal-overlay, .ec-modal, .ec-modal-close, .ec-inlineBtn--cancel').on('click', function() {
-                $('#cart-modal').hide()
+                $('#cart-modal').hide();
+                $('#favorite-modal').hide();
             });
+
+            {% if favorite == true %}
+                $('#favorite-modal').show();
+            {% endif %}
         </script>
         <script type="application/ld+json">
         {
@@ -416,12 +451,12 @@
                         <form action="{{ url('product_add_cart', {id:Product.id}) }}" method="post" id="form1" name="form1" style="width: 450px;">
                             <div style="display: none;">
                                 {% if form.classcategory_id1 is defined %}
-                                    <div class="ec-select">
+                                    <div class="ec-radio property-color">
                                         {{ form_row(form.classcategory_id1) }}
                                         {{ form_errors(form.classcategory_id1) }}
                                     </div>
                                     {% if form.classcategory_id2 is defined %}
-                                        <div class="ec-select">
+                                        <div class="ec-radio">
                                             {{ form_row(form.classcategory_id2) }}
                                             {{ form_errors(form.classcategory_id2) }}
                                         </div>
@@ -462,6 +497,24 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="ec-modal" id="favorite-modal">
+                            <div class="ec-modal-overlay">
+                                <div class="ec-modal-wrap">
+                                    <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
+                                    <div id="ec-modal-header">{{ 'お気に入りに追加しました。'|trans }}</div>
+                                    <div class="ec-modal-box">
+                                        <div class="ec-btn_group">
+                                            <div class="c-btn_left">
+                                                <button class="c-btn ec-inlineBtn--cancel">お買い物を続ける</button>
+                                            </div>
+                                            <div class="c-btn_rigth">
+                                                <a href="{{ url('mypage_favorite') }}" class="c-btn" >お気に入りへ</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
                         <div class="s-favorite">
                             {% if BaseInfo.option_favorite_product %}
@@ -469,28 +522,31 @@
                                     {% if is_favorite == false %}
                                         <button type="submit" id="favorite" class="s-favorite_btn"><i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i></button>
                                     {% else %}
-                                        <button type="submit" id="favorite" class="s-favorite_btn" disabled="disabled"><i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i></button>
+                                        <button type="submit" id="favorite" class="s-favorite_btn disabled" disabled="disabled"><i class="ec-headerNav__itemIcon fas fa-heart fa-fw"></i></button>
                                     {% endif %}
                                 </form>
                             {% endif %}
                         </div>
                     </div>
-                    {% if Product.color is not empty %}
+                    {% if form.classcategory_id1 is defined %}
                         <div class="s-product_colors">
                             <div class="s-colors_head">
-                                {% if Product.id == 15 %}
-                                    <p>SIZE</p>
-                                {% else %}
-                                    <p>COLORS</p>
-                                {% endif %}
+                                <p>{{ Product.getClassName1 }}</p>
                             </div>
                             <div class="s-colors_box">
-                                {% for index, color in Product.color|split('/') %}
+                                {% for key, ClassCategory in Product.getClassCategories1|reverse %}
+                                    <div class="s-color_item">
+                                        <input type="radio" id="color{{key}}" name="color" {% if loop.first %} checked {% endif %} data-index="{{ key }}">
+                                        <label for="color{{key}}">{{ ClassCategory }}</label>
+                                    </div>
+                                {% endfor %}
+
+                                {# {% for index, color in Product.color|split('/') %}
                                     <div class="s-color_item">
                                         <input type="radio" id="color{{index}}" name="color" {% if loop.first %} checked {% endif %} text="{{ color }}" data-index="{{ index }}">
                                         <label for="color{{index}}">{{ color }}</label>
                                     </div>
-                                {% endfor %}
+                                {% endfor %} #}
                             </div>
                         </div>
                     {% endif %}
@@ -566,7 +622,7 @@
             <section class="s-product_introduce">
                 <div class="s-introduce_top wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
                     <div class="top_txt">
-                        {{ Product.catch_copy }}
+                        {{ Product.catch_copy|raw|nl2br }}
                     </div>
                     {% if Product.title0 is not empty %}
                     <div class="top_head">
@@ -717,7 +773,8 @@
                                 <span>品番（商品コード）</span>
                             </div>
                             <div class="s-add_detail_txt">
-                                <p>{{ Product.code_min }}</p>
+                                {# <p>{{ Product.code_min }}</p> #}
+                                <p>{{ Product.getCodes|reverse|join(', ') }}</p>
                             </div>
                         </div>
                     {% endif %}
@@ -807,7 +864,7 @@
                 </div>
                 <div class="s-recommend_body wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
                     <div class="p-products_grid">
-                        {% for scProduct in same_category_products %}
+                        {% for scProduct in same_category_products if scProduct.id != Product.id %}
                             <div class="p-product_item">
                                 <a href="{{ url('product_detail', {'id': scProduct.id}) }}" class="p-product_img">
                                     <img src="{{ asset(scProduct.main_list_image|no_image_product, 'save_image') }}" alt="{{ scProduct.name }}" loading="lazy">
@@ -820,7 +877,7 @@
                                         <p>{{ scProduct.description_detail }}</p>
                                     </div>
                                     <div class="p-product_price">
-                                        <span>{{ Product.getPrice02Max|price }}</span>
+                                        <span>{{ scProduct.getPrice02Max|price }}</span>
                                     </div>
                                 </div>
                             </div>

@@ -33,6 +33,8 @@ file that was distributed with this source code.
                             {{ BaseInfo.shop_name }}でございます。<br/>
                             お客さまがご注文された以下の商品を発送いたしました。商品の到着まで、今しばらくお待ちください。<br/>
                             <br/>
+                            注文番号：{{ Order.order_no }} <br/>
+                            <br/>
                             {% if Shipping.tracking_number %}
                                 <hr style="border-top: 3px double #8c8b8b;">
                                 お問い合わせ番号：{{ Shipping.tracking_number }}
@@ -79,6 +81,9 @@ file that was distributed with this source code.
                             お届け日：{{ Shipping.shipping_delivery_date is empty ? '指定なし' : Shipping.shipping_delivery_date|date_day }}<br/>
                             お届け時間：{{ Shipping.shipping_delivery_time|default('指定なし') }}<br/>
                             <br/>
+                            <hr style="border-top: 2px dotted #8c8b8b;">
+                            このメッセージはお客様へのお知らせ専用です。<br/>
+                            ご返信いただいても回答できませんのでご了承ください。<br/>
                         </div>
                     </td>
                 </tr>
@@ -89,11 +94,14 @@ file that was distributed with this source code.
             <table id="html-mail-table2" border="0" width="600px" cellpadding="10" cellspacing="0" class="container" style="border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;">
                 <tr>
                     <td class="container-padding content footer-text" align="left" style="border-collapse:collapse;font-family:Helvetica, Arial, sans-serif;font-size:12px;line-height:16px;color:#aaaaaa;padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:12px;background-color:#ffffff;">
-                        本メールは、{{ BaseInfo.shop_name }}より送信しております。<br/>
-                        もしお心当たりが無い場合は、その旨 <a href="mailto:{{ BaseInfo.email02 }}" style="text-decoration:none;">{{ BaseInfo.email02 }}</a> までご連絡いただければ幸いです。<br/>
+                        このメールにお心当たりがない場合は、お手数ですが下記お問い合わせ窓口へご連絡ください。<br/>
+                        お問い合わせ窓口<br/>
+                        <a href="mailto:contact@yokohama-mirai.jp" style="text-decoration:none;">contact@yokohama-mirai.jp</a>
                         <br/>
                         <div class="title" style="font-size:14px;font-family:Helvetica, Arial, sans-serif;font-weight:600;color:#374550;"><a href="{{ url('homepage') }}" style="color:#aaaaaa;text-decoration:none;">{{ BaseInfo.shop_name }}</a></div>
-                        <div>copyright &copy; {{ BaseInfo.shop_name }} all rights reserved.</div>
+                        <div>
+                            copyright © LEBEN Co.,Ltd. All rights reserved.<br/>
+                        </div>
                     </td>
                 </tr>
             </table>

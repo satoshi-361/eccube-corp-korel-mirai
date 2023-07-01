@@ -1392,4 +1392,11 @@ trait ProductTrait
             $this->ProductDetails = new \Doctrine\Common\Collections\ArrayCollection();
         }
     }
+
+    public function getCodes()
+    {
+        $this->_calc();
+
+        return $this->codes;
+    }
 }

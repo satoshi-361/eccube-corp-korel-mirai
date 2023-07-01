@@ -225,6 +225,9 @@ class ForgotController extends AbstractController
                 // パスワードを更新
                 $this->entityManager->persist($Customer);
                 $this->entityManager->flush();
+                
+                // メール送信
+                $this->mailService->sendPasswordResetCompleteMail($Customer, $pass);
 
                 $event = new EventArgs(
                     [
@@ -238,7 +241,7 @@ class ForgotController extends AbstractController
                 $this->addFlash('password_reset_complete', trans('front.forgot.reset_complete'));
 
                 // ログインページへリダイレクト
-                return $this->redirectToRoute('mypage_login');
+                return $this->redirectToRoute('forgot_reset_complete');
             } else {
                 // リセットキー・メールアドレスから会員データが取得できない場合
                 $error = trans('front.forgot.reset_not_found');
@@ -249,5 +252,16 @@ class ForgotController extends AbstractController
             'error' => $error,
             'form' => $form->createView(),
         ];
+    }
+
+    /**
+     * 再設定完了画面.
+     *
+     * @Route("/forgot/complete/reset", name="forgot_reset_complete", methods={"GET"})
+     * @Template("Forgot/reset_complete.twig")
+     */
+    public function resetComplete(Request $request)
+    {
+        return [];
     }
 }

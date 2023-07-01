@@ -54,7 +54,11 @@ class CreditCardForTokenPaymentType extends AbstractType
                 ],
             ])
             ->add('credit_card_number', TextType::class)
-            ->add('holder_name', TextType::class)
+            ->add('holder_name', TextType::class, [
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ])
             ->add('expiration_month', ChoiceType::class, [
                 'choices' => [
                     '-' => null,
@@ -75,7 +79,11 @@ class CreditCardForTokenPaymentType extends AbstractType
             ->add('expiration_year', ChoiceType::class, [
                 'choices' => $this->getYearsService->get(10),
             ])
-            ->add('security_code', TextType::class)
+            ->add('security_code', TextType::class, [
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ])
             ->add('token', HiddenType::class, [
                 'constraints' => [
                     new NotBlank([

@@ -1,38 +1,675 @@
 <!doctype html>
-{#
-This file is part of EC-CUBE
+<html lang="ja">
+    <head prefix="og: https://ogp.me/ns# fb: https://ogp.me/ns/fb# product: https://ogp.me/ns/product#">
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="eccube-csrf-token" content="422f.49s6OVZqsv5oXh18IgAv5k2Ml7NrtjxTKTuQZyA_-4c.vJBqQyRS1sg_aFcqcEl7rh70zYYt_HgJY3fkKXJalsSGmGNIDh78vBIfVA">
+        <title>横浜みらい / MYページ/ログイン</title>
+        <meta property="og:type" content="article"/>
+        <meta property="og:site_name" content="横浜みらい"/>
+        <meta name="robots" content="noindex">
+        <link rel="icon" href="/html/template/mirai/assets/image/favicon/favicon64.ico">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+        <link rel="stylesheet" href="/html/template/mirai/assets/fontawesome/css/all.css">
+        <link rel="stylesheet" href="/html/template/mirai/assets/fontawesome/css/v4-shims.css">
+        <link rel="stylesheet" href="/html/template/mirai/assets/css/style.css" type="text/css">
+        <link rel="stylesheet" href="/html/template/mirai/assets/css/style_sp.css" type="text/css">
+        <!-- Animation -->
+        <link rel="stylesheet" href="/html/template/mirai/assets/css/animate.css" type="text/css"/>
+        <!-- Slick -->
+        <link rel="stylesheet" href="/html/template/mirai/assets/css/slick.css" type="text/css"/>
+        <link rel="stylesheet" href="/html/template/mirai/assets/css/slick-theme.css" type="text/css"/>
+        <script src="/html/bundle/front.bundle.js"></script>
+        <link rel="stylesheet" href="/html/template/mirai/assets/css/style_input.css" type="text/css"/>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-7HGCRKZD9S"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
 
-Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+            gtag('config', 'G-7HGCRKZD9S');
+        </script>
+        <script>
+            $(function() {
+                $.ajaxSetup({
+                    'headers': {
+                        'ECCUBE-CSRF-TOKEN': $('meta[name="eccube-csrf-token"]').attr('content')
+                    }
+                });
+            });
+        </script>
+        <!-- ▼下層ページ用アセット -->
+        <link rel="stylesheet" href="/html/template/mirai/assets/css/subpage.css" type="text/css"/>
+        <link rel="stylesheet" href="/html/template/mirai/assets/css/subpage_sp.css" type="text/css"/>
+        <!-- ▲下層ページ用アセット -->
+        <link rel="stylesheet" href="/html/user_data/assets/css/customize.css">
 
-http://www.ec-cube.co.jp/
+        <style>
+            .ec-off4Grid__cell {
+                text-align: center;
+            }
+            .ec-off4Grid__cell {
+                text-align: center;
+            }
+            .ec-off4Grid__cell .ec-icon {
+                width: 200px;
+                margin: auto;
+            }
+            .ec-off4Grid__cell a {
+                width: 160px;
+                height: 40px;
+                margin: 20px auto;
+                border-radius: 5px;
+                background: #7fb744;
+                font-family: Arial;
+                font-weight: bold;
+                font-size: 14px;
+                letter-spacing: 0.1em;
+                line-height: 26px;
+                text-align: center;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all .35s;
+            }
+            .ec-off4Grid__cell a:hover {
+                background: #648746;
+            }
+        </style>
+    </head>
+    <body id="page_mypage_login" class="mypage">
+        <div class="page">
+            <div class="ec-layoutRole">
+                <header class="header">
+                    <!-- ▼新しいヘッダー -->
+                    <div class="header_contain">
+                        <div class="header_logo">
+                            <a href="https://yokohama-mirai.jp/">
+                                <img src="/html/template/mirai/assets/image/common/logo.png" alt="横浜みらい">
+                            </a>
+                        </div>
+                        <div class="header_nav_pc">
+                            <ul class="nav_list">
+                                <li class="p-menu active">
+                                    <a href="https://yokohama-mirai.jp/products/list?category_id=9">
+                                        <span class="en">EARPICK</span>
+                                        <span class="jp">耳かき</span>
+                                    </a>
+                                    <div class="p-submenu">
+                                        <ul class="p-submenu_list">
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=10">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-earpick_01.png" alt="マイクロファイバー製">
+                                                    <span class="jp pc">
+                                                        マイクロ<br>ファイバー製
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=11">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-earpick_02.png" alt="ワイヤータイプ">
+                                                    <span class="jp pc">
+                                                        ワイヤー<br>タイプ
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=12">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-earpick_03.png" alt="専門医用">
+                                                    <span class="jp pc">専門医用</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="p-menu">
+                                    <a href="https://yokohama-mirai.jp/products/list?category_id=5">
+                                        <span class="en">BODYCARE</span>
+                                        <span class="jp">ボディケア</span>
+                                    </a>
+                                    <div class="p-submenu">
+                                        <ul class="p-submenu_list">
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=6">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-bodycare_01.png" alt="ヘルスケア雑貨">
+                                                    <span class="jp pc">
+                                                        ヘルスケア<br>雑貨
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=7">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-bodycare_02.png" alt="オーラルマウスケア">
+                                                    <span class="jp pc">
+                                                        オーラル<br>マウスケア
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="p-menu">
+                                    <a href="https://yokohama-mirai.jp/products/list?category_id=13">
+                                        <span class="en">BEAUTY</span>
+                                        <span class="jp">ビューティー</span>
+                                    </a>
+                                    <div class="p-submenu">
+                                        <ul class="p-submenu_list">
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=14">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-beauty_01.png" alt="ヘアブラシ">
+                                                    <span class="jp pc">ヘアブラシ</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="p-menu">
+                                    <a href="https://yokohama-mirai.jp/products/list?category_id=20">
+                                        <span class="en">TABLE WEAR</span>
+                                        <span class="jp">テーブルウェア</span>
+                                    </a>
+                                    <div class="p-submenu">
+                                        <ul class="p-submenu_list">
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=21">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table01.png" alt="カトラリー">
+                                                    <span class="jp pc">カトラリー</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=22">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table02.png" alt="UDカトラリー">
+                                                    <span class="jp pc">UDカトラリー</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=23">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table03.png" alt="デザインカトラリー">
+                                                    <span class="jp pc">
+                                                        デザイン<br>カトラリー
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=24">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table04.png" alt="離乳食スプーン">
+                                                    <span class="jp pc">離乳食スプーン</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=25">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table05.png" alt="食器(グラス)">
+                                                    <span class="jp pc">食器(グラス)</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="p-menu">
+                                    <a href="https://yokohama-mirai.jp/products/list?category_id=15">
+                                        <span class="en">KITCHENTOOL</span>
+                                        <span class="jp">キッチン用品</span>
+                                    </a>
+                                    <div class="p-submenu">
+                                        <ul class="p-submenu_list">
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=16">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-kitchen01.png" alt="包丁">
+                                                    <span class="jp pc">包丁</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=17">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-kitchen02.png" alt="ピーラー">
+                                                    <span class="jp pc">ピーラー</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=18">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-kitchen03.png" alt="菜箸">
+                                                    <span class="jp pc">菜箸</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=19">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-kitchen04.png" alt="ハサミ">
+                                                    <span class="jp pc">ハサミ</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="p-menu">
+                                    <a href="https://yokohama-mirai.jp/products/list?category_id=26">
+                                        <span class="en">OTHER</span>
+                                        <span class="jp">その他</span>
+                                    </a>
+                                    <div class="p-submenu">
+                                        <ul class="p-submenu_list">
+                                            <li>
+                                                <a href="https://yokohama-mirai.jp/products/list?category_id=27">
+                                                    <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-other_01.png" alt="ペットブラシ">
+                                                    <span class="jp pc">ペットブラシ</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="header_icons">
+                            <ul class="icons_list">
+                                <li>
+                                    <a href="https://yokohama-mirai.jp/mypage/login">
+                                        <img src="/html/template/mirai/assets/image/common/icon-login.png" alt="ログイン">
+                                        <span class="jp">ログイン</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://yokohama-mirai.jp/entry">
+                                        <img src="/html/template/mirai/assets/image/common/icon-register.png" alt="会員登録">
+                                        <span class="jp">会員登録</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://yokohama-mirai.jp/mypage/favorite">
+                                        <img src="/html/template/mirai/assets/image/common/icon-faiver.png" alt="お気に入り">
+                                        <span class="jp">お気に入り</span>
+                                    </a>
+                                </li>
+                                <li class="ec-headerRole__cart">
+                                    <style>
+                                        .header ul li.ec-headerRole__cart a {
+                                            position: relative;
+                                        }
 
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
-#}
-<html lang="{{ eccube_config.locale }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{ error_title }}</title>
-    <link rel="icon" href="{{ asset('assets/img/common/favicon.ico', 'user_data') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-</head>
-<body>
-<div class="ec-layoutRole">
-    <div class="ec-404Role">
-        <div class="ec-off4Grid">
-            <div class="ec-off4Grid__cell">
-                <div style="font-size:100px;text-align:center;">
-                    <div class="ec-404Role__icon ec-icon">
-                        <img src="{{ asset('assets/icon/exclamation-pale.svg') }}" alt="">
+                                        .header ul li.ec-headerRole__cart a .ec-cartNavi__badge {
+                                            width: 15px;
+                                            height: 15px;
+                                            border-radius: 10px;
+                                            background: #ed431f;
+                                            color: white;
+                                            font-size: 12px;
+                                            font-style: normal;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            position: absolute;
+                                            bottom: 15px;
+                                            right: -5px;
+                                            z-index: 1;
+                                        }
+
+                                        @media only screen and (max-width: 767px) {
+                                            .header ul li.ec-headerRole__cart a .ec-cartNavi__badge {
+                                                width: 12px;
+                                                height: 12px;
+                                                font-size: 11px;
+                                            }
+                                        }
+                                    </style>
+                                    <a href="https://yokohama-mirai.jp/cart">
+                                        <img src="/html/template/mirai/assets/image/common/icon-cart.png" alt="カート">
+                                        <span class="jp">カート</span>
+                                        <span class="ec-cartNavi__badge">0</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sp sp_menu">
+                            <div class="menu_btn">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <div id="sp_nav" class="nav_sp sp" style="right: -100%;">
+                            <div class="sp_nav_contain">
+                                <div class="sp_nav_head">
+                                    <div class="header_logo">
+                                        <a href="https://yokohama-mirai.jp/">
+                                            <img src="/html/template/mirai/assets/image/common/logo.png" alt="横浜みらい">
+                                            <h1>横浜みらい</h1>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="sp_nav_body">
+                                    <div class="sp_nav_item">
+                                        <button id="menu-button-1" aria-expanded="false">
+                                            <span class="en">EARPICK</span>
+                                            <span class="jp">耳かき</span>
+                                            <span class="icon" aria-hidden="true"></span>
+                                        </button>
+                                        <div class="subnav_content">
+                                            <ul class="subnav_itemlist">
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=10">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-earpick_01.png" alt="マイクロファイバー製">
+                                                        <span class="jp">
+                                                            マイクロ<br>ファイバー製
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=11">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-earpick_02.png" alt="ワイヤータイプ">
+                                                        <span class="jp">
+                                                            ワイヤー<br>タイプ
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=12">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-earpick_03.png" alt="専門医用">
+                                                        <span class="jp">専門医用</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="sp_nav_item">
+                                        <button id="menu-button-1" aria-expanded="false">
+                                            <span class="en">BODYCARE</span>
+                                            <span class="jp">ボディケア</span>
+                                            <span class="icon" aria-hidden="true"></span>
+                                        </button>
+                                        <div class="subnav_content">
+                                            <ul class="subnav_itemlist">
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=6">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-bodycare_01.png" alt="ヘルスケア雑貨">
+                                                        <span class="jp">
+                                                            ヘルスケア<br>雑貨
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=7">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-bodycare_02.png" alt="オーラルマウスケア">
+                                                        <span class="jp">
+                                                            オーラル<br>マウスケア
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="sp_nav_item">
+                                        <button id="menu-button-1" aria-expanded="false">
+                                            <span class="en">BEAUTY</span>
+                                            <span class="jp">ビューティー</span>
+                                            <span class="icon" aria-hidden="true"></span>
+                                        </button>
+                                        <div class="subnav_content">
+                                            <ul class="subnav_itemlist">
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=14">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-beauty_01.png" alt="ヘアブラシ">
+                                                        <span class="jp">ヘアブラシ</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="sp_nav_item">
+                                        <button id="menu-button-1" aria-expanded="false">
+                                            <span class="en">TABLE WEAR</span>
+                                            <span class="jp">テーブルウェア</span>
+                                            <span class="icon" aria-hidden="true"></span>
+                                        </button>
+                                        <div class="subnav_content">
+                                            <ul class="subnav_itemlist">
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=21">
+                                                        <span style="width: 50px"></span>
+                                                        <span class="jp">カトラリー</span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=22">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table02.png" alt="UDカトラリー">
+                                                        <span class="jp">UDカトラリー</span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=23">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table03.png" alt="デザインカトラリー">
+                                                        <span class="jp">
+                                                            デザイン<br>カトラリー
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=24">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table04.png" alt="離乳食スプーン">
+                                                        <span class="jp">離乳食スプーン</span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=25">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-table05.png" alt="食器(グラス)">
+                                                        <span class="jp">食器(グラス)</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="sp_nav_item">
+                                        <button id="menu-button-1" aria-expanded="false">
+                                            <span class="en">KITCHENTOOL</span>
+                                            <span class="jp">キッチン用品</span>
+                                            <span class="icon" aria-hidden="true"></span>
+                                        </button>
+                                        <div class="subnav_content">
+                                            <ul class="subnav_itemlist">
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=16">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-kitchen01.png" alt="包丁">
+                                                        <span class="jp">包丁</span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=17">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-kitchen02.png" alt="ピーラー">
+                                                        <span class="jp">ピーラー</span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=18">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-kitchen03.png" alt="菜箸">
+                                                        <span class="jp">菜箸</span>
+                                                    </a>
+                                                </li>
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=19">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-kitchen04.png" alt="ハサミ">
+                                                        <span class="jp">ハサミ</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="sp_nav_item">
+                                        <button id="menu-button-1" aria-expanded="false">
+                                            <span class="en">OTHER</span>
+                                            <span class="jp">その他</span>
+                                            <span class="icon" aria-hidden="true"></span>
+                                        </button>
+                                        <div class="subnav_content">
+                                            <ul class="subnav_itemlist">
+                                                <li class="subnav_item">
+                                                    <a href="https://yokohama-mirai.jp/products/list?category_id=27">
+                                                        <img src="/html/template/mirai/assets/image/top/category-icon/cate-icon-other_01.png" alt="ペットブラシ">
+                                                        <span class="jp">ペットブラシ</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ▲新しいヘッダー -->
+                </header>
+                <div class="ec-layoutRole__contents">
+                    <div class="ec-404Role">
+                        <div class="ec-off4Grid">
+                            <div class="ec-off4Grid__cell">
+                                <div style="font-size:100px;text-align:center;">
+                                    <div class="ec-404Role__icon ec-icon">
+                                        <img src="{{ asset('assets/icon/exclamation-pale.svg') }}" alt="">
+                                    </div>
+                                </div>
+                                <p class="ec-404Role__title ec-reportHeading">{{ error_title }}</p>
+                                <p class="ec-404Role__description ec-reportDescription">{{ error_message }}</p>
+                                <a class="ec-blockBtn--cancel" href="{{ app.request.basePath ~ '/' }}">{{ 'トップページへ'|trans }}</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <p class="ec-404Role__title ec-reportHeading">{{ error_title }}</p>
-                <p class="ec-404Role__description ec-reportDescription">{{ error_message }}</p>
-                <a class="ec-blockBtn--cancel" href="{{ app.request.basePath ~ '/' }}">{{ 'トップページへ'|trans }}</a>
+                <footer class="footer">
+                    <!-- ▼新しいフーター -->
+                    <div class="footer_contain">
+                        <div class="footer_contain_flex">
+                            <div class="footer_information">
+                                <div class="footer_logo">
+                                    <a href="https://yokohama-mirai.jp/">
+                                        <img src="/html/template/mirai/assets/image/common/logo.png" alt="">
+                                    </a>
+                                </div>
+                                <div class="footer_company">
+                                    <p class="campany_name">株式会社レーベン</p>
+                                    <p>
+                                        〒220-0004<br>横浜市西区北幸2-8-19横浜西口Ｋビル１階
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="footer_nav">
+                                <div class="footer_nav_title">
+                                    <p>ご利用ガイド</p>
+                                </div>
+                                <div class="footer_navlist">
+                                    <ul>
+                                        <li>
+                                            <a href="https://yokohama-mirai.jp/user_data/guide#delivery">
+                                                <span class="icon">▶︎ </span>
+                                                送料・配送方法について
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://yokohama-mirai.jp/user_data/guide#paymethod">
+                                                <span class="icon">▶︎ </span>
+                                                お支払い方法について
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://yokohama-mirai.jp/user_data/guide#refund">
+                                                <span class="icon">▶︎ </span>
+                                                返品・交換について
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://yokohama-mirai.jp/help/tradelaw">
+                                                <span class="icon">▶︎ </span>
+                                                特定商取引法に基づく表記
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://yokohama-mirai.jp/help/privacy">
+                                                <span class="icon">▶︎ </span>
+                                                個人情報の取り扱いについて
+                                            </a>
+                                        </li>
+                                        <li class="sp">
+                                            <a href="https://yokohama-mirai.jp/user_data/guide#calendar">
+                                                <span class="icon">▶︎ </span>
+                                                営業日カレンダー
+                                            </a>
+                                        </li>
+                                        <li class="sp">
+                                            <a href="https://yokohama-mirai.jp/user_data/faq">
+                                                <span class="icon">▶︎ </span>
+                                                よくあるご質問
+                                            </a>
+                                        </li>
+                                        <li class="sp">
+                                            <a href="https://yokohama-city.co.jp/company/">
+                                                <span class="icon">▶︎ </span>
+                                                レーベンとは
+                                            </a>
+                                        </li>
+                                        <li class="sp">
+                                            <a href="https://yokohama-mirai.jp/contact">
+                                                <span class="icon">▶︎ </span>
+                                                お問い合わせ
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <ul class="pc">
+                                        <li>
+                                            <a href="https://yokohama-mirai.jp/user_data/guide#calendar">
+                                                <span class="icon">▶︎ </span>
+                                                営業日カレンダー
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://yokohama-mirai.jp/user_data/faq">
+                                                <span class="icon">▶︎ </span>
+                                                よくあるご質問
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://yokohama-city.co.jp/company/">
+                                                <span class="icon">▶︎ </span>
+                                                レーベンとは
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://yokohama-mirai.jp/contact">
+                                                <span class="icon">▶︎ </span>
+                                                お問い合わせ
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="copyright">
+                        <p>Copyright© LEBEN Co.,Ltd. All rights reserved.</p>
+                    </div>
+                    <!-- ▲新しいフーター -->
+                </footer>
             </div>
+            <!-- ec-layoutRole -->
+            <div class="ec-overlayRole"></div>
+            <div class="ec-drawerRole"></div>
         </div>
-    </div>
-</div>
-</body>
+        <div class="pagetop" style="position: fixed; bottom: 0px; right: 0px; opacity: 1; cursor: pointer; z-index: 200; right: 30px !important; bottom: 30px !important">
+            <img src="/html/template/mirai/assets/image/common/btn_pagetop.png" style="width:55px; height:55px;"/>
+        </div>
+        <script>
+            var eccube_lang = {
+                'common.delete_confirm': "削除してもよろしいですか?",
+                'front.product.out_of_stock': "ただいま品切れ中です。",
+            };
+        </script>
+        <script src="/html/template/mirai/assets/js/function.js"></script>
+        <script src="/html/template/mirai/assets/js/eccube.js"></script>
+        <script src="/html/user_data/assets/js/customize.js"></script>
+        <!-- script -->
+        <script src="/html/template/mirai/assets/js/wow.min.js"></script>
+        <script src="/html/template/mirai/assets/js/slick.js"></script>
+        <script src="/html/template/mirai/assets/js/script.js"></script>
+        <script>
+            new WOW().init();
+        </script>
+    </body>
 </html>

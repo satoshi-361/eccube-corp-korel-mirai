@@ -425,7 +425,7 @@
     }
     /*  */
     .p-mypage_head {
-        max-width: calc(860/1100*100vw);
+        max-width: calc(950/1100*100vw);
         gap: 20px;
     }
     .mypage_tablink {
@@ -514,7 +514,7 @@
         row-gap: calc(40/768*100vw);
     }
     .c-btn {
-        width: calc(330/768*100vw);
+        width: calc(270/768*100vw);
         height: calc(90/768*100vw);
         font-size: calc(30/768*100vw);
         line-height: calc(32/768*100vw);
@@ -1003,7 +1003,14 @@
     }
     .p-mypage_content .main_box .main_img {
         max-width: calc(200/768*100vw);
-        max-height: calc(200/768*100vw);
+        width: calc(200/768*100vw);
+        height: calc(200/768*100vw);
+        max-height: unset;
+    }
+    .p-mypage_content .main_box .main_infor {
+        max-width: calc(400/768*100vw);
+        width: calc(558/768*100vw);
+        max-height: unset;
     }
     .p-mypage_content .main_infor .txt_up {
         font-size: calc(24/768*100vw);

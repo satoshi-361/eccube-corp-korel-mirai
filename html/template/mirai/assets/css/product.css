@@ -137,6 +137,10 @@ button {
     outline: none;
     transition: all 0.35s;
 }
+.s-favorite_btn.disabled {
+    background: #bbb;
+    cursor: no-drop;
+}
 
 .s-product_colors {
     margin-top: 35px;
@@ -327,6 +331,7 @@ button {
 .s-introduce_txt .container-2 .image {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 10px;
 }
 

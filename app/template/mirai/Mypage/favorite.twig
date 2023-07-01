@@ -85,6 +85,14 @@ file that was distributed with this source code.
                                                 {% if Product.description_detail is not empty %}
                                                     <p class="txt_bt">{{ Product.description_detail }}</p>
                                                 {% endif %}
+                                                <p class="price sp">
+                                                    {% if Product.price02_inc_tax_min == Product.price02_inc_tax_max %}
+                                                        {{ Product.price02_inc_tax_min|price }}
+                                                    {% else %}
+                                                        {{ Product.price02_inc_tax_min|price }}～{{ Product.price02_inc_tax_max|price }}
+                                                    {% endif %}
+                                                    <span class="tax"> (税込)</span>
+                                                </p>
                                             </div>
                                         </div>
                                         <div class="price_box pc">
@@ -98,7 +106,7 @@ file that was distributed with this source code.
                                             </p>
                                         </div>
                                         <div class="buybtn">
-                                            <a href="{{ url('product_detail', {'id': Product.id}) }}">カートに入れる</a>
+                                            <a href="{{ url('product_detail', {'id': Product.id}) }}">商品ページへ進む</a>
                                         </div>
                                     </div>
                                 {% endfor %}

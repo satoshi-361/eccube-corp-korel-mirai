@@ -33,7 +33,6 @@ use Detection\MobileDetect;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use Eccube\Entity\Cart;
 use Eccube\Entity\CartItem;
 use Eccube\Entity\Customer;
 use Eccube\Entity\Master\DeviceType;
@@ -45,7 +44,6 @@ use Eccube\Entity\Master\OrderStatus;
 use Eccube\Entity\Order;
 use Eccube\Entity\OrderItem;
 use Eccube\Entity\Shipping;
-use Eccube\EventListener\SecurityListener;
 use Eccube\Repository\DeliveryRepository;
 use Eccube\Repository\Master\DeviceTypeRepository;
 use Eccube\Repository\Master\OrderItemTypeRepository;
@@ -53,10 +51,8 @@ use Eccube\Repository\Master\OrderStatusRepository;
 use Eccube\Repository\Master\PrefRepository;
 use Eccube\Repository\OrderRepository;
 use Eccube\Repository\PaymentRepository;
-use Eccube\Util\StringUtil;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 use Eccube\Repository\Master\RoundingTypeRepository;
 use Eccube\Repository\Master\TaxTypeRepository;
@@ -65,19 +61,22 @@ use Eccube\Repository\Master\TaxDisplayTypeRepository;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Customize\Form\Type\Cart\CartType;
-use Doctrine\ORM\Query\Expr\Func;
 use Eccube\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Eccube\Repository\CustomerRepository;
 use Eccube\Entity\Master\CustomerStatus;
 use Eccube\Repository\Master\CustomerStatusRepository;
 
-use Plugin\EccubePaymentLite42\Form\Type\Front\CreditCardForTokenPaymentType;
 use Plugin\EccubePaymentLite42\Service\GmoEpsilonRequestService;
 use Plugin\EccubePaymentLite42\Service\GmoEpsilonUrlService;
 use Customize\Service\CreditService;
 use Eccube\Service\MailService;
 use Eccube\Repository\DeliveryFeeRepository;
+use Eccube\Entity\ItemHolderInterface;
+use Eccube\Service\Payment\PaymentDispatcher;
+use Eccube\Service\Payment\PaymentMethodInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Eccube\Exception\ShoppingException;
 
 class CartController extends AbstractController
 {
@@ -227,6 +226,11 @@ class CartController extends AbstractController
     protected $deliveryFeeRepository;
 
     /**
+     * @var OrderHelper
+     */
+    protected $orderHelper;
+
+    /**
      * CartController constructor.
      *
      * @param ProductClassRepository $productClassRepository
@@ -268,7 +272,8 @@ class CartController extends AbstractController
         SessionInterface $session,
         CreditService $creditService,
         MailService $mailService,
-        DeliveryFeeRepository $deliveryFeeRepository
+        DeliveryFeeRepository $deliveryFeeRepository,
+        OrderHelper $orderHelper
     ) {
         $this->productClassRepository = $productClassRepository;
         $this->cartService = $cartService;
@@ -298,13 +303,14 @@ class CartController extends AbstractController
         $this->tokenStorage = $tokenStorage;
         $this->mailService = $mailService;
         $this->deliveryFeeRepository = $deliveryFeeRepository;
+        $this->orderHelper = $orderHelper;
     }
 
     /**
      * カート画面.
      *
-     * @Route("/cart", name="cart", methods={"GET", "POST"})
-     * @Route("/cart", name="cart_confirm", methods={"GET", "POST"})
+     * @Route("/cart1", name="cart1", methods={"GET", "POST"})
+     * @Route("/cart1", name="cart1_confirm", methods={"GET", "POST"})
      * @Template("Cart/index.twig")
      */
     public function index(Request $request)
@@ -411,12 +417,81 @@ class CartController extends AbstractController
                         $flagShippingFree = true;
                     }
 
-                    $data = $form->getData();                    
+                    $data = $form->getData();
+                    $Cart = $this->cartService->getCart();
+                    $Order = $this->orderHelper->initializeOrder($Cart, $Customer);
+                    $this->entityManager->flush();
+                    
+                    $Payment = $this->setDefaultPayment($Order);
+                    $PaymentMethod = $this->container->get($Payment->getMethodClass());
+
+                    // 集計処理.
+                    log_info('[注文手続] 集計処理を開始します.', [$Order->getId()]);
+                    $flowResult = $this->executePurchaseFlow($Order);
+                    $this->entityManager->flush();
+
+                    try {
+                        /*
+                        * 決済実行(前処理)
+                        */
+                        log_info('[注文処理] PaymentMethod::applyを実行します.');
+                        if ($response = $this->executeApply($PaymentMethod)) {
+                            return $response;
+                        }
+
+                        /*
+                        * 決済実行
+                        *
+                        * PaymentMethod::checkoutでは決済処理が行われ, 正常に処理出来た場合はPurchaseFlow::commitがコールされます.
+                        */
+                        log_info('[注文処理] PaymentMethod::checkoutを実行します.');
+                        if ($response = $this->executeCheckout($PaymentMethod)) {
+                            return $response;
+                        }
+
+                        $this->entityManager->flush();
+
+                        log_info('[注文処理] 注文処理が完了しました.', [$Order->getId()]);
+                    } catch (ShoppingException $e) {
+                        log_error('[注文処理] 購入エラーが発生しました.', [$e->getMessage()]);
+        
+                        $this->entityManager->rollback();
+        
+                        $this->addError($e->getMessage());
+        
+                        return $this->redirectToRoute('shopping_error');
+                    } catch (\Exception $e) {
+                        log_error('[注文処理] 予期しないエラーが発生しました.', [$e->getMessage()]);
+        
+                        // $this->entityManager->rollback(); FIXME ユニットテストで There is no active transaction エラーになってしまう
+        
+                        $this->addError('front.shopping.system_error');
+        
+                        return $this->redirectToRoute('shopping_error');
+                    }
+
+                    // カート削除
+                    log_info('[注文処理] カートをクリアします.', [$Order->getId()]);
+                    $this->cartService->clear();
+
+                    // 受注IDをセッションにセット
+                    $this->session->set(OrderHelper::SESSION_ORDER_ID, $Order->getId());
+
+                    // メール送信
+                    log_info('[注文処理] 注文メールの送信を行います.', [$Order->getId()]);
+                    $this->mailService->sendOrderMail($Order);
+                    $this->entityManager->flush();
+
+                    log_info('[注文処理] 注文処理が完了しました. 購入完了画面へ遷移します.', [$Order->getId()]);
+
+                    return $this->redirect($this->generateUrl('cart_complete'));
+
+
+
                     $Order = $this->createNewOrder( $this->cartService->getCart(), $data, $flagShippingFree );
                     $this->purchaseFlow->validate($Order, new PurchaseContext(clone $Order, $Order->getCustomer()));
 
                     $response = $this->creditService->apply($Order, $request->request->get('token'));
-                    // dd($response->getResponse());
 
                     if ( is_object($response) && get_class($response) == \Eccube\Service\Payment\PaymentDispatcher::class ) {
                         return $response->getResponse()->send();
@@ -452,7 +527,7 @@ class CartController extends AbstractController
     /**
      * ショッピング完了画面.
      *
-     * @Route("/cart/complete", name="cart_complete", methods={"GET"})
+     * @Route("/cart1/complete", name="cart1_complete", methods={"GET"})
      * @Template("Cart/complete.twig")
      */
     public function complete()
@@ -792,6 +867,8 @@ class CartController extends AbstractController
         if ($Payment) {
             $Order->setPayment($Payment);
             $Order->setPaymentMethod($Payment->getMethod());
+
+            return $Payment;
         }
     }
 
@@ -846,5 +923,115 @@ class CartController extends AbstractController
 
         $Order->addItem($OrderItem);
         $Shipping->addOrderItem($OrderItem);
+    }
+
+    /**
+     * @param ItemHolderInterface $itemHolder
+     * @param bool $returnResponse レスポンスを返すかどうか. falseの場合はPurchaseFlowResultを返す.
+     *
+     * @return PurchaseFlowResult|RedirectResponse|null
+     */
+    protected function executePurchaseFlow(ItemHolderInterface $itemHolder, $returnResponse = true)
+    {
+        /** @var PurchaseFlowResult $flowResult */
+        $flowResult = $this->purchaseFlow->validate($itemHolder, new PurchaseContext(clone $itemHolder, $itemHolder->getCustomer()));
+        foreach ($flowResult->getWarning() as $warning) {
+            $this->addWarning($warning->getMessage());
+        }
+        foreach ($flowResult->getErrors() as $error) {
+            $this->addError($error->getMessage());
+        }
+
+        if (!$returnResponse) {
+            return $flowResult;
+        }
+
+        if ($flowResult->hasError()) {
+            log_info('Errorが発生したため購入エラー画面へ遷移します.', [$flowResult->getErrors()]);
+
+            return $this->redirectToRoute('shopping_error');
+        }
+
+        if ($flowResult->hasWarning()) {
+            log_info('Warningが発生したため注文手続き画面へ遷移します.', [$flowResult->getWarning()]);
+
+            return $this->redirectToRoute('shopping');
+        }
+
+        return null;
+    }
+
+    /**
+     * PaymentMethod::applyを実行する.
+     *
+     * @param PaymentMethodInterface $paymentMethod
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    protected function executeApply(PaymentMethodInterface $paymentMethod)
+    {
+        $dispatcher = $paymentMethod->apply(); // 決済処理中.
+
+        // リンク式決済のように他のサイトへ遷移する場合などは, dispatcherに処理を移譲する.
+        if ($dispatcher instanceof PaymentDispatcher) {
+            $response = $dispatcher->getResponse();
+            $this->entityManager->flush();
+
+            // dispatcherがresponseを保持している場合はresponseを返す
+            if ($response instanceof Response && ($response->isRedirection() || $response->isSuccessful())) {
+                log_info('[注文処理] PaymentMethod::applyが指定したレスポンスを表示します.');
+
+                return $response;
+            }
+
+            // forwardすることも可能.
+            if ($dispatcher->isForward()) {
+                log_info('[注文処理] PaymentMethod::applyによりForwardします.',
+                    [$dispatcher->getRoute(), $dispatcher->getPathParameters(), $dispatcher->getQueryParameters()]);
+
+                return $this->forwardToRoute($dispatcher->getRoute(), $dispatcher->getPathParameters(),
+                    $dispatcher->getQueryParameters());
+            } else {
+                log_info('[注文処理] PaymentMethod::applyによりリダイレクトします.',
+                    [$dispatcher->getRoute(), $dispatcher->getPathParameters(), $dispatcher->getQueryParameters()]);
+
+                return $this->redirectToRoute($dispatcher->getRoute(),
+                    array_merge($dispatcher->getPathParameters(), $dispatcher->getQueryParameters()));
+            }
+        }
+    }
+
+    /**
+     * PaymentMethod::checkoutを実行する.
+     *
+     * @param PaymentMethodInterface $paymentMethod
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response|null
+     */
+    protected function executeCheckout(PaymentMethodInterface $paymentMethod)
+    {
+        $PaymentResult = $paymentMethod->checkout();
+        $response = $PaymentResult->getResponse();
+        // PaymentResultがresponseを保持している場合はresponseを返す
+        if ($response instanceof Response && ($response->isRedirection() || $response->isSuccessful())) {
+            $this->entityManager->flush();
+            log_info('[注文処理] PaymentMethod::checkoutが指定したレスポンスを表示します.');
+
+            return $response;
+        }
+
+        // エラー時はロールバックして購入エラーとする.
+        if (!$PaymentResult->isSuccess()) {
+            $this->entityManager->rollback();
+            foreach ($PaymentResult->getErrors() as $error) {
+                $this->addError($error);
+            }
+
+            log_info('[注文処理] PaymentMethod::checkoutのエラーのため, 購入エラー画面へ遷移します.', [$PaymentResult->getErrors()]);
+
+            return $this->redirectToRoute('shopping_error');
+        }
+
+        return null;
     }
 }

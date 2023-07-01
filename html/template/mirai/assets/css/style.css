@@ -210,6 +210,14 @@ ul li {
 
 .header ul.nav_list {
     gap: 35px;
+    margin-left: 25px;
+    margin-right: 15px;
+}
+
+@media only screen and (max-width: 1280px) {
+    .header ul.nav_list {
+        gap: 15px;
+    }
 }
 
 .header span.en {

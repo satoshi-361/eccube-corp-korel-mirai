@@ -1,0 +1,39 @@
+<style>
+    .header ul li.ec-headerRole__cart a {
+        position: relative;
+    }
+    .header ul li.ec-headerRole__cart a .ec-cartNavi__badge {
+        width: 15px;
+        height: 15px;
+        border-radius: 10px;
+        background: #ed431f;
+        color: white;
+        font-size: 12px;
+        font-style: normal;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        position: absolute;
+        bottom: 15px;
+        right: -5px;
+        z-index: 1;
+    }
+
+    @media only screen and (max-width: 767px) {
+        .header ul li.ec-headerRole__cart a .ec-cartNavi__badge {
+            width: 12px;
+            height: 12px;
+            font-size: 11px;
+        }
+    }
+</style>
+
+{% set totalQuantity = get_carts_total_quantity() %}
+
+<a href="{{ url('cart') }}">
+    <img src="{{ asset('assets/image/common/icon-cart.png') }}" alt="カート">
+    <span class="jp">カート</span>
+    <span class="ec-cartNavi__badge">{{ totalQuantity|number_format }}</span>
+</a>

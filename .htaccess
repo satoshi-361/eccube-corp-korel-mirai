@@ -86,7 +86,8 @@ DirectoryIndex index.php index.html .ht
 #     Require all granted
 #     Require not env admin_path
 # </RequireAll>
-AuthUserFile "/home/yokohamacity/yokohama-mirai.jp/htpasswd/.htpasswd"
-AuthName "Member Site"
-AuthType BASIC
-require valid-user
+Satisfy Any
+SetEnvIf REQUEST_URI "https://yokohama-mirai.jp/user_data/preparation" allowed_url
+Order deny,allow
+Deny from all
+Allow from env=allowed_url

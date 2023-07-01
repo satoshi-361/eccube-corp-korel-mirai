@@ -14,5 +14,6 @@ file that was distributed with this source code.
     <a href="{{ url('mypage_favorite') }}" class="mypage_tablink {% if mypageno|default('') == 'favorite' %}active{% endif %}">{{ 'お気に入り'|trans }}</a>
     <a href="{{ url('mypage') }}" class="mypage_tablink {% if mypageno|default('') == 'index' %}active{% endif %}">{{ '購入履歴'|trans }}</a>
     <a href="{{ url('mypage_browse_history') }}" class="mypage_tablink {% if mypageno|default('') == 'browse_history' %}active{% endif %}">{{ '閲覧履歴'|trans }}</a>
+    <a href="{{ url('mypage_withdraw') }}" class="mypage_tablink {% if mypageno|default('') == 'withdraw' %}active{% endif %}">{{ '退会'|trans }}</a>
 </div>
 

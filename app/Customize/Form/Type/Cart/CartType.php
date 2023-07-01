@@ -18,9 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Component\Form\AbstractType;
@@ -55,10 +52,15 @@ class CartType extends AbstractType
         $builder
             ->add('customer', EntryType::class, [
                 'required' => true,
+                'flag_member' => $options['flag_member'],
             ])
-            ->add('is_member', CheckboxType::class, [
-                'label' => '会員登録する',
-                'required' => false,
+            ->add('is_member', ChoiceType::class, [
+                'choices' => [
+                    '登録する' => 1,
+                    '登録しない' => 0,
+                ],
+                'expanded' => true,
+                'multiple' => false,
             ])
             ->add('shipping_address', ChoiceType::class, [
                 'choices' => [
@@ -73,7 +75,7 @@ class CartType extends AbstractType
             ])
             ->add('privacy_check', CheckboxType::class, [
                 'required' => true,
-                'label' => null,
+                'label' => 'プライバシーポリシーに同意する',
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
@@ -81,6 +83,15 @@ class CartType extends AbstractType
             ->add('credit', CreditCardForTokenPaymentType::class, [
                 'required' => true,
             ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'flag_member' => false,
+            ]
+        );
     }
 
     /**

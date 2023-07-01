@@ -1,3 +1,4 @@
+
 {#
 This file is part of EC-CUBE
 
@@ -10,39 +11,90 @@ file that was distributed with this source code.
 #}
 {% extends 'default_frame.twig' %}
 
-{% set mypageno = 'withdraw' %}
-
 {% set body_class = 'mypage' %}
 
+{% set mypageno = 'withdraw' %}
+
+{% form_theme form 'Form/form_div_layout.twig' %}
+
+{% block stylesheet %}
+    <style>
+        .ec-off3Grid__cell {
+            text-align: center;
+        }
+        .ec-off3Grid__cell .ec-icon {
+            width: 200px;
+            margin: auto;
+        }
+        .ec-off4Grid__cell {
+            text-align: center;
+        }
+        .ec-off4Grid__cell button {
+            width: 160px;
+            height: 40px;
+            margin: 20px auto;
+            border: unset;
+            border-radius: 5px;
+            background: #7fb744;
+            font-family: Arial;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 0.1em;
+            line-height: 26px;
+            text-align: center;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .35s;
+        }
+        .ec-off4Grid__cell button:hover {
+            background: #648746;
+        }
+    </style>
+{% endblock %}
+
 {% block main %}
-    <div class="ec-layoutRole__main">
-        <div class="ec-mypageRole">
-            <div class="ec-pageHeader">
-                <h1>{{ 'マイページ'|trans }}/{{ '退会手続き'|trans }}</h1>
+<div class="c-page_head page_small_width">
+    <div class="c-page_title">
+        <h1 class="en"><span>MY PAGE</span></h1>
+        <p class="jp">マイページ</p>
+    </div>
+</div>
+
+<!--  -->
+<main class="main">
+    <div class="page_max_width">
+        <div class="p-mypage_contain">
+            {% include 'Mypage/navi.twig' %}
+            <div class="p-mypage_body">
+                <div id="registration" class="p-mypage_content wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <div class="c-register_title">
+                        <h2>退会手続き</h2>
+                    </div>
+                    <div class="ec-withdrawRole">
+                        <form method="post" action="{{ url('mypage_withdraw') }}">
+                            {{ form_widget(form._token) }}
+                            <div class="ec-off3Grid">
+                                <div class="ec-off3Grid__cell">
+                                    <div class="ec-icon"><img src="{{ asset('assets/icon/exclamation.svg') }}" alt=""></div>
+                                    <p class="ec-withdrawRole__title">{{ '退会手続きの前にご確認ください。'|trans }}
+                                    </p>
+                                    <p class="ec-withdrawRole__description">{{ '退会手続きが完了した時点で、現在保存されている購入履歴やお届け先等の情報は、すべて削除されますのでご注意ください。'|trans }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="ec-off4Grid">
+                                <div class="ec-off4Grid__cell">
+                                    <button type="submit" class="ec-blockBtn--cancel" name="mode"
+                                            value="complete">{{ '退会手続きへ'|trans }}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            {{ include('Mypage/navi.twig') }}
-        </div>
-        <div class="ec-withdrawRole">
-            <form method="post" action="{{ url('mypage_withdraw') }}">
-                {{ form_widget(form._token) }}
-                <div class="ec-off3Grid">
-                    <div class="ec-off3Grid__cell">
-                        <div style="font-size:100px;text-align:center;">
-                            <div class="ec-icon"><img src="{{ asset('assets/icon/exclamation.svg') }}" alt=""></div>
-                        </div>
-                        <p class="ec-withdrawRole__title">{{ '退会手続きの前にご確認ください'|trans }}
-                        </p>
-                        <p class="ec-withdrawRole__description">{{ '退会手続きが完了した時点で、現在保存されている購入履歴やお届け先等の情報は、すべて削除されますのでご注意ください。'|trans }}
-                        </p>
-                    </div>
-                </div>
-                <div class="ec-off4Grid">
-                    <div class="ec-off4Grid__cell">
-                        <button type="submit" class="ec-blockBtn--cancel" name="mode"
-                                value="confirm">{{ '退会手続きへ'|trans }}</button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
+</div>
 {% endblock %}

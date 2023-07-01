@@ -32,7 +32,7 @@ class UpdateRegularOrder implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            EccubeEvents::FRONT_MYPAGE_CHANGE_INDEX_COMPLETE => 'index',
+            // EccubeEvents::FRONT_MYPAGE_CHANGE_INDEX_COMPLETE => 'index',
         ];
     }
 

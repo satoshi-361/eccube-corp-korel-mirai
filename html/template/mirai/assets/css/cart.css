@@ -231,6 +231,7 @@
     font-weight: bold;
     vertical-align: middle;
     width: 46%;
+    padding-left: 10px;
   }
   .ec-cartRow .ec-cartRow__summary .ec-cartRow__name {
     margin-bottom: 5px;

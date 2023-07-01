@@ -1,0 +1,57 @@
+{% extends 'default_frame.twig' %}
+
+{% block stylesheet %}
+<style>
+.main {
+    padding: 200px 0 0;
+    background-color: #F9FCF5;
+}
+.main_content {
+    max-width: 1000px;
+    width: 60%;
+    margin: 0 auto;
+    padding: 60px 100px;
+    text-align: center;
+    background-color: #fff;
+}
+.main_content_warn {
+    width: 100px;
+    margin: 0 auto 20px;
+}
+.main_content_text {
+    font-weight: 100;
+    font-size: 30px;
+    letter-spacing: 0.1em;
+    line-height: 1.5em;
+    text-align: center;
+    color: #7fb744;
+}
+.main_content_logo {
+    width: 215px;
+    margin: 60px auto 20px;
+}
+.main_content_link {
+    color: #5AB9C1;
+    text-decoration: underline;
+}
+.main_content_link:hover {
+    opacity: 0.4;
+}
+.main_content p {
+    color: #333;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+
+<div class="main">
+    <div class="main_content">
+        <img src="/html/template/mirai/assets/image/common/warn.png" class="main_content_warn">
+        <h3 class="main_content_text jp">このページは現在準備中です。<br>公開までもうしばらくお待ちください。</h3>
+        <img src="/html/template/mirai/assets/image/common/logo.png" class="main_content_logo">
+        <p>レーベン・オフィシャルストアは<a href="https://inventor-leben.shop-pro.jp/" class="main_content_link" target="_blank">こちら</a></p>
+    </div>
+</div>
+
+{% endblock %}

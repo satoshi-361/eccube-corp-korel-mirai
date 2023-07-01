@@ -425,7 +425,7 @@ input[type='checkbox'] {
 }
 
 .p-mypage_content .p-mypagebox {
-    margin: 30px;
+    margin: 15px auto;
 }
 
 .p-mypage_content .p-mypagebox .head {
@@ -438,19 +438,18 @@ input[type='checkbox'] {
     color: #333;
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
 
 .p-mypage_content .p-mypagebox .head span {
     display: block;
 }
 
-.p-mypage_content .p-mypagebox .head_first {
+/* .p-mypage_content .p-mypagebox .head_first {
     width: 15%;
-}
+} */
 
 .p-mypage_content .p-mypagebox .head_product {
-    width: 30%;
+    width: 55%;
 }
 
 .p-mypage_content .p-mypagebox .head_num {
@@ -458,19 +457,42 @@ input[type='checkbox'] {
 }
 
 .p-mypage_content .p-mypagebox .head_price {
-    width: 5%;
+    width: 15%;
 }
 
 .p-mypage_content .p-mypagebox .head_btn {
-    width: 20%;
+    width: 15%;
 }
 
 .p-mypage_content .content_row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     padding: 20px;
     border-bottom: 3px dotted #ebebeb;
+}
+
+@media only screen and (min-width: 768px) {
+    /* .p-mypage_content .content_row .other_box {
+        width: 15%;
+    } */
+    .p-mypage_content .content_row .main_box {
+        width: 55%;
+    }
+    .p-mypage_content .content_row .pro_amount {
+        width: 5%;
+        text-align: center;
+    }
+    .p-mypage_content .content_row .price_box {
+        width: 15%;
+    }
+    .p-mypage_content .content_row .price_box .price {
+        text-align: center;
+    }
+    .p-mypage_content .content_row .buybtn {
+        width: 15%;
+        text-align: center;
+    }
 }
 
 .p-mypage_content .other_box {

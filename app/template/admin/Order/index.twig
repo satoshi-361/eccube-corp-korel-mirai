@@ -494,7 +494,7 @@ file that was distributed with this source code.
                                                     />
                                                 </td>
                                                 <td class="align-middle text-start">
-                                                    <a class="action-edit" href="{{ url('admin_order_edit', { id : Order.id }) }}">{{ Order.id }}<br>{{ Order.name01 ~ Order.name02 }}<br>{{ Order.order_date|date_min }}</a>
+                                                    <a class="action-edit" href="{{ url('admin_order_edit', { id : Order.id }) }}">{{ Order.order_no }}<br>{{ Order.name01 ~ Order.name02 }}<br>{{ Order.order_date|date_min }}</a>
                                                 </td>
                                                 <td class="align-middle text-center">
                                                     {{ Order.payment_method }}

@@ -1,0 +1,31 @@
+{% extends 'default_frame.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/manual.css') }}" type="text/css" />
+{% endblock %}
+
+{% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>MANUAL</span></h1>
+            <p class="jp">取扱説明書</p>
+        </div>
+    </div>
+    <!-- manual -->
+    <main class="main">
+        <div class="c-subpage_contain">
+            <div class="p-manualpage">
+                <div class="c-subsec_head">
+                    <div class="c-subsec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                        <h2> {% if Blog.title is not empty %} {{ Blog.title }} {% else %} マニュアル {% endif %} </h2>
+                    </div>
+                </div>
+                <div class="p-manual_body">
+                    <div class="body">
+                        {{ Blog.body|raw }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

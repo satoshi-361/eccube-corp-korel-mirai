@@ -82,6 +82,103 @@ file that was distributed with this source code.
             gap: 10px;
         }
 
+        #privacy  {
+            height: 250px;
+            overflow-y: scroll;
+            margin-bottom: 20px;
+            border: 1px dashed #ccc;
+            padding: 5px;
+            text-align: left;
+            color: black;
+        }
+        #privacy h3 {
+            font-size: 15px;
+        }
+        #privacy p {
+            font-size: 13px;
+        }
+
+        #open-security-code-modal {
+            color: #7FB744;
+        }
+        #open-security-code-modal:hover {
+            color: #648746;
+            cursor: pointer;
+        }
+
+        #security-code-modal h3 {
+            font-family: "Source Han Sans JP";
+            font-weight: 500;
+            font-size: 30px;
+            line-height: 28px;
+            text-align: center;
+            color: #4e4e4e;
+        }
+
+        #security-code-modal .code-images {
+            margin: 40px auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        #security-code-modal .code-images .image {
+            width: 300px;
+            margin: auto;
+        }
+        #security-code-modal .code-images p {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .cs-cartRole__prices {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+        }
+
+        .cs-cartRole__prices .cs-cartRole__price {
+            width: 100%;
+            max-width: 350px;
+            margin-left: auto;
+        }
+        
+        .cs-cartRole__prices .cs-cartRole__price label {
+            width: 200px;
+            display: inline-block;
+            font-family: "Source Han Sans JP";
+            font-size: 15px;
+            line-height: 20px;
+            text-align: right;
+        }
+        
+        .cs-cartRole__prices .cs-cartRole__price span {
+            margin-left: 20px;
+            font-family: "Source Han Sans JP";
+            font-size: 22px;
+            line-height: 25px;
+        }
+        
+        .cs-cartRole__prices .cs-cartRole__price.delivery-fee {
+            border-bottom: 1px solid #ebebeb;
+            padding-bottom: 15px;
+        }
+        
+        .cs-cartRole__prices .cs-cartRole__price.delivery-fee .free {
+            color: red;
+        }
+
+        .cs-cartRole__prices .cs-cartRole__price.payment-total {
+            padding-top: 15px;
+        }
+
+        .cs-cartRole__prices .cs-cartRole__price.payment-total label,
+        .cs-cartRole__prices .cs-cartRole__price.payment-total span, {
+            font-family: bold;
+        }
+
         @media only screen and (min-width: 768px) {
             .ec-modal .ec-modal-box {
                 padding: 20px;
@@ -89,6 +186,25 @@ file that was distributed with this source code.
             
             .card-group .cards {
                 gap: 5px;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            #security-code-modal .code-images {
+                margin: 20px auto;
+                gap: 20px;
+            }
+            #security-code-modal .code-images .image {
+                width: 200px;
+            }
+            #security-code-modal h3 {
+                font-size: 22px;
+            }
+            #security-code-modal p {
+                font-size: 13px;
+            }
+            .cs-cartRole__prices .cs-cartRole__price label {
+                width: 160px;
             }
         }
     </style>
@@ -122,10 +238,66 @@ file that was distributed with this source code.
         }
 
         $(function() {
-            $('#cart_is_member').on('change', function() {
-                if ( ! $(this).is(':checked') ) {
-                    $('.ec-modal').show();
+            var subTotal = '{{ subTotal|price }}';
+            var paymentTotalWithDeliv = '{{ (subTotal + 550)|price }}';
+            var is_user = false;
+            {% if app.user is not empty %}
+                is_user = true;
+            {% endif %}
+
+            function isMember( first_lodaing = false ) {
+                if ($('#cart_is_member_0').is(':checked')) {
+                    if ( !is_user ) {
+                        $('#cart_customer_plain_password_first').val('');
+                        $('#cart_customer_plain_password_second').val('');
+                    }
+
+                    $('.delivery-fee span').text('送料無料');
+                    $('.payment-total span').text(subTotal);
+                    
+                    $('.toggle-by-member').removeClass('any');
+                    $('.plain_password').show();
+                    $('.delivery-fee span').addClass('free');
                 }
+                
+                if ($('#cart_is_member_1').is(':checked')) {
+                    $(this).val(0);
+                    
+                    $('#cart_customer_plain_password_first').val('dla20191215!A');
+                    $('#cart_customer_plain_password_second').val('dla20191215!A');
+
+                    $('.delivery-fee span').text('￥550');
+                    $('.payment-total span').text(paymentTotalWithDeliv);
+                    $('.toggle-by-member').addClass('any');
+
+                    $('.plain_password').hide();
+                    $('.delivery-fee span').removeClass('free');
+
+                    if ( !first_lodaing ) {
+                        $('#delivery-fee-modal').show();
+                    }
+                }
+                
+                if ( $('.toggle-by-member').hasClass('any') ) {
+                    $('.toggle-by-member').text('任意');
+                } else {
+                    $('.toggle-by-member').text('必須');
+                }
+            }
+
+            $('#cart_is_member').on('change', function() {
+                // 性別 | 生年月日の「必須/任意」変更
+                $('.toggle-by-member').toggleClass('any');
+
+                // パスワードの「必須/任意」変更
+                // $('.plain_password').toggle();
+                // $('.delivery-fee span').toggleClass('free');
+
+                isMember();
+            });
+
+            $('#open-security-code-modal').on('click', function() {
+                $('#security-code-modal').show();
             });
 
             $('.ec-modal-close, .ec-modal .ec-inlineBtn--cancel').on('click', function() {
@@ -140,10 +312,14 @@ file that was distributed with this source code.
                     //  登録以外の住所に届ける
                     clearDeliver();
                 }
-            })
+            });
+        
+            isMember( true );
         });
 
-        copyToDeliver();
+        if ( $('#cart_shipping_address_0').is(':checked') ) {
+            copyToDeliver();
+        }
     </script>
 
     <script src='{{ url_token_js }}'></script>
@@ -243,28 +419,33 @@ file that was distributed with this source code.
                             <div class="ec-cartRole__cart">
                                 <div class="ec-cartTable">
                                     <ol class="ec-cartHeader">
-                                        <li class="ec-cartHeader__label">{{ '削除'|trans }}</li>
                                         <li class="ec-cartHeader__label">{{ '商品内容'|trans }}</li>
                                         <li class="ec-cartHeader__label">{{ '数量'|trans }}</li>
                                         <li class="ec-cartHeader__label">{{ '小計'|trans }}</li>
+                                        <li class="ec-cartHeader__label">{{ '削除'|trans }}</li>
                                     </ol>
                                     {% for CartItem in Cart.CartItems %}
                                         {% set ProductClass = CartItem.ProductClass %}
                                         {% set Product = ProductClass.Product %}
                                         <ul class="ec-cartRow">
-                                            <li class="ec-cartRow__delColumn">
-                                                <a href="{{ url('cart_handle_item', {'operation': 'remove', 'productClassId': ProductClass.id, 'pageName': 'cart' }) }}" {{ csrf_token_for_anchor() }} class="ec-icon" data-method="put" data-message="カートから商品を削除してもよろしいですか?">
-                                                    <img src="{{ asset('assets/icon/cross.svg') }}" alt="delete">
-                                                    <span style="margin-top: 5px; display: inline-block;">削除</span>
-                                                </a>
-                                            </li>
                                             <li class="ec-cartRow__contentColumn">
                                                 <div class="ec-cartRow__img">
                                                     <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}">
-                                                        {% if CartItem.property is not empty %}
+                                                        {# {% if CartItem.property is not empty %}
                                                             {% set properties = Product.color|split('/') %}
                                                             {% set propertyIndex = properties|keys|filter(item => properties[item] == CartItem.property)|first %}
                                                             <img src="{{ asset(Product.ProductImage[propertyIndex].file_name|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                        {% else %}
+                                                            <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
+                                                        {% endif %} #}
+                                                        
+                                                        {% if Product.getClassCategories1|length %}
+                                                            {% set array = [] %}
+                                                            {% for value in Product.getClassCategories1 %}
+                                                                {% set array = array|merge([value]) %}
+                                                            {% endfor %}
+                                                            {% set index = array|keys|filter(item => array[item] == ProductClass.ClassCategory1.name)|first %}
+                                                            <img src="{{ asset(Product.ProductImage[index + 1].file_name|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
                                                         {% else %}
                                                             <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
                                                         {% endif %}
@@ -305,8 +486,28 @@ file that was distributed with this source code.
                                             <li class="ec-cartRow__subtotalColumn">
                                                 <div class="ec-cartRow__sutbtotal">{{ CartItem.total_price|price }}</div>
                                             </li>
+                                            <li class="ec-cartRow__delColumn">
+                                                <a href="{{ url('cart_handle_item', {'operation': 'remove', 'productClassId': ProductClass.id, 'pageName': 'cart' }) }}" {{ csrf_token_for_anchor() }} class="ec-icon" data-method="put" data-message="カートから商品を削除してもよろしいですか?">
+                                                    <span style="margin-bottom: 10px; display: inline-block; font-size: 14px;">削除</span>
+                                                    <img src="{{ asset('assets/icon/cross.svg') }}" alt="delete">
+                                                </a>
+                                            </li>
                                         </ul>
                                     {% endfor %}
+                                </div>
+                                <div class="cs-cartRole__prices">
+                                    <div class="cs-cartRole__price subtotal">
+                                        <label>小計</label>
+                                        <span>{{ subTotal|price }}</span>
+                                    </div>
+                                    <div class="cs-cartRole__price delivery-fee">
+                                        <label>送料</label>
+                                        <span class="free">送料無料</span>
+                                    </div>
+                                    <div class="cs-cartRole__price payment-total">
+                                        <label>お支払い金額</label>
+                                        <span>{{ subTotal|price }}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="ec-cartRole__progress">
@@ -357,10 +558,22 @@ file that was distributed with this source code.
                         </div>
                         <div class="p-order_conatin">
                             <div class="p-register_form">
+                                <p style="color: red; text-align: center;">「ブラウザバック」を行うと表示に誤作動を生じる場合がございますのでご注意下さい。</p>
                                 <!-- お客様情報入力 -->
                                 <div class="p-orederform_sec h-adr customer_input wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
                                     <span class="p-country-name" style="display:none;">Japan</span>
                                     <ul>
+                                        {% if app.user is empty %}
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="any">任意</span><label class="">会員登録の有無</label>
+                                            </div>
+                                            <div class="content ec-radio{{ has_errors(form.is_member) ? ' error' }}">
+                                                {{ form_widget(form.is_member) }}
+                                                {{ form_errors(form.is_member) }}
+                                            </div>
+                                        </li>
+                                        {% endif %}
                                         <li class="form_item">
                                             <div class="head">
                                                 <span class="required">必須</span><label class="">氏名</label>
@@ -385,7 +598,7 @@ file that was distributed with this source code.
                                         </li>
                                         <li class="form_item">
                                             <div class="head">
-                                                <span class="required">必須</span><label class="">性別</label>
+                                                <span class="toggle-by-member">任意</span><label class="">性別</label>
                                             </div>
                                             <div class="content ec-radio{{ has_errors(form.customer.sex) ? ' error' }}">
                                                 {{ form_widget(form.customer.sex) }}
@@ -394,7 +607,7 @@ file that was distributed with this source code.
                                         </li>
                                         <li class="form_item">
                                             <div class="head">
-                                                <span class="required">必須</span><label class="">生年月日</label>
+                                                <span class="toggle-by-member">任意</span><label class="">生年月日</label>
                                             </div>
                                             <div class="content ec-birth{{ has_errors(form.customer.birth) ? ' error' }}">
                                                 {{ form_widget(form.customer.birth) }}
@@ -405,13 +618,27 @@ file that was distributed with this source code.
                                             <div class="head">
                                                 <span class="required">必須</span><label class="">メールアドレス</label>
                                             </div>
-                                            <div class="content ec-input{{ has_errors(form.customer.email) ? ' error' }}">
-                                                {{ form_widget(form.customer.email) }}
-                                                {{ form_errors(form.customer.email) }}
+                                            <div class="content ec-input{{ has_errors(form.customer.email.first) ? ' error' }}">
+                                                {{ form_widget(form.customer.email.first, {
+                                                    'attr': { 'oncopy': 'return false', 'oncut': 'return false', 'onpaste': 'return false' }
+                                                }) }}
+                                                {{ form_errors(form.customer.email.first) }}
+                                                <p style="margin-top: 5px; color: red; font-size: 13px;">※ご注文後に「ご注文内容の確認メール」をお送りいたします。入力間違いにご注意ください。</p>
+                                            </div>
+                                        </li>
+                                        <li class="form_item">
+                                            <div class="head">
+                                                <span class="required">必須</span><label class="">メールアドレス(再入力)</label>
+                                            </div>
+                                            <div class="content ec-input{{ has_errors(form.customer.email.second) ? ' error' }}">
+                                                {{ form_widget(form.customer.email.second, {
+                                                    'attr': { 'oncopy': 'return false', 'oncut': 'return false', 'onpaste': 'return false' }
+                                                }) }}
+                                                {{ form_errors(form.customer.email.second) }}
                                             </div>
                                         </li>
                                         {% if app.user is empty %}
-                                            <li class="form_item">
+                                            <li class="form_item plain_password">
                                                 <div class="head">
                                                     <span class="required">必須</span><label class="">パスワード</label>
                                                 </div>
@@ -424,7 +651,7 @@ file that was distributed with this source code.
                                                     <div class="invalid-feedback d-block">半角英数記号12〜50文字</div>
                                                 </div>
                                             </li>
-                                            <li class="form_item">
+                                            <li class="form_item plain_password">
                                                 <div class="head">
                                                     <span class="required">必須</span><label class="">パスワード(再入力)</label>
                                                 </div>
@@ -488,26 +715,63 @@ file that was distributed with this source code.
                                                 {{ form_errors(form.customer.phone_number) }}
                                             </div>
                                         </li>
-                                        <li class="form_item">
-                                            <div class="head">
-                                                <span class="any">任意</span><label class="">会員登録の有無</label>
-                                            </div>
-                                            <div class="content ec-checkbox{{ has_errors(form.is_member) ? ' error' }}">
-                                                {{ form_widget(form.is_member, { 'attr': { 'checked': true } }) }}
-                                                {{ form_errors(form.is_member) }}
-                                            </div>
-                                        </li>
-                                        <li class="form_item">
-                                            <div class="head">
-                                                <span class="required">必須</span><label class="">プライバシーポリシー</label>
-                                            </div>
-                                            <div class="content ec-checkbox{{ has_errors(form.privacy_check) ? ' error' }}">
-                                                <input type="checkbox" id="cart_privacy_check" name="cart[privacy_check]" required="required" class="form-check-input" value="1">
-                                                <label for="cart_privacy_check"><a class="ec-link" href="https://yokohama-mirai.jp/help/privacy" target="_blank" style="text-decoration: underline;">プライバシーポリシー</a>に同意する</label>
-                                                {{ form_errors(form.privacy_check) }}
-                                            </div>
-                                        </li>
                                     </ul>
+                                    <div class="privacy_check ec-checkbox{{ has_errors(form.privacy_check) ? ' error' }}">
+                                        <div id="privacy">
+                                            <h3>1.個人情報の定義</h3>
+                                            <p>「個人情報」とは、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日その他の記述等により特定の個人を識別することができるもの、及び他の情報と容易に照合することができ、それにより特定の個人を識別することができることとなるものをいいます。</p>
+                                            <br>
+                                            <h3>2.個人情報の収集</h3>
+                                            <p>当ショップでは商品のご購入、お問合せをされた際にお客様の個人情報を収集することがございます。<br> 収集するにあたっては利用目的を明記の上、適法かつ公正な手段によります。
+                                            </p>
+                                            <p>当ショップで収集する個人情報は以下の通りです。</p>
+                                            <p>A)お名前、フリガナ
+                                                <br> B)性別
+                                                <br> C)生年月日
+                                                <br> D)ご住所
+                                                <br> E)お電話番号
+                                                <br> F)メールアドレス
+                                                <br> G)パスワード
+                                                <br> H)配送先情報
+                                                <br> I)当ショップとのお取引履歴及びその内容
+                                                <br> J)上記を組み合わせることで特定の個人が識別できる情報
+                                            </p>
+                                            <br>
+                                            <h3>3.個人情報の利用</h3>
+                                            <p>当ショップではお客様からお預かりした個人情報の利用目的は以下の通りです。</p>
+                                            <p>
+                                                A)ご注文の確認、照会 <br>
+                                                B)商品発送の確認、照会 <br>
+                                                C)お問合せの返信時 <br>
+                                                D)メルマガ配信時
+                                            </p>
+                                            <p>当ショップでは、下記の場合を除いてはお客様の断りなく第三者に個人情報を開示・提供することはいたしません。</p>
+                                            <p>A)法令に基づく場合、及び国の機関若しくは地方公共団体又はその委託を受けた者が法令の定める事務を遂行することに対して協力する必要がある場合<br> B)人の生命、身体又は財産の保護のために必要がある場合であって、本人の同意を得ることが困難である場合
+                                                <br> C)当ショップを運営する会社の関連会社で個人データを交換する場合
+                                            </p>
+                                            <br>
+                                            <h3>4.個人情報の安全管理</h3>
+                                            <p>お客様よりお預かりした個人情報の安全管理はサービス提供会社によって合理的、組織的、物理的、人的、技術的施策を講じるとともに、当ショップでは関連法令に準じた適切な取扱いを行うことで個人データへの不正な侵入、個人情報の紛失、改ざん、漏えい等の危険防止に努めます。</p>
+                                            <br>
+                                            <h3>5.個人情報の訂正、削除</h3>
+                                            <p>お客様からお預かりした個人情報の訂正・削除は下記の問合せ先よりお知らせ下さい。<br> また、ユーザー登録された場合、当サイトのメニュー「マイページ」より個人情報の訂正が出来ます。
+                                            </p>
+                                            <br>
+                                            <h3>6.cookie(クッキー)の使用について</h3>
+                                            <p>当社は、お客様によりよいサービスを提供するため、cookie （クッキー）を使用することがありますが、これにより個人を特定できる情報の収集を行えるものではなく、お客様のプライバシーを侵害することはございません。<br> ※cookie （クッキー）とは、サーバーコンピュータからお客様のブラウザに送信され、お客様が使用しているコンピュータのハードディスクに蓄積される情報です。</p>
+                                            <br>
+                                            <h3>7.SSLの使用について</h3>
+                                            <p>個人情報の入力時には、セキュリティ確保のため、これらの情報が傍受、妨害または改ざんされることを防ぐ目的でSSL（Secure Sockets Layer）技術を使用しております。 ※ SSLは情報を暗号化することで、盗聴防止やデータの改ざん防止送受信する機能のことです。SSLを利用する事でより安全に情報を送信する事が可能となります。</p>
+                                            <br>
+                                            <h3>8.お問合せ先</h3>
+                                            <p>特定商取引法に基づく表記をご覧ください。</p>
+                                            <br>
+                                            <h3>9.プライバシーポリシーの変更</h3>
+                                            <p>当ショップでは、収集する個人情報の変更、利用目的の変更、またはその他プライバシーポリシーの変更を行う際は、当ページへの変更をもって公表とさせていただきます。</p>
+                                        </div>
+                                        {{ form_widget(form.privacy_check) }}
+                                        {{ form_errors(form.privacy_check) }}
+                                    </div>
                                 </div>
                                 <!-- お届け先情報入力 -->
                                 <div class="p-orederform_sec h-adr customer_input wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
@@ -664,7 +928,7 @@ file that was distributed with this source code.
                                             </div>
                                             <div class="content ec-halfInput{{ has_errors(form.credit.security_code) ? ' error' }}">
                                                 {{ form_widget(form.credit.security_code) }}
-                                                {{ form_errors(form.credit.security_code) }}
+                                                {{ form_errors(form.credit.security_code) }}<span id="open-security-code-modal">セキュリティコードについて</span>
                                                 <p class="example">例：123</p>
                                             </div>
                                         </li>
@@ -672,7 +936,7 @@ file that was distributed with this source code.
                                 </div>
                             </div>
                         </div>
-                        <div class="ec-modal">
+                        <div class="ec-modal" id="delivery-fee-modal">
                             <div class="ec-modal-overlay">
                                 <div class="ec-modal-wrap">
                                     <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
@@ -682,11 +946,41 @@ file that was distributed with this source code.
                                         </div>
                                         <div class="c-btn_group">
                                             <div class="c-btn_cancel">
-                                                <button class="c-btn ec-inlineBtn--cancel">戻る</button>
+                                                <span class="c-btn ec-inlineBtn--cancel">戻る</span>
                                             </div>
-                                            {# <div class="c-btn_next">
-                                                <button class="c-btn ec-inlineBtn--cancel">戻る</button>
-                                            </div> #}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ec-modal" id="security-code-modal">
+                            <div class="ec-modal-overlay">
+                                <div class="ec-modal-wrap">
+                                    <span class="ec-modal-close"><span class="ec-icon"><img src="{{ asset('assets/icon/cross-dark.svg') }}" alt=""/></span></span>
+                                    <div class="ec-modal-box">
+                                        <h3>セキュリティコードについて</h3>
+                                        <div class="code-images">
+                                            <div class="card">
+                                                <div class="image">
+                                                    <img src="{{ asset('assets/image/common/credit/visa-code.png') }}" />
+                                                </div>
+                                                <p>Visa・MasterCard・Diners Club・JCB の場合</p>
+                                            </div>
+                                            <div class="card">
+                                                <div class="image">
+                                                    <img src="{{ asset('assets/image/common/credit/express-code.png') }}" />
+                                                </div>
+                                                <p>American Express の場合 </p>
+                                            </div>
+                                        </div>
+                                        <p style="text-align: center;">
+                                            セキュリティコードとは、クレジットカードの裏面の署名欄に印字されている、右端の3~4桁の数字のことです。<br/>
+                                            American Expressカードの場合は、裏面に印字されていることがあります。
+                                        </p>
+                                        <div class="c-btn_group">
+                                            <div class="c-btn_cancel">
+                                                <button class="c-btn ec-inlineBtn--cancel">閉じる</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

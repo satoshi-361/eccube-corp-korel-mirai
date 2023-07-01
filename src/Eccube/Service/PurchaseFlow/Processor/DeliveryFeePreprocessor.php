@@ -114,39 +114,42 @@ class DeliveryFeePreprocessor implements ItemHolderPreprocessor
         /** @var Order $Order */
         $Order = $itemHolder;
         /* @var Shipping $Shipping */
-        foreach ($Order->getShippings() as $Shipping) {
-            // 送料の計算
-            $deliveryFeeProduct = 0;
-            if ($this->BaseInfo->isOptionProductDeliveryFee()) {
-                /** @var OrderItem $item */
-                foreach ($Shipping->getOrderItems() as $item) {
-                    if (!$item->isProduct()) {
-                        continue;
+
+        if ( ( empty($Order->getCustomer()) ) ) {
+            foreach ($Order->getShippings() as $Shipping) {
+                // 送料の計算
+                $deliveryFeeProduct = 0;
+                if ($this->BaseInfo->isOptionProductDeliveryFee()) {
+                    /** @var OrderItem $item */
+                    foreach ($Shipping->getOrderItems() as $item) {
+                        if (!$item->isProduct()) {
+                            continue;
+                        }
+                        $deliveryFeeProduct += $item->getProductClass()->getDeliveryFee() * $item->getQuantity();
                     }
-                    $deliveryFeeProduct += $item->getProductClass()->getDeliveryFee() * $item->getQuantity();
                 }
+    
+                /** @var DeliveryFee|null $DeliveryFee */
+                $DeliveryFee = $this->deliveryFeeRepository->findOneBy([
+                    'Delivery' => $Shipping->getDelivery(),
+                    'Pref' => $Shipping->getPref(),
+                ]);
+                $fee = is_object($DeliveryFee) ? $DeliveryFee->getFee() : 0;
+    
+                $OrderItem = new OrderItem();
+                $OrderItem->setProductName($DeliveryFeeType->getName())
+                    ->setPrice($fee + $deliveryFeeProduct)
+                    ->setQuantity(1)
+                    ->setOrderItemType($DeliveryFeeType)
+                    ->setShipping($Shipping)
+                    ->setOrder($itemHolder)
+                    ->setTaxDisplayType($TaxInclude)
+                    ->setTaxType($Taxation)
+                    ->setProcessorName(DeliveryFeePreprocessor::class);
+    
+                $itemHolder->addItem($OrderItem);
+                $Shipping->addOrderItem($OrderItem);
             }
-
-            /** @var DeliveryFee|null $DeliveryFee */
-            $DeliveryFee = $this->deliveryFeeRepository->findOneBy([
-                'Delivery' => $Shipping->getDelivery(),
-                'Pref' => $Shipping->getPref(),
-            ]);
-            $fee = is_object($DeliveryFee) ? $DeliveryFee->getFee() : 0;
-
-            $OrderItem = new OrderItem();
-            $OrderItem->setProductName($DeliveryFeeType->getName())
-                ->setPrice($fee + $deliveryFeeProduct)
-                ->setQuantity(1)
-                ->setOrderItemType($DeliveryFeeType)
-                ->setShipping($Shipping)
-                ->setOrder($itemHolder)
-                ->setTaxDisplayType($TaxInclude)
-                ->setTaxType($Taxation)
-                ->setProcessorName(DeliveryFeePreprocessor::class);
-
-            $itemHolder->addItem($OrderItem);
-            $Shipping->addOrderItem($OrderItem);
         }
     }
 }

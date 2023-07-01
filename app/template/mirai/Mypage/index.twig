@@ -20,6 +20,41 @@ file that was distributed with this source code.
         .ec-para-normal {
             margin: auto 30px;
         }
+
+        .p-mypage_content .my-content .content_row {
+            border-bottom: unset;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .p-mypage_content .my-content .content_row .main_box {
+                width: 50%;
+            }
+
+            .p-mypage_content .my-content .content_row .order_no {
+                width: 15%;
+            }
+        }
+
+        .p-mypage_content .my-content .content_row .order_no .txt_bt {
+            color: #7fb744;
+        }
+
+        .p-mypage_content .my-content .content_row .order_no {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .p-mypage_content .my-content .content_row .order_no .txt_up {
+            color: #648746;
+        }
+
+        .p-mypage_content .my-content .content_row .order_no .txt_up span {
+            color: red;
+        }
+
+        .hr {
+            border-bottom: 3px dotted #ebebeb;
+        }
     </style>
 {% endblock %}
 
@@ -63,9 +98,10 @@ file that was distributed with this source code.
                             <div class="my-content">
                                 {% for Order in pagination %}
                                     {% for OrderItem in Order.MergedProductOrderItems %}
+                                        {% set ProductClass = OrderItem.ProductClass %}
                                         {% set Product = OrderItem.Product %}
                                         <div class="content_row">
-                                            <div class="other_box">
+                                            {# <div class="other_box">
                                                 {% if loop.index0 %}
                                                     <p class="date">{{ Order.order_date|date_sec }}</p>
                                                     <div class="delivery_link">
@@ -75,13 +111,27 @@ file that was distributed with this source code.
                                                         <a href="{{ url('mypage_history', {'order_no': Order.order_no}) }}">注文詳細を表示する</a>
                                                     </div>
                                                 {% endif %}
+                                            </div> #}
+                                            <div class="order_no">
+                                                {% if loop.first %}
+                                                    <p class="txt_bt">
+                                                        <span style="color: #7fb744"> ご注文番号： </span> {{ Order.order_no }}
+                                                    </p>
+                                                    <p class="txt_up">{{ Order.order_date|date_sec }}</p>
+                                                    <p class="txt_up">お支払い金額(税込)：<span>{{ Order.getTaxableTotal|price }}</span></p>
+                                                {% endif %}
                                             </div>
                                             <div class="main_box">
                                                 <div class="main_img">
-                                                    {% if Product is null %}
-                                                        <img src="{{ asset(''|no_image_product, 'save_image') }}"/>
+                                                    {% if Product.getClassCategories1|length and ProductClass.ClassCategory1 is not empty %}
+                                                        {% set array = [] %}
+                                                        {% for value in Product.getClassCategories1 %}
+                                                            {% set array = array|merge([value]) %}
+                                                        {% endfor %}
+                                                        {% set index = array|keys|filter(item => array[item] == ProductClass.ClassCategory1.name)|first %}
+                                                        <img src="{{ asset(Product.ProductImage[index].file_name|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
                                                     {% else %}
-                                                        <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}">
+                                                        <img src="{{ asset(Product.MainListImage|no_image_product, 'save_image') }}" alt="{{ Product.name }}"/>
                                                     {% endif %}
                                                 </div>
                                                 <div class="main_infor">
@@ -107,6 +157,7 @@ file that was distributed with this source code.
                                             </div>
                                         </div>
                                     {% endfor %}
+                                    <div class="hr"></div>
                                 {% endfor %}
                             </div>
                             <div class="ec-pagerRole">

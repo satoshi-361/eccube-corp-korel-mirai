@@ -1187,4 +1187,113 @@ class ProductController extends AbstractController
             ]);
         }
     }
+
+    /**
+     * @Route("/%eccube_admin_route%/generate-product-class", name="admin_generate_product_class")
+     */
+    public function generateProductClass(Request $request)
+    {
+        // // Delete Orders & OrderItems
+        // $OrderRepository = $this->entityManager->getRepository(\Eccube\Entity\Order::class);
+        // $OrderItemRepository = $this->entityManager->getRepository(\Eccube\Entity\OrderItem::class);
+
+        // $Orders = [];
+        // $OrderItems = $OrderItemRepository->findBy(['class_name1' => 'カラー']);
+        // foreach ( $OrderItems as $OrderItem ) {
+        //     $Order = $OrderItem->getOrder();
+        //     $Order->removeOrderItem( $OrderItem );
+        //     $this->entityManager->remove($OrderItem);
+
+        //     $Orders[] = $Order;
+        // }
+
+        // foreach ( $Orders as $Order ) {
+        //     $this->entityManager->remove($Order);
+        // }
+
+        // // Delete ProductClasses
+        // $ProductClasses = $this->productClassRepository->findBy(['visible' => false]);
+
+        // foreach ( $ProductClasses as $ProductClass ) {
+        //     $Product = $ProductClass->getProduct();
+        //     $removeProductClasses = $this->productClassRepository->findBy(['visible' => true, 'Product' => $Product]);
+
+        //     foreach ( $removeProductClasses as $removeClass ) {
+        //         $Product->removeProductClass($removeClass);
+        //         $this->entityManager->remove($removeClass);
+        //     }
+
+        //     $ProductClass->setVisible( true );
+        // }
+
+        // Create ProductClasses
+        // $ClassCategoryRepository = $this->entityManager->getRepository(\Eccube\Entity\ClassCategory::class);
+
+        // $Products = $this->productRepository->findAll();
+
+        // foreach ( $Products as $Product ) {
+        //     $ProductClass = null;
+        //     $ProductStock = null;
+        //     if (!$Product) {
+        //         throw new NotFoundHttpException();
+        //     }
+        //     // 規格無しの商品の場合は、デフォルト規格を表示用に取得する
+        //     $has_class = $Product->hasProductClass();
+        //     if (!$has_class) {
+        //         $ProductClasses = $Product->getProductClasses();
+        //         foreach ($ProductClasses as $pc) {
+        //             if (!is_null($pc->getClassCategory1())) {
+        //                 continue;
+        //             }
+        //             if ($pc->isVisible()) {
+        //                 $ProductClass = $pc;
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     if ( ! empty( $Product->getColor() ) && $ProductClass ) {
+        //         $modelProductClass0 = new ProductClass();
+        //         $modelProductClass0->copyProperties($ProductClass, [
+        //             'id',
+        //             'create_date',
+        //             'update_date',
+        //         ]);
+
+        //         $ProductCodes = explode('/', $ProductClass->getCode());
+        //         foreach ( explode('/', $Product->getColor()) as $index => $color ) {
+        //             $newProductClass = clone $modelProductClass0;
+        //             $ClassCategory = $ClassCategoryRepository->findOneBy(['name' => $color]);
+        //             $newProductClass->setClassCategory1( $ClassCategory );
+
+        //             if ( count($ProductCodes) > 1 ) {
+        //                 $newProductClass->setCode( $ProductCodes[$index] );
+        //             }
+
+        //             $this->entityManager->persist( $newProductClass );
+        //         }
+
+        //         $ProductClass->setVisible( false );
+        //     }
+        // }
+        
+        $qb = $this->productClassRepository->createQueryBuilder('pc');
+        $qb
+            ->where('pc.ClassCategory1 IS NOT NULL')
+            ->andWhere('pc.visible = :true')
+            ->setParameter('true', true);
+
+        foreach ( $qb->getQuery()->getResult() as $ProductClass ) {
+            $ProductStock = new ProductStock();
+            // 在庫無制限時はnullを設定
+            $ProductStock->setStock(null);
+            $ProductClass->setProductStock($ProductStock);
+            $ProductStock->setProductClass($ProductClass);
+
+            $this->entityManager->persist($ProductClass);
+            $this->entityManager->persist($ProductStock);
+        }
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('admin_product');
+    }
 }

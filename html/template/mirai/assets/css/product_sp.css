@@ -243,6 +243,7 @@
         font-size: calc(32/768*100vw);
     }
     .s-product_infor_additem .txt {
+        width: calc(450/768*100vw);
         font-size: calc(32/768*100vw);
     }
     .s-product_manuallink a {
@@ -366,6 +367,7 @@
         font-size: calc(28/768*100vw);
     }
     .s-add_detail_txt {
+        width: calc(508/768*100vw);
         font-size: calc(28/768*100vw);
         line-height: calc(42/768*100vw);
     }
@@ -394,6 +396,7 @@
     .s-introduce_txt .container-3 .image,
     .s-introduce_txt .container-6 .image {
         width: 100%;
+        flex-wrap: wrap;
     }
 
     .s-introduce_txt .container-1 img,
@@ -411,5 +414,10 @@
     .s-introduce_txt .container-1 div:not(.image),
     .s-introduce_txt .container-2 p {
         width: 100%;
+    }
+
+    .s-product_introduce iframe {
+        width: 100%;
+        height: auto;
     }
 }

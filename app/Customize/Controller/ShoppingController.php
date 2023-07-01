@@ -45,9 +45,24 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 use Eccube\Controller\AbstractShoppingController;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Plugin\EccubePaymentLite42\Service\GmoEpsilonUrlService;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Eccube\Repository\CustomerRepository;
+use Eccube\Entity\Master\CustomerStatus;
+use Eccube\Repository\Master\CustomerStatusRepository;
+use Eccube\Repository\DeliveryRepository;
+use Eccube\Repository\PaymentRepository;
+use Customize\Form\Type\Cart\CartType;
 
 class ShoppingController extends AbstractShoppingController
 {
+    /**
+     * @var string 非会員情報を保持するセッションのキー
+     */
+    public const SESSION_FRONT_SHOPPING_ORDER = 'eccube.front.shopping.order';
+
     /**
      * @var CartService
      */
@@ -74,6 +89,41 @@ class ShoppingController extends AbstractShoppingController
     protected $serviceContainer;
 
     /**
+     * @var TokenStorageInterface
+     */
+    protected $tokenStorage;
+    
+    /**
+     * @var GmoEpsilonUrlService
+     */
+    private $gmoEpsilonUrlService;
+
+    /**
+     * @var EncoderFactoryInterface
+     */
+    protected $encoderFactory;
+
+    /**
+     * @var CustomerRepository
+     */
+    protected $customerRepository;
+
+    /**
+     * @var CustomerStatusRepository
+     */
+    protected $customerStatusRepository;
+
+    /**
+     * @var DeliveryRepository
+     */
+    protected $deliveryRepository;
+
+    /**
+     * @var PaymentRepository
+     */
+    protected $paymentRepository;
+
+    /**
      * @var TradeLawRepository
      */
     protected TradeLawRepository $tradeLawRepository;
@@ -96,6 +146,13 @@ class ShoppingController extends AbstractShoppingController
         RateLimiterFactory $shoppingConfirmIpLimiter,
         RateLimiterFactory $shoppingConfirmCustomerLimiter,
         RateLimiterFactory $shoppingCheckoutIpLimiter,
+        TokenStorageInterface $tokenStorage,
+        GmoEpsilonUrlService $gmoEpsilonUrlService,
+        EncoderFactoryInterface $encoderFactory,
+        CustomerRepository $customerRepository,
+        CustomerStatusRepository $customerStatusRepository,
+        DeliveryRepository $deliveryRepository,
+        PaymentRepository $paymentRepository,
         RateLimiterFactory $shoppingCheckoutCustomerLimiter
     ) {
         $this->cartService = $cartService;
@@ -108,6 +165,13 @@ class ShoppingController extends AbstractShoppingController
         $this->shoppingConfirmCustomerLimiter = $shoppingConfirmCustomerLimiter;
         $this->shoppingCheckoutIpLimiter = $shoppingCheckoutIpLimiter;
         $this->shoppingCheckoutCustomerLimiter = $shoppingCheckoutCustomerLimiter;
+        $this->tokenStorage = $tokenStorage;
+        $this->encoderFactory = $encoderFactory;
+        $this->gmoEpsilonUrlService = $gmoEpsilonUrlService;
+        $this->customerRepository = $customerRepository;
+        $this->customerStatusRepository = $customerStatusRepository;
+        $this->deliveryRepository = $deliveryRepository;
+        $this->paymentRepository = $paymentRepository;
     }
 
     /**
@@ -516,7 +580,7 @@ class ShoppingController extends AbstractShoppingController
      * 購入完了画面を表示する.
      *
      * @Route("/shopping/complete", name="shopping_complete", methods={"GET"})
-     * @Template("Shopping/complete.twig")
+     * @Template("Cart/complete.twig")
      */
     public function complete(Request $request)
     {
@@ -878,5 +942,233 @@ class ShoppingController extends AbstractShoppingController
         }
 
         return null;
+    }
+
+    /**
+     * カスタム購入画面.
+     *
+     * @Route("/cart", name="cart", methods={"GET", "POST"})
+     * @Route("/cart", name="cart_confirm", methods={"GET", "POST"})
+     * @Template("Cart/index.twig")
+     */
+    public function cart(Request $request)
+    {
+        // dd($request->request->get('cart')['is_member']);
+        // カートを取得して明細の正規化を実行
+        $Carts = $this->cartService->getCarts();
+        $totalQuantity = 0;
+        $subTotal = 0;
+
+        foreach ($Carts as $Cart) {
+            $totalQuantity += $Cart->getQuantity();
+            $subTotal += $Cart->getTotalPrice();
+        }
+
+        $flag_member = false;
+        if ($request->request->has('cart') && array_key_exists('is_member', $request->request->get('cart')) && $request->request->get('cart')['is_member'] == true) {
+            $flag_member = true;
+        }
+
+        $builder = $this->formFactory->createBuilder(CartType::class, null, [
+            'flag_member' => $flag_member,
+        ]);
+
+        // $builder = $this->formFactory->createBuilder(CartType::class);
+
+        // $builder->setData(
+        //     [
+        //         'is_member' => $flag_member,
+        //     ]
+        // );
+
+        if ( !$request->request->has('mode') ) {
+            $is_member = true;
+        } else {
+            $is_member = $flag_member;
+        }
+        $user = $this->getUser();
+        $builder->setData(
+            [
+                'customer' => $user,
+                'is_member' => $is_member,
+            ]
+        );
+
+        $form = $builder->getForm();
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            switch ($request->get('mode')) {
+                case 'confirm':
+                    return $this->render('Cart/confirm.twig', [
+                        'totalQuantity' => $totalQuantity,
+                        'subTotal' => $subTotal,
+                        'form' => $form->createView(),
+                        // 空のカートを削除し取得し直す
+                        'Carts' => $this->cartService->getCarts(true),
+                        'url_token_js' => $this->gmoEpsilonUrlService->getUrl('token'),
+                        'token' => $form['credit']['token']->getData(),
+                    ]);
+
+                case 'complete':
+                    $Customer = $form['customer']->getData();
+
+                    if (!$Customer->getId() && $is_member ) {
+                        // 新規会員登録する
+                        $encoder = $this->encoderFactory->getEncoder($Customer);
+                        $salt = $encoder->createSalt();
+                        $password = $encoder->encodePassword($Customer->getPlainPassword(), $salt);
+                        $secretKey = $this->customerRepository->getUniqueSecretKey();
+                        $CustomerStatus = $this->customerStatusRepository->find(CustomerStatus::REGULAR);
+    
+                        $Customer
+                            ->setStatus($CustomerStatus)
+                            ->setSalt($salt)
+                            ->setPassword($password)
+                            ->setSecretKey($secretKey)
+                            ->setPoint(0);
+    
+                        $this->entityManager->persist($Customer);
+                        $this->entityManager->flush();
+    
+                        // 本会員登録してログイン状態にする
+                        $token = new UsernamePasswordToken($Customer, 'customer', ['ROLE_USER']);
+                        $this->tokenStorage->setToken($token);
+                        $request->getSession()->migrate(true);
+                    }
+
+                    $Cart = $this->cartService->getCart();
+                    $Order = $this->orderHelper->initializeOrder1($Cart, $Customer, $form['shipping']->getData());
+
+                    $this->entityManager->flush();
+
+                    $Payment = $this->setDefaultPayment($Order);
+                    $PaymentMethod = $this->serviceContainer->get($Payment->getMethodClass());
+                    $PaymentMethod->setOrder($Order);
+
+                    // 集計処理.
+                    log_info('[注文手続] 集計処理を開始します.', [$Order->getId()]);
+                    $this->executePurchaseFlow($Order);
+                    $this->entityManager->flush();
+
+                    try {
+                        /*
+                        * 決済実行(前処理)
+                        */
+                        log_info('[注文処理] PaymentMethod::applyを実行します.');
+                        if ($response = $this->executeApply($PaymentMethod)) {
+                            return $response;
+                        }
+
+                        /*
+                        * 決済実行
+                        *
+                        * PaymentMethod::checkoutでは決済処理が行われ, 正常に処理出来た場合はPurchaseFlow::commitがコールされます.
+                        */
+                        log_info('[注文処理] PaymentMethod::checkoutを実行します.');
+                        if ($response = $this->executeCheckout($PaymentMethod)) {
+                            return $response;
+                        }
+
+                        $this->entityManager->flush();
+
+                        log_info('[注文処理] 注文処理が完了しました.', [$Order->getId()]);
+                    } catch (ShoppingException $e) {
+                        log_error('[注文処理] 購入エラーが発生しました.', [$e->getMessage()]);
+        
+                        $this->entityManager->rollback();
+        
+                        $this->addError($e->getMessage());
+        
+                        return $this->redirectToRoute('shopping_error');
+                    } catch (\Exception $e) {
+                        log_error('[注文処理] 予期しないエラーが発生しました.', [$e->getMessage()]);
+        
+                        // $this->entityManager->rollback(); FIXME ユニットテストで There is no active transaction エラーになってしまう
+        
+                        $this->addError('front.shopping.system_error');
+        
+                        return $this->redirectToRoute('shopping_error');
+                    }
+
+                    // カート削除
+                    log_info('[注文処理] カートをクリアします.', [$Order->getId()]);
+                    $this->cartService->clear();
+
+                    // 受注IDをセッションにセット
+                    $this->session->set(OrderHelper::SESSION_ORDER_ID, $Order->getId());
+
+                    // メール送信
+                    log_info('[注文処理] 注文メールの送信を行います.', [$Order->getId()]);
+                    $this->mailService->sendOrderMail($Order);
+                    $this->entityManager->flush();
+
+                    log_info('[注文処理] 注文処理が完了しました. 購入完了画面へ遷移します.', [$Order->getId()]);
+                    $this->session->set($this::SESSION_FRONT_SHOPPING_ORDER, $Order);
+
+                    return $this->redirect($this->generateUrl('cart_complete'));
+            }
+        }
+
+        return [
+            'totalQuantity' => $totalQuantity,
+            'subTotal' => $subTotal,
+            // 空のカートを削除し取得し直す
+            'Carts' => $this->cartService->getCarts(true),
+            'form' => $form->createView(),
+            'url_token_js' => $this->gmoEpsilonUrlService->getUrl('token'),
+        ];
+    }
+    /**
+     * @param Order $Order
+     */
+    protected function setDefaultPayment(Order $Order)
+    {
+        $OrderItems = $Order->getOrderItems();
+
+        // 受注明細に含まれる販売種別を抽出.
+        $SaleTypes = [];
+        /** @var OrderItem $OrderItem */
+        foreach ($OrderItems as $OrderItem) {
+            $ProductClass = $OrderItem->getProductClass();
+            if (is_null($ProductClass)) {
+                // 商品明細のみ対象とする. 送料明細等はスキップする.
+                continue;
+            }
+            $SaleType = $ProductClass->getSaleType();
+            $SaleTypes[$SaleType->getId()] = $SaleType;
+        }
+
+        // 販売種別に紐づく配送業者を抽出
+        $Deliveries = $this->deliveryRepository->getDeliveries($SaleTypes);
+
+        // 利用可能な支払い方法を抽出.
+        // ここでは支払総額が決まっていないため、利用条件に合致しないものも選択対象になる場合がある
+        $Payments = $this->paymentRepository->findAllowedPayments($Deliveries, true);
+
+        // 初期の支払い方法を設定.
+        $Payment = current($Payments);
+        if ($Payment) {
+            $Order->setPayment($Payment);
+            $Order->setPaymentMethod($Payment->getMethod());
+
+            return $Payment;
+        }
+    }
+
+    /**
+     * ショッピング完了画面.
+     *
+     * @Route("/cart/complete", name="cart_complete", methods={"GET"})
+     * @Template("Cart/complete.twig")
+     */
+    public function cartComplete()
+    {
+        $Order = $this->session->get($this::SESSION_FRONT_SHOPPING_ORDER);
+        $this->session->remove($this::SESSION_FRONT_SHOPPING_ORDER);
+
+        return [
+            'Order' => $Order,
+        ];
     }
 }

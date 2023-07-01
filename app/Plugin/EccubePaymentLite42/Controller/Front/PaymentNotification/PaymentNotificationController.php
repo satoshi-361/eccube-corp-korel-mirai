@@ -126,7 +126,8 @@ class PaymentNotificationController extends AbstractController
         /** @var PaymentStatus $PaymentStatus */
         $PaymentStatus = $this->paymentStatusRepository->find($request->get('state'));
         $Order->setPaymentStatus($PaymentStatus);
-        $Order->setOrderStatus($this->orderStatusRepository->find(OrderStatus::NEW));
+        // $Order->setOrderStatus($this->orderStatusRepository->find(OrderStatus::NEW));
+        $Order->setOrderStatus($this->orderStatusRepository->find(OrderStatus::PAID));
         $Order->setPaymentDate(new \DateTime());
 
         // 会員の場合、購入回数、購入金額などを更新
@@ -154,7 +155,8 @@ class PaymentNotificationController extends AbstractController
          * 決済処理中ならステータスの更新等の決済処理をする。
          * メール送信の処理は必ず入れるが、メール履歴（dtb_mail_history）を確認して無ければ送信の判断を入れる。
          */
-        if (!$MailHistory && $orderStatusIdBefore != OrderStatus::NEW) {
+        // if (!$MailHistory && $orderStatusIdBefore != OrderStatus::NEW) {
+        if (!$MailHistory && $orderStatusIdBefore != OrderStatus::PAID) {
             $MailHistory = $this->mailService->sendOrderMail($Order);
         }
 

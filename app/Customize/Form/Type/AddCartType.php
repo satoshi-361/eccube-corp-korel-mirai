@@ -91,10 +91,15 @@ class AddCartType extends BaseType
                 ]);
             if ($Product && $Product->getProductClasses()) {
                 if (!is_null($Product->getClassName1())) {
+                    $ClassCategories1 = array_reverse($Product->getClassCategories1AsFlip());
+
                     $builder->add('classcategory_id1', ChoiceType::class, [
                         'label' => $Product->getClassName1(),
-                        'choices' => ['common.select' => '__unselected'] + $Product->getClassCategories1AsFlip(),
+                        'choices' => $ClassCategories1,
                         'mapped' => false,
+                        'data' => reset($ClassCategories1),
+                        // 'multiple' => false,
+                        // 'expanded' => true,
                     ]);
                 }
                 if (!is_null($Product->getClassName2())) {
@@ -102,6 +107,8 @@ class AddCartType extends BaseType
                         'label' => $Product->getClassName2(),
                         'choices' => ['common.select' => '__unselected'],
                         'mapped' => false,
+                        'multiple' => false,
+                        'expanded' => true,
                     ]);
                 }
             }

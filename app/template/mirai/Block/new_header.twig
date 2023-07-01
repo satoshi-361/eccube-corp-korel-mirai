@@ -71,7 +71,7 @@
                     <ul class="p-submenu_list">
                         <li>
                             <a href="{{ url('product_list', { 'category_id': 21 }) }}">
-                                {# <img src="" alt="カトラリー"> #}
+                                <img src="{{ asset('assets/image/top/category-icon/cate-icon-table01.png') }}" alt="カトラリー">
                                 <span class="jp pc">カトラリー</span>
                             </a>
                         </li>
@@ -169,11 +169,8 @@
                     <span class="jp">お気に入り</span>
                 </a>
             </li>
-            <li>
-                <a href="{{ url('cart') }}">
-                    <img src="{{ asset('assets/image/common/icon-cart.png') }}" alt="カート">
-                    <span class="jp">カート</span>
-                </a>
+            <li class="ec-headerRole__cart">
+                {{ include('Block/new_cart.twig') }}
             </li>
         {% else %}
             <li>
@@ -194,11 +191,8 @@
                     <span class="jp">お気に入り</span>
                 </a>
             </li>
-            <li>
-                <a href="{{ url('cart') }}">
-                    <img src="{{ asset('assets/image/common/icon-cart.png') }}" alt="カート">
-                    <span class="jp">カート</span>
-                </a>
+            <li class="ec-headerRole__cart">
+                {{ include('Block/new_cart.twig') }}
             </li>
         {% endif %}
         </ul>
@@ -284,7 +278,7 @@
                             <li class="subnav_item">
                                 <a href="{{ url('product_list', { 'category_id': 21 }) }}">
                                     {# <img src="" alt="カトラリー"> #}
-                                    <span style="width: 50px"></span>
+                                    <img src="{{ asset('assets/image/top/category-icon/cate-icon-table01.png') }}" alt="UDカトラリー">
                                     <span class="jp">カトラリー</span>
                                 </a>
                             </li>

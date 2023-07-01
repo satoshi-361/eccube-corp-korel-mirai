@@ -113,4 +113,113 @@ class OrderHelper extends BaseService
             return $OrderItem;
         }, $CartItems instanceof Collection ? $CartItems->toArray() : $CartItems);
     }
+
+    /**
+     * 購入処理中の受注を生成する.
+     *
+     * @param Customer $Customer
+     * @param $CartItems
+     * @param array $shipping
+     *
+     * @return Order
+     */
+    public function createPurchaseProcessingOrder1(Cart $Cart, Customer $Customer, $shipping)
+    {
+        $OrderStatus = $this->orderStatusRepository->find(OrderStatus::PROCESSING);
+        $Order = new Order($OrderStatus);
+
+        $preOrderId = $this->createPreOrderId();
+        $Order->setPreOrderId($preOrderId);
+
+        // 顧客情報の設定
+        $this->setCustomer($Order, $Customer);
+
+        $DeviceType = $this->deviceTypeRepository->find($this->mobileDetector->isMobile() ? DeviceType::DEVICE_TYPE_MB : DeviceType::DEVICE_TYPE_PC);
+        $Order->setDeviceType($DeviceType);
+
+        // 明細情報の設定
+        $OrderItems = $this->createOrderItemsFromCartItems($Cart->getCartItems());
+        $OrderItemsGroupBySaleType = array_reduce($OrderItems, function ($result, $item) {
+            /* @var OrderItem $item */
+            $saleTypeId = $item->getProductClass()->getSaleType()->getId();
+            $result[$saleTypeId][] = $item;
+
+            return $result;
+        }, []);
+
+        foreach ($OrderItemsGroupBySaleType as $OrderItems) {
+            $Shipping = $this->createShipping($shipping);
+            $Shipping->setOrder($Order);
+            $this->addOrderItems($Order, $Shipping, $OrderItems);
+            $this->setDefaultDelivery($Shipping);
+            $this->entityManager->persist($Shipping);
+            $Order->addShipping($Shipping);
+        }
+
+        $this->setDefaultPayment($Order);
+
+        $this->entityManager->persist($Order);
+
+        return $Order;
+    }
+
+    /**
+     * @param Cart $Cart
+     * @param Customer $Customer
+     * @param array $shipping
+     *
+     * @return Order|null
+     */
+    public function initializeOrder1(Cart $Cart, Customer $Customer, $shipping)
+    {
+        // 購入処理中の受注情報を取得
+        if ($Order = $this->getPurchaseProcessingOrder($Cart->getPreOrderId())) {
+            return $Order;
+        }
+
+        // 受注情報を作成
+        $Order = $this->createPurchaseProcessingOrder1($Cart, $Customer, $shipping);
+        $Cart->setPreOrderId($Order->getPreOrderId());
+
+        return $Order;
+    }
+
+    protected function setCustomer(Order $Order, Customer $Customer)
+    {
+        if ($Customer->getId()) {
+            $Order->setCustomer($Customer);
+        }
+
+        $Order->copyProperties(
+            $Customer,
+            [
+                'id',
+                'create_date',
+                'update_date',
+                'del_flg',
+            ]
+        );
+    }
+
+    /**
+     * @param array $shipping
+     *
+     * @return Shipping
+     */
+    protected function createShipping($shipping)
+    {
+        $Shipping = new Shipping();
+        $Shipping
+            ->setName01($shipping['name01'])
+            ->setName02($shipping['name02'])
+            ->setKana01($shipping['kana01'])
+            ->setKana02($shipping['kana02'])
+            ->setPhoneNumber($shipping['phone_number'])
+            ->setPostalCode($shipping['postal_code'])
+            ->setPref($shipping['pref'])
+            ->setAddr01($shipping['addr01'])
+            ->setAddr02($shipping['addr02']);
+
+        return $Shipping;
+    }
 }

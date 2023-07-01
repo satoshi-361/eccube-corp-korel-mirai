@@ -19,6 +19,17 @@ file that was distributed with this source code.
 {% block stylesheet %}
     <link rel="stylesheet" href="{{ asset('assets/css/style_input.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('assets/css/modal.css') }}" type="text/css" />
+
+    <style>
+        .p-mypage_contain .c-modal .form_row {
+            padding: 8px 0;
+        }
+
+        .p-mypage_contain .ec-modal .ec-modal-wrap {
+            max-height: 65%;
+            overflow-y: auto;
+        }
+    </style>
 {% endblock stylesheet %}
 
 {% block javascript %}
@@ -33,6 +44,20 @@ file that was distributed with this source code.
             $('.ec-modal-close').on('click', function() {
                 $('.ec-modal').hide();
             });
+
+            {% set flag = true %}
+            {% for child in form if flag == true %}
+                {% for ch in child if child|length > 1 and flag == true %}
+                    {% if has_errors(ch) %}
+                        $('.ec-modal').show();
+                        {% set flag = false %}
+                    {% endif %}
+                {% endfor %}
+                {% if has_errors(child) %}
+                    {% set flag = false %}
+                    $('.ec-modal').show();
+                {% endif %}
+            {% endfor %}
         });
     </script>
 {% endblock javascript %}
@@ -120,6 +145,9 @@ file that was distributed with this source code.
                                 <span>{{ Customer.phone_number }}</span>
                             </div>
                         </div>
+                        {% for key in form.vars.method %}
+                            {{ key }}<br>
+                        {% endfor %}
                     </div>
                     <div class="p-registration_edit">
                         <a class="p-registration_edit_btn"><img src="{{ asset('assets/image/common/review_writer.png') }}" alt=""><span>内容を編集する</span></a>
@@ -136,33 +164,69 @@ file that was distributed with this source code.
                                 <span class="p-country-name" style="display:none;">Japan</span>
                                 {{ form_widget(form._token) }}
                                 <ul>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">氏名</label>
                                         </div>
                                         <div class="content ec-halfInput">
                                             {{ form_widget(form.name.name01, { 'attr': { 'placeholder': '姓' }}) }}
                                             {{ form_widget(form.name.name02, { 'attr': { 'placeholder': '名' }}) }}
+                                            {{ form_errors(form.name.name01) }}
+                                            {{ form_errors(form.name.name02) }}
                                         </div>
                                     </li>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">フリガナ</label>
                                         </div>
                                         <div class="content ec-halfInput">
                                             {{ form_widget(form.kana.kana01, { 'attr': { 'placeholder': 'セイ' }}) }}
                                             {{ form_widget(form.kana.kana02, { 'attr': { 'placeholder': 'メイ' }}) }}
+                                            {{ form_errors(form.kana.kana01) }}
+                                            {{ form_errors(form.kana.kana02) }}
                                         </div>
                                     </li>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
+                                        <div class="head">
+                                            <span class="required">任意</span><label class="">性別</label>
+                                        </div>
+                                        <div class="content ec-radio{{ has_errors(form.sex) ? ' error' }}">
+                                            {{ form_widget(form.sex) }}
+                                            {{ form_errors(form.sex) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row form_item">
+                                        <div class="head">
+                                            <span class="required">任意</span><label class="">生年月日</label>
+                                        </div>
+                                        <div class="content ec-birth{{ has_errors(form.birth) ? ' error' }}">
+                                            {{ form_widget(form.birth) }}
+                                            {{ form_errors(form.birth) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">メールアドレス</label>
                                         </div>
-                                        <div class="content ec-input">
-                                            {{ form_widget(form.email) }}
+                                        <div class="content ec-input{{ has_errors(form.email.first) ? ' error' }}">
+                                            {{ form_widget(form.email.first, {
+                                                'attr': { 'style': 'opacity: 0.5; cursor: not-allowed;' }
+                                            }) }}
+                                            {{ form_errors(form.email.first) }}
                                         </div>
                                     </li>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">メールアドレス(再入力)</label>
+                                        </div>
+                                        <div class="content ec-input{{ has_errors(form.email.second) ? ' error' }}">
+                                            {{ form_widget(form.email.second, {
+                                                'attr': { 'style': 'opacity: 0.5; cursor: not-allowed;' }
+                                            }) }}
+                                            {{ form_errors(form.email.second) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">パスワード</label>
                                         </div>
@@ -171,50 +235,62 @@ file that was distributed with this source code.
                                                 'attr': { 'placeholder': '半角英数記号%min%〜%max%文字'|trans({ '%min%': eccube_config.eccube_password_min_len, '%max%': eccube_config.eccube_password_max_len }) },
                                                 'type': 'password'
                                             }) }}
+                                        </div>
+                                    </li>
+                                    <li class="form_row form_item">
+                                        <div class="head">
+                                            <span class="required">必須</span><label class="">パスワード(再入力)</label>
+                                        </div>
+                                        <div class="content ec-input">
                                             {{ form_widget(form.plain_password.second, {
                                                 'attr': { 'placeholder': '確認のためもう一度入力してください'|trans },
                                                 'type': 'password'
                                             }) }}
                                         </div>
                                     </li>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">郵便番号</label>
                                         </div>
                                         <div class="content ec-input">
                                             {{ form_widget(form.postal_code) }}
+                                            {{ form_errors(form.postal_code) }}
                                         </div>
                                     </li>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">都道府県</label>
                                         </div>
                                         <div class="content ec-input">
                                             {{ form_widget(form.address.pref) }}
+                                            {{ form_errors(form.address.pref) }}
                                         </div>
                                     </li>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">市区町村</label>
                                         </div>
                                         <div class="content ec-input">
                                             {{ form_widget(form.address.addr01) }}
+                                            {{ form_errors(form.address.addr01) }}
                                         </div>
                                     </li>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">以降の住所</label>
                                         </div>
                                         <div class="content ec-input">
                                             {{ form_widget(form.address.addr02) }}
+                                            {{ form_errors(form.address.addr02) }}
                                         </div>
                                     </li>
-                                    <li class="form_row">
+                                    <li class="form_row form_item">
                                         <div class="head">
                                             <span class="required">必須</span><label class="">電話番号</label>
                                         </div>
                                         <div class="content ec-input">
                                             {{ form_widget(form.phone_number) }}
+                                            {{ form_errors(form.phone_number) }}
                                         </div>
                                     </li>
                                 </ul>

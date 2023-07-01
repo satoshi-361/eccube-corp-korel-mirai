@@ -1,0 +1,41 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+    <div class="c-page_head page_small_width">
+        <div class="c-page_title">
+            <h1 class="en"><span>LOGIN</span></h1>
+            <p class="jp">ログイン</p>
+        </div>
+    </div>
+    <!--  -->
+    <main class="main">
+        <div class="c-subpage_contain">
+            <div class="c-register_top">
+                <div class="c-register_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <h2>パスワード再設定完了</h2>
+                </div>
+                <div class="c-register_top_introtxt wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                    <p>パスワードを正確に変更いたしました。<br/>今後とも横浜みらいをどうぞよろしくお願い申し上げます。</p>
+                </div>
+            </div>
+
+            <div class="p-register_conatin wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
+                <div class="c-btn_group">
+                    <div class="c-btn_left">
+                        <a href="{{ url('homepage') }}" class="c-btn">ホームに戻る</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

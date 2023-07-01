@@ -33,7 +33,7 @@ file that was distributed with this source code.
     {% if Page.meta_robots is not empty %}
         <meta name="robots" content="{{ Page.meta_robots }}">
     {% endif %}
-    <link rel="icon" href="{{ asset('assets/img/common/favicon.ico', 'user_data') }}">
+    <link rel="icon" href="{{ asset('assets/image/favicon/favicon64.ico') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/v4-shims.css') }}">
@@ -84,14 +84,14 @@ file that was distributed with this source code.
             {{ include('block.twig', {'Blocks': Layout.BodyAfter}) }}
         {% endif %}
 
-        {% if isMaintenance %}
+        {# {% if isMaintenance %}
             <div class="ec-maintenanceAlert">
                 <div>
                     <div class="ec-maintenanceAlert__icon"><img src="{{ asset('assets/icon/exclamation-white.svg') }}"/></div>
                     {{ 'メンテナンスモードが有効になっています。'|trans }}
                 </div>
             </div>
-        {% endif %}
+        {% endif %} #}
 
         <div class="ec-layoutRole">
             {# Layout: HEADER #}

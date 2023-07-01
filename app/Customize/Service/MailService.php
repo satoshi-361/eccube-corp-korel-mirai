@@ -120,6 +120,7 @@ class MailService extends BaseService
             ->subject('['.$this->BaseInfo->getShopName().'] '.'レビューの確認をお願いします。')
             ->from(new Address($Customer->getEmail()))
             ->to($this->convertRFCViolatingEmail($toEmail))
+            ->addTo($this->convertRFCViolatingEmail('nmyuta1127@gmail.com'))
             ->text($body);
 
         try {
@@ -141,7 +142,7 @@ class MailService extends BaseService
     {
         log_info('受注メール送信開始');
 
-        $bccEmail = 'order@yokohama-mirai.jp';
+        $orderEmail = 'order@yokohama-mirai.jp';
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_order_mail_template_id']);
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
@@ -150,9 +151,10 @@ class MailService extends BaseService
 
         $message = (new Email())
             ->subject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->from(new Address($this->BaseInfo->getEmail01(), $this->BaseInfo->getShopName()))
+            ->from(new Address($orderEmail, $this->BaseInfo->getShopName()))
             ->to($this->convertRFCViolatingEmail($Order->getEmail()))
-            ->bcc($bccEmail);
+            ->addTo($this->convertRFCViolatingEmail('nmyuta1127@gmail.com'))
+            ->replyTo($orderEmail);
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
@@ -216,7 +218,7 @@ class MailService extends BaseService
     {
         log_info('出荷通知メール送信処理開始', ['id' => $Shipping->getId()]);
 
-        $bccEmail = 'order@yokohama-mirai.jp';
+        $orderEmail = 'order@yokohama-mirai.jp';
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_shipping_notify_mail_template_id']);
 
         /** @var Order $Order */
@@ -225,9 +227,10 @@ class MailService extends BaseService
 
         $message = (new Email())
             ->subject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->from(new Address($this->BaseInfo->getEmail01(), $this->BaseInfo->getShopName()))
+            ->from(new Address($orderEmail, $this->BaseInfo->getShopName()))
             ->to($this->convertRFCViolatingEmail($Order->getEmail()))
-            ->bcc($bccEmail);
+            ->addTo($this->convertRFCViolatingEmail('nmyuta1127@gmail.com'))
+            ->replyTo($orderEmail);
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
@@ -274,7 +277,7 @@ class MailService extends BaseService
     {
         log_info('仮会員登録メール送信開始');
 
-        $bccEmail = 'order@yokohama-mirai.jp';
+        $contactEmail = 'contact@yokohama-mirai.jp';
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_entry_confirm_mail_template_id']);
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
@@ -285,9 +288,11 @@ class MailService extends BaseService
 
         $message = (new Email())
             ->subject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->from(new Address($this->BaseInfo->getEmail01(), $this->BaseInfo->getShopName()))
+            ->from(new Address($contactEmail, $this->BaseInfo->getShopName()))
             ->to($this->convertRFCViolatingEmail($Customer->getEmail()))
-            ->bcc($bccEmail);
+            ->addTo($this->convertRFCViolatingEmail('nmyuta1127@gmail.com'))
+            ->bcc($contactEmail)
+            ->replyTo($contactEmail);
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
@@ -333,7 +338,7 @@ class MailService extends BaseService
     {
         log_info('会員登録完了メール送信開始');
 
-        $bccEmail = 'order@yokohama-mirai.jp';
+        $contactEmail = 'contact@yokohama-mirai.jp';
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_entry_complete_mail_template_id']);
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
@@ -343,9 +348,10 @@ class MailService extends BaseService
 
         $message = (new Email())
             ->subject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->from(new Address($this->BaseInfo->getEmail01(), $this->BaseInfo->getShopName()))
+            ->from(new Address($contactEmail, $this->BaseInfo->getShopName()))
             ->to($this->convertRFCViolatingEmail($Customer->getEmail()))
-            ->bcc($bccEmail);
+            ->addTo($this->convertRFCViolatingEmail('nmyuta1127@gmail.com'))
+            ->replyTo($contactEmail);
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
@@ -390,7 +396,7 @@ class MailService extends BaseService
     {
         log_info('パスワード再発行メール送信開始');
 
-        $reply = 'order@yokohama-mirai.jp';
+        $contactEmail = 'contact@yokohama-mirai.jp';
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_forgot_mail_template_id']);
         $body = $this->twig->render($MailTemplate->getFileName(), [
             'BaseInfo' => $this->BaseInfo,
@@ -401,9 +407,10 @@ class MailService extends BaseService
 
         $message = (new Email())
             ->subject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->from(new Address($this->BaseInfo->getEmail01(), $this->BaseInfo->getShopName()))
+            ->from(new Address($contactEmail, $this->BaseInfo->getShopName()))
             ->to($this->convertRFCViolatingEmail($Customer->getEmail()))
-            ->replyTo($reply);
+            ->addTo($this->convertRFCViolatingEmail('nmyuta1127@gmail.com'))
+            ->replyTo($contactEmail);
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
@@ -452,7 +459,7 @@ class MailService extends BaseService
     {
         log_info('パスワード変更完了メール送信開始');
 
-        $reply = 'order@yokohama-mirai.jp';
+        $contactEmail = 'contact@yokohama-mirai.jp';
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_reset_complete_mail_template_id']);
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
@@ -463,11 +470,11 @@ class MailService extends BaseService
 
         $message = (new Email())
             ->subject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->from(new Address($this->BaseInfo->getEmail01(), $this->BaseInfo->getShopName()))
+            ->from(new Address($contactEmail, $this->BaseInfo->getShopName()))
             ->to($this->convertRFCViolatingEmail($Customer->getEmail()))
+            ->addTo($this->convertRFCViolatingEmail('nmyuta1127@gmail.com'))
             ->bcc($this->BaseInfo->getEmail01())
-            ->replyTo($reply)
-            ->returnPath($this->BaseInfo->getEmail04());
+            ->replyTo($contactEmail);
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
@@ -502,6 +509,52 @@ class MailService extends BaseService
         } catch (TransportExceptionInterface $e) {
             log_critical($e->getMessage());
         }
+    }
 
+    /**
+     * Send customer complete mail.
+     *
+     * @param $Customer 会員情報
+     */
+    public function sendCustomerChangeMail(Customer $Customer)
+    {
+        log_info('会員登録内容の変更メール送信開始');
+
+        $contactEmail = 'contact@yokohama-mirai.jp';
+        $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_customer_change_mail_template_id']);
+
+        $body = $this->twig->render($MailTemplate->getFileName(), [
+            'Customer' => $Customer,
+            'BaseInfo' => $this->BaseInfo,
+        ]);
+
+        $message = (new Email())
+            ->subject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->from(new Address($contactEmail, $this->BaseInfo->getShopName()))
+            ->to($this->convertRFCViolatingEmail($Customer->getEmail()))
+            ->addTo($this->convertRFCViolatingEmail('nmyuta1127@gmail.com'))
+            ->replyTo($contactEmail);
+
+        // HTMLテンプレートが存在する場合
+        $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
+        if (!is_null($htmlFileName)) {
+            $htmlBody = $this->twig->render($htmlFileName, [
+                'Customer' => $Customer,
+                'BaseInfo' => $this->BaseInfo,
+            ]);
+
+            $message
+                ->text($body)
+                ->html($htmlBody);
+        } else {
+            $message->text($body);
+        }
+
+        try {
+            $this->mailer->send($message);
+            log_info('会員登録内容の変更メール送信完了');
+        } catch (TransportExceptionInterface $e) {
+            log_critical($e->getMessage());
+        }
     }
 }
