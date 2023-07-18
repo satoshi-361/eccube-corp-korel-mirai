@@ -19,7 +19,7 @@
 {% elseif app.request.get('_route') == 'homepage' %}
     {% set meta_og_type = 'website' %}
     {% set meta_canonical = url('homepage') %}
-{% elseif Page is defined and Page.edit_type == 0 and Page.url is defined %}
+{% elseif Page is defined and Page.edit_type == 0 and Page.url is defined and Page.url != 'preparation' %}
     {% set meta_canonical = url(eccube_config.eccube_user_data_route, {'route': Page.url}) %}
 {% endif %}
 

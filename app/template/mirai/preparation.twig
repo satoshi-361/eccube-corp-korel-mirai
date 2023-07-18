@@ -1,31 +1,79 @@
 {% extends 'default_frame.twig' %}
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{{ asset('assets/css/manual.css') }}" type="text/css" />
+<style>
+.main {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    background-color: #F9FCF5;
+    margin-bottom: 0 !important;
+}
+.main_content {
+    max-width: 1000px;
+    max-height: 355px;
+    width: 60%;
+    margin: 0 auto;
+    padding: 60px 100px;
+    text-align: center;
+    background-color: #fff;
+}
+.main_content_warn {
+    width: 100px;
+    margin: 0 auto 20px;
+}
+.main_content_text {
+    font-weight: 100;
+    font-size: 30px;
+    letter-spacing: 0.1em;
+    line-height: 1.5em;
+    text-align: center;
+    color: #7fb744;
+}
+.main_content_logo {
+    width: 215px;
+    margin: 60px auto 20px;
+}
+.main_content_link {
+    color: #5AB9C1;
+    text-decoration: underline;
+}
+.main_content_link:hover {
+    opacity: 0.4;
+}
+.main_content p {
+    color: #333;
+}
+.top_link {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 6px;
+}
+
+@media screen and (max-width: 600px) {
+    .main_content {
+        width: 100%;
+        padding: 60px 0;
+    }
+    
+    .main_content_text {
+        font-size: 18px;
+    }
+}
+</style>
 {% endblock %}
 
 {% block main %}
-    <div class="c-page_head page_small_width">
-        <div class="c-page_title">
-            <h1 class="en"><span>MANUAL</span></h1>
-            <p class="jp">取扱説明書</p>
-        </div>
+
+<div class="main">
+    <div class="main_content">
+        <img src="/html/template/mirai/assets/image/common/warn.png" class="main_content_warn">
+        <h3 class="main_content_text jp">このページは現在準備中です。<br>公開までもうしばらくお待ちください。</h3>
+        <img src="/html/template/mirai/assets/image/common/logo.png" class="main_content_logo">
+        <p>レーベン・オフィシャルストアは<a href="https://inventor-leben.shop-pro.jp/" class="main_content_link" target="_blank">こちら</a></p>
     </div>
-    <!-- manual -->
-    <main class="main">
-        <div class="c-subpage_contain">
-            <div class="p-manualpage">
-                <div class="c-subsec_head">
-                    <div class="c-subsec_title wow fadeInUp" data-wow-duration="1s " data-wow-delay="0.3s">
-                        <h2> {% if Blog.title is not empty %} {{ Blog.title }} {% else %} マニュアル {% endif %} </h2>
-                    </div>
-                </div>
-                <div class="p-manual_body">
-                    <div class="body">
-                        {{ Blog.body|raw }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+</div>
+    <a class="top_link" href="/">TOP</a>
+
 {% endblock %}

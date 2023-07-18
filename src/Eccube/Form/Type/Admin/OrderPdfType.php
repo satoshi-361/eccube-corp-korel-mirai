@@ -94,8 +94,8 @@ class OrderPdfType extends AbstractType
             ])
             ->add('download_kind', ChoiceType::class, [
                 'choices' => [
-                    'admin.order.delivery_note_output_format__file' => 1,
                     'admin.order.delivery_note_output_format__browser' => 2,
+                    'admin.order.delivery_note_output_format__file' => 1,
                 ],
                 'expanded' => false,
                 'multiple' => false,

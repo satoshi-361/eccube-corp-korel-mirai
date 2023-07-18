@@ -478,6 +478,7 @@ file that was distributed with this source code.
                                         <th class="border-top-0 pt-2 pb-2 text-center">{{ 'admin.order.purchase_price'|trans }}<a href="#" class="js-listSort" data-sortkey="purchase_price"><i class="fa fa-arrow-up" aria-hidden="true"></i></a></th>
                                         <th class="border-top-0 pt-2 pb-2 text-center">商品名</th>
                                         <th class="border-top-0 pt-2 pb-2 text-center text-nowrap">{{ 'admin.order.shipping_status'|trans }}<a href="#" class="js-listSort" data-sortkey="shipping_status"><i class="fa fa-arrow-up" aria-hidden="true"></i></a></th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">{{ 'admin.order.tracking_number'|trans }}<a href="#" class="js-listSort" data-sortkey="tracking_number"><i class="fa fa-arrow-up" aria-hidden="true"></i></a></th>
                                         <th class="border-top-0 pt-2 pb-2 text-center">{{ 'admin.order.delivery'|trans }}<a href="#" class="js-listSort" data-sortkey="delivery"><i class="fa fa-arrow-up" aria-hidden="true"></i></a></th>
                                         <th class="border-top-0 pt-2 pb-2 text-center pe-3"></th>
                                     </tr>
@@ -527,6 +528,16 @@ file that was distributed with this source code.
                                                         {% set send_mail_date = Shipping.mail_send_date|date_min %}
                                                         <i class="fa fa-envelope fa-lg text-secondary" aria-hidden="true" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ 'admin.order.shipping_mail__completed'|trans({'%date%': send_mail_date}) }}"></i>
                                                     {% endif %}
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    <div class="input-group input-group-sm">
+                                                        <input type="text" id="tracking_number_{{ Shipping.id }}" class="form-control update_tracking_number" placeholder="{{ 'admin.order.tracking_number'|trans }}" value="{{ Shipping.trackingNumber }}" data-shipping_id="{{ Shipping.id }}" data-url="{{ url('admin_shipping_update_tracking_number', { id : Shipping.id }) }}" tabindex="{{ loop.index }}"/>
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default update_tracking_number" data-target="#tracking_number_{{ Shipping.id }}">
+                                                                <i class="fa fa-check fa-lg text-secondary" aria-hidden="true"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </td>
                                                 <td class="align-middle text-center">
                                                     {{ Shipping.name01 ~ Shipping.name02 }}<br>

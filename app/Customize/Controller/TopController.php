@@ -92,4 +92,15 @@ class TopController extends AbstractController
             'Blog' => $BlogProduct->getBlog(),
         ];
     }
+
+    /**
+     * 準備中のページ.
+     *
+     * @Route("/preparation", name="preparation", methods={"GET"})
+     * @Template("preparation.twig")
+     */
+    public function preparation(Request $request)
+    {
+        return [];
+    }
 }

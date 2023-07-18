@@ -219,7 +219,7 @@
             "url": "https://package-api-c2.ec-cube.net/v42",
             "options": {
                 "http": {
-                    "header": ["X-ECCUBE-KEY: fd1a450d881a7cfad13b30648f9d6fde7bb2e778"]
+                    "header": ["X-ECCUBE-KEY: d70280d28c043886d03eb9613c7970d49a21c7b9"]
                 }
             }
         }

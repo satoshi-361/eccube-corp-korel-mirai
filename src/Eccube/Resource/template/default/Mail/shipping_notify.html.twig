@@ -38,7 +38,7 @@ file that was distributed with this source code.
                                 お問い合わせ番号：{{ Shipping.tracking_number }}
                                 {% if Shipping.Delivery.confirm_url %}
                                     <br/>
-                                    お問い合わせURL：{{ Shipping.Delivery.confirm_url }}
+                                    お問い合わせURL：{{ Shipping.Delivery.confirm_url }}{{ Shipping.tracking_number }}
                                 {% endif %}
                                 <br/>
                             {% endif %}

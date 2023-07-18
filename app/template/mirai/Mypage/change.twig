@@ -150,7 +150,7 @@ file that was distributed with this source code.
                         {% endfor %}
                     </div>
                     <div class="p-registration_edit">
-                        <a class="p-registration_edit_btn"><img src="{{ asset('assets/image/common/review_writer.png') }}" alt=""><span>内容を編集する</span></a>
+                        <a class="p-registration_edit_btn" style="cursor: pointer;"><img src="{{ asset('assets/image/common/review_writer.png') }}" alt=""><span>内容を編集する</span></a>
                     </div>
                 </div>
             </div>
@@ -209,9 +209,7 @@ file that was distributed with this source code.
                                             <span class="required">必須</span><label class="">メールアドレス</label>
                                         </div>
                                         <div class="content ec-input{{ has_errors(form.email.first) ? ' error' }}">
-                                            {{ form_widget(form.email.first, {
-                                                'attr': { 'style': 'opacity: 0.5; cursor: not-allowed;' }
-                                            }) }}
+                                            {{ form_widget(form.email.first) }}
                                             {{ form_errors(form.email.first) }}
                                         </div>
                                     </li>
@@ -220,9 +218,7 @@ file that was distributed with this source code.
                                             <span class="required">必須</span><label class="">メールアドレス(再入力)</label>
                                         </div>
                                         <div class="content ec-input{{ has_errors(form.email.second) ? ' error' }}">
-                                            {{ form_widget(form.email.second, {
-                                                'attr': { 'style': 'opacity: 0.5; cursor: not-allowed;' }
-                                            }) }}
+                                            {{ form_widget(form.email.second) }}
                                             {{ form_errors(form.email.second) }}
                                         </div>
                                     </li>

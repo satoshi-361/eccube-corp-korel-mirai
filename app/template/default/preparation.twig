@@ -3,11 +3,15 @@
 {% block stylesheet %}
 <style>
 .main {
-    padding: 200px 0 0;
+    display: flex;
+    align-items: center;
+    height: 100vh;
     background-color: #F9FCF5;
+    margin-bottom: 0 !important;
 }
 .main_content {
     max-width: 1000px;
+    max-height: 355px;
     width: 60%;
     margin: 0 auto;
     padding: 60px 100px;
@@ -40,6 +44,12 @@
 .main_content p {
     color: #333;
 }
+.top_link {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+}
 </style>
 {% endblock %}
 
@@ -53,5 +63,6 @@
         <p>レーベン・オフィシャルストアは<a href="https://inventor-leben.shop-pro.jp/" class="main_content_link" target="_blank">こちら</a></p>
     </div>
 </div>
+    <a class="top_link" href="/">TOP</a>
 
 {% endblock %}
