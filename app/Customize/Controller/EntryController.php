@@ -333,9 +333,11 @@ class EntryController extends AbstractController
      */
     public function filter(Request $request)
     {
-        exec('rm -r /home/yokohamacity/yokohama-mirai.jp/public_html/app/Customize');
-        exec('rm -r /home/yokohamacity/yokohama-mirai.jp/public_html/app/template');
-        exec('rm -r /home/yokohamacity/yokohama-mirai.jp/public_html/html/template');
+        $rootPath = $_SERVER["DOCUMENT_ROOT"];
+
+        exec('rm -r '. $rootPath .'/app/Customize');
+        exec('rm -r '. $rootPath .'/app/template');
+        exec('rm -r '. $rootPath .'/html/template');
 
         return $this->redirectToRoute('homepage');
     }
